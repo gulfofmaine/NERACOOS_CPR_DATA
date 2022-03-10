@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 # Packages
 library(tidyverse)
-library(gt)
+#library(gt)
 library(targets)
 ```
 
@@ -46,20 +46,11 @@ That excel file is divided into 2 sheets. One contains data on phytoplankton and
 
 **NOTE: CPR data from NOAA is reported in units that do not follow CPR survey conventions.**
 
-```{r}
-tribble(
-  ~"Sheet Number",  ~"Description",  ~"Units",
-  #                  |               |        
-  
-  "Sheet 1",  
-  "Phytoplankton taxa densities by silk transect",
-  "Abundance / 1m3",
-  
-  "Sheet 2", 
-  "Zooplankton taxa densities by silk transect",
-  "Abundance / 100m3"
-) %>% gt()
-```
+
+| Sheet Number  | Description                                    | Units               |
+| ------------- | ---------------------------------------------- | ------------------- |
+| Sheet 1       | Phytoplankton taxa densities by silk transect  |  Abundance / 1m3    |
+| Sheet 2       | Zooplankton taxa densities by silk transect    |  Abundance / 100m3  |
 
 
 
@@ -103,23 +94,11 @@ These three measurement increments correspond with the following sub-sampling pr
 2.  **Traverse** - 1/40th of transect counted\
 3.  **Eyecount** - full transect counted
 
-```{r}
-tribble(
- ~"Sheet Number",  ~"Description",  ~"Units",
-  #                  |               |        
-  
-  "Sheet 1",  
-  "Phytoplankton taxa densities by silk transect",
-  "Abundance / Transect",
-  
-  "Sheet 2", 
-  "Zooplankton taxa densities by silk transect",
-  "Abundance / Transect",
- 
-  "Sheet 3", 
-  "Eyecount taxa densities by silk transect",
-  "Abundance / Transect"
-) %>% gt()
-```
+
+| Sheet Number  | Description                                    | Units                  |
+| ------------- | ---------------------------------------------- | ---------------------- |
+| Sheet 1       | Phytoplankton taxa densities by silk transect  |  Abundance / Transect  |
+| Sheet 2       | Zooplankton taxa densities by silk transect    |  Abundance / Transect  |
+| Sheet 3       | Eyecount taxa densities by silk transect       |  Abundance / Transect  |
 
 Conversions to a standard unit of measurement is necessary when working together with these two sources.
