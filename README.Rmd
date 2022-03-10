@@ -81,7 +81,7 @@ tar_make()
 
 This will recreate the processing steps outlined in `_targets.R`:
 
-```{r}
+```{r gulf of maine pipeline}
 tar_visnetwork()
 ```
 
@@ -92,7 +92,7 @@ tar_visnetwork()
 
 Data obtained from SAHFOS spans the period of: **2013-2017**, and was delivered in the following files:
 
-> **data_raw/Gulf of Maine CPR/SAHFOS-MBA_2013-2017/MC part1.xlsx**
+> **data_raw/Gulf of Maine CPR/SAHFOS-MBA_2013-2017/MC part1.xlsx**      
 > **data_raw/Gulf of Maine CPR/SAHFOS-MBA_2013-2017/MC part 2.xlsx**
 
 Each of these files contain **three** sheets containing the different counting scales of the CPR survey, the phytoplankton, the traverse, and the "eye-count" scales. These three scales are based on the size of organisms counted. At each scale different subsets of the silk transect are used when counting the individually identified taxa. Counts from the subsets are then scaled to the entire silk transect and given a number on a categorical counting scale. These represent discrete jumps in abundance per transect.

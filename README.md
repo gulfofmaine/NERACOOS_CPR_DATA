@@ -36,12 +36,12 @@ identification and development stage of certain taxa.
 **NOTE: CPR data from NOAA is reported in units that do not follow CPR
 survey conventions.**
 
-<div id="daemdlqrcb" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="mvponhxihy" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#daemdlqrcb .gt_table {
+#mvponhxihy .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -66,7 +66,7 @@ survey conventions.**
   border-left-color: #D3D3D3;
 }
 
-#daemdlqrcb .gt_heading {
+#mvponhxihy .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -78,7 +78,7 @@ survey conventions.**
   border-right-color: #D3D3D3;
 }
 
-#daemdlqrcb .gt_title {
+#mvponhxihy .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -88,7 +88,7 @@ survey conventions.**
   border-bottom-width: 0;
 }
 
-#daemdlqrcb .gt_subtitle {
+#mvponhxihy .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -98,13 +98,13 @@ survey conventions.**
   border-top-width: 0;
 }
 
-#daemdlqrcb .gt_bottom_border {
+#mvponhxihy .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#daemdlqrcb .gt_col_headings {
+#mvponhxihy .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -119,7 +119,7 @@ survey conventions.**
   border-right-color: #D3D3D3;
 }
 
-#daemdlqrcb .gt_col_heading {
+#mvponhxihy .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -139,7 +139,7 @@ survey conventions.**
   overflow-x: hidden;
 }
 
-#daemdlqrcb .gt_column_spanner_outer {
+#mvponhxihy .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -151,15 +151,15 @@ survey conventions.**
   padding-right: 4px;
 }
 
-#daemdlqrcb .gt_column_spanner_outer:first-child {
+#mvponhxihy .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#daemdlqrcb .gt_column_spanner_outer:last-child {
+#mvponhxihy .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#daemdlqrcb .gt_column_spanner {
+#mvponhxihy .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -171,7 +171,7 @@ survey conventions.**
   width: 100%;
 }
 
-#daemdlqrcb .gt_group_heading {
+#mvponhxihy .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -193,7 +193,7 @@ survey conventions.**
   vertical-align: middle;
 }
 
-#daemdlqrcb .gt_empty_group_heading {
+#mvponhxihy .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -208,15 +208,15 @@ survey conventions.**
   vertical-align: middle;
 }
 
-#daemdlqrcb .gt_from_md > :first-child {
+#mvponhxihy .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#daemdlqrcb .gt_from_md > :last-child {
+#mvponhxihy .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#daemdlqrcb .gt_row {
+#mvponhxihy .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -235,7 +235,7 @@ survey conventions.**
   overflow-x: hidden;
 }
 
-#daemdlqrcb .gt_stub {
+#mvponhxihy .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -247,7 +247,7 @@ survey conventions.**
   padding-left: 12px;
 }
 
-#daemdlqrcb .gt_summary_row {
+#mvponhxihy .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -257,7 +257,7 @@ survey conventions.**
   padding-right: 5px;
 }
 
-#daemdlqrcb .gt_first_summary_row {
+#mvponhxihy .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -267,7 +267,7 @@ survey conventions.**
   border-top-color: #D3D3D3;
 }
 
-#daemdlqrcb .gt_grand_summary_row {
+#mvponhxihy .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -277,7 +277,7 @@ survey conventions.**
   padding-right: 5px;
 }
 
-#daemdlqrcb .gt_first_grand_summary_row {
+#mvponhxihy .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -287,11 +287,11 @@ survey conventions.**
   border-top-color: #D3D3D3;
 }
 
-#daemdlqrcb .gt_striped {
+#mvponhxihy .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#daemdlqrcb .gt_table_body {
+#mvponhxihy .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -300,7 +300,7 @@ survey conventions.**
   border-bottom-color: #D3D3D3;
 }
 
-#daemdlqrcb .gt_footnotes {
+#mvponhxihy .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -314,13 +314,13 @@ survey conventions.**
   border-right-color: #D3D3D3;
 }
 
-#daemdlqrcb .gt_footnote {
+#mvponhxihy .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#daemdlqrcb .gt_sourcenotes {
+#mvponhxihy .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -334,41 +334,41 @@ survey conventions.**
   border-right-color: #D3D3D3;
 }
 
-#daemdlqrcb .gt_sourcenote {
+#mvponhxihy .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#daemdlqrcb .gt_left {
+#mvponhxihy .gt_left {
   text-align: left;
 }
 
-#daemdlqrcb .gt_center {
+#mvponhxihy .gt_center {
   text-align: center;
 }
 
-#daemdlqrcb .gt_right {
+#mvponhxihy .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#daemdlqrcb .gt_font_normal {
+#mvponhxihy .gt_font_normal {
   font-weight: normal;
 }
 
-#daemdlqrcb .gt_font_bold {
+#mvponhxihy .gt_font_bold {
   font-weight: bold;
 }
 
-#daemdlqrcb .gt_font_italic {
+#mvponhxihy .gt_font_italic {
   font-style: italic;
 }
 
-#daemdlqrcb .gt_super {
+#mvponhxihy .gt_super {
   font-size: 65%;
 }
 
-#daemdlqrcb .gt_footnote_marks {
+#mvponhxihy .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -420,7 +420,7 @@ an active R session. (Assuming all R-packages are installed).
 
 This will recreate the processing steps outlined in `_targets.R`:
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-gulf of maine pipeline-1.png" width="100%" />
 
 ------------------------------------------------------------------------
 
@@ -429,7 +429,7 @@ This will recreate the processing steps outlined in `_targets.R`:
 Data obtained from SAHFOS spans the period of: **2013-2017**, and was
 delivered in the following files:
 
-> **data_raw/Gulf of Maine CPR/SAHFOS-MBA_2013-2017/MC part1.xlsx**
+> **data_raw/Gulf of Maine CPR/SAHFOS-MBA_2013-2017/MC part1.xlsx**  
 > **data_raw/Gulf of Maine CPR/SAHFOS-MBA_2013-2017/MC part 2.xlsx**
 
 Each of these files contain **three** sheets containing the different
@@ -448,12 +448,12 @@ sub-sampling protocols to save time when counting very small organisms:
 2.  **Traverse** - 1/40th of transect counted  
 3.  **Eyecount** - full transect counted
 
-<div id="ccgwarkhql" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="pvvvtafhar" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ccgwarkhql .gt_table {
+#pvvvtafhar .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -478,7 +478,7 @@ sub-sampling protocols to save time when counting very small organisms:
   border-left-color: #D3D3D3;
 }
 
-#ccgwarkhql .gt_heading {
+#pvvvtafhar .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -490,7 +490,7 @@ sub-sampling protocols to save time when counting very small organisms:
   border-right-color: #D3D3D3;
 }
 
-#ccgwarkhql .gt_title {
+#pvvvtafhar .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -500,7 +500,7 @@ sub-sampling protocols to save time when counting very small organisms:
   border-bottom-width: 0;
 }
 
-#ccgwarkhql .gt_subtitle {
+#pvvvtafhar .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -510,13 +510,13 @@ sub-sampling protocols to save time when counting very small organisms:
   border-top-width: 0;
 }
 
-#ccgwarkhql .gt_bottom_border {
+#pvvvtafhar .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ccgwarkhql .gt_col_headings {
+#pvvvtafhar .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -531,7 +531,7 @@ sub-sampling protocols to save time when counting very small organisms:
   border-right-color: #D3D3D3;
 }
 
-#ccgwarkhql .gt_col_heading {
+#pvvvtafhar .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -551,7 +551,7 @@ sub-sampling protocols to save time when counting very small organisms:
   overflow-x: hidden;
 }
 
-#ccgwarkhql .gt_column_spanner_outer {
+#pvvvtafhar .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -563,15 +563,15 @@ sub-sampling protocols to save time when counting very small organisms:
   padding-right: 4px;
 }
 
-#ccgwarkhql .gt_column_spanner_outer:first-child {
+#pvvvtafhar .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ccgwarkhql .gt_column_spanner_outer:last-child {
+#pvvvtafhar .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ccgwarkhql .gt_column_spanner {
+#pvvvtafhar .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -583,7 +583,7 @@ sub-sampling protocols to save time when counting very small organisms:
   width: 100%;
 }
 
-#ccgwarkhql .gt_group_heading {
+#pvvvtafhar .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -605,7 +605,7 @@ sub-sampling protocols to save time when counting very small organisms:
   vertical-align: middle;
 }
 
-#ccgwarkhql .gt_empty_group_heading {
+#pvvvtafhar .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -620,15 +620,15 @@ sub-sampling protocols to save time when counting very small organisms:
   vertical-align: middle;
 }
 
-#ccgwarkhql .gt_from_md > :first-child {
+#pvvvtafhar .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ccgwarkhql .gt_from_md > :last-child {
+#pvvvtafhar .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ccgwarkhql .gt_row {
+#pvvvtafhar .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -647,7 +647,7 @@ sub-sampling protocols to save time when counting very small organisms:
   overflow-x: hidden;
 }
 
-#ccgwarkhql .gt_stub {
+#pvvvtafhar .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -659,7 +659,7 @@ sub-sampling protocols to save time when counting very small organisms:
   padding-left: 12px;
 }
 
-#ccgwarkhql .gt_summary_row {
+#pvvvtafhar .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -669,7 +669,7 @@ sub-sampling protocols to save time when counting very small organisms:
   padding-right: 5px;
 }
 
-#ccgwarkhql .gt_first_summary_row {
+#pvvvtafhar .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -679,7 +679,7 @@ sub-sampling protocols to save time when counting very small organisms:
   border-top-color: #D3D3D3;
 }
 
-#ccgwarkhql .gt_grand_summary_row {
+#pvvvtafhar .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -689,7 +689,7 @@ sub-sampling protocols to save time when counting very small organisms:
   padding-right: 5px;
 }
 
-#ccgwarkhql .gt_first_grand_summary_row {
+#pvvvtafhar .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -699,11 +699,11 @@ sub-sampling protocols to save time when counting very small organisms:
   border-top-color: #D3D3D3;
 }
 
-#ccgwarkhql .gt_striped {
+#pvvvtafhar .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ccgwarkhql .gt_table_body {
+#pvvvtafhar .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -712,7 +712,7 @@ sub-sampling protocols to save time when counting very small organisms:
   border-bottom-color: #D3D3D3;
 }
 
-#ccgwarkhql .gt_footnotes {
+#pvvvtafhar .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -726,13 +726,13 @@ sub-sampling protocols to save time when counting very small organisms:
   border-right-color: #D3D3D3;
 }
 
-#ccgwarkhql .gt_footnote {
+#pvvvtafhar .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#ccgwarkhql .gt_sourcenotes {
+#pvvvtafhar .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -746,41 +746,41 @@ sub-sampling protocols to save time when counting very small organisms:
   border-right-color: #D3D3D3;
 }
 
-#ccgwarkhql .gt_sourcenote {
+#pvvvtafhar .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#ccgwarkhql .gt_left {
+#pvvvtafhar .gt_left {
   text-align: left;
 }
 
-#ccgwarkhql .gt_center {
+#pvvvtafhar .gt_center {
   text-align: center;
 }
 
-#ccgwarkhql .gt_right {
+#pvvvtafhar .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ccgwarkhql .gt_font_normal {
+#pvvvtafhar .gt_font_normal {
   font-weight: normal;
 }
 
-#ccgwarkhql .gt_font_bold {
+#pvvvtafhar .gt_font_bold {
   font-weight: bold;
 }
 
-#ccgwarkhql .gt_font_italic {
+#pvvvtafhar .gt_font_italic {
   font-style: italic;
 }
 
-#ccgwarkhql .gt_super {
+#pvvvtafhar .gt_super {
   font-size: 65%;
 }
 
-#ccgwarkhql .gt_footnote_marks {
+#pvvvtafhar .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
