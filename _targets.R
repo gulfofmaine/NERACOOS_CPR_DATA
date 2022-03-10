@@ -3,10 +3,11 @@
 
 # Load packages and set specific options for the workflow
 options(tidyverse.quiet = T)
-library(targets)
-library(tarchetypes)
-library(here)
-library(tidyverse)
+suppressWarnings(library(targets))
+suppressWarnings(library(tarchetypes))
+suppressPackageStartupMessages(suppressWarnings(library(here)))
+suppressWarnings(library(tidyverse))
+suppressWarnings(library(readxl))
 
 
 # Support Functions for Pipeline
@@ -18,159 +19,79 @@ source(here("R", "support/targets_support.R"))
 # Order is not important, package sorts out connections for everything
 list(
   
+  #### Raw Data from NOAA (1961-2013)  ####
   
+  #####__ Phytoplankton Data: ####
+  # Units: #/cubic meter
   
-  #### GOM Analyses  ####
-  
-  #### Raw NOAA
+  # 1. Raw Data
   tar_target(
-    name = noaa_zoo,
-    command = import_noaa_cpr(sample_type = "zoo", return_option = "abundances")),
+    phytoplankton_raw,
+    noaa_cpr_raw("phyto")
+  ),
+  
+  # 2. Marmap Key
   tar_target(
-    name = noaa_zoo_key,
-    command = import_noaa_cpr(sample_type = "zoo", return_option = "key")),
+    phyto_key,
+    pull_phyto_pieces(phytoplankton_raw, "key")
+  ),
+  
+  # 3. Abundances with MARMAP codes repaired
   tar_target(
-    name = noaa_phyto,
-    command = import_noaa_cpr(sample_type = "phyto", return_option = "abundances")),
+    phyto_abundances,
+    pull_phyto_pieces(phytoplankton_raw, "abundances")
+  ),
+  
+  # 4. Instances of duplicate MARMAP codes
   tar_target(
-    name = noaa_phyto_key,
-    command = import_noaa_cpr(sample_type = "phyto", return_option = "key")),
+    phyto_duplicates,
+    pull_phyto_pieces(phytoplankton_raw, "duplicates")
+  ),
   
-  
-  ####  Raw SAHFOS
-  
-  # MC1 Tables
-  tar_target(sahfos_mc1_taxa,
-             sahfos_taxa_key("mc1")),
+  # 5. Pivot longer and rejoin header info
   tar_target(
-    name = sahfos_eye_mc1,
-    command = import_sahfos_mc1(mc_taxa_key = sahfos_mc1_taxa, sample_type = "eye")),
+    erddap_phytoplankton,
+    pivot_phyto(phyto_abundances, phyto_key)
+  ),
+  
+  
+  
+  #####__  Zooplankton Data:   ####
+  # Units: #/100 cubic meters
+  
+  
+  # 1. Raw Data
   tar_target(
-    name = sahfos_phyto_mc1,
-    command = import_sahfos_mc1(mc_taxa_key = sahfos_mc1_taxa, sample_type = "phyto")),
+    zooplankton_raw,
+    noaa_cpr_raw("zoo")
+  ),
+  
+  # 2. Marmap Key
   tar_target(
-    name = sahfos_trav_mc1,
-    command = import_sahfos_mc1(mc_taxa_key = sahfos_mc1_taxa, sample_type = "trav")),
+    zoo_key,
+    pull_zoo_pieces(zooplankton_raw, "key")
+  ),
   
-  # MC2 Tables
-  tar_target(sahfos_mc2_taxa,
-             sahfos_taxa_key("mc2")),
+  # 3. Abundances with MARMAP codes repaired
   tar_target(
-    name = sahfos_eye_mc2,
-    command = import_sahfos_mc2(mc_taxa_key = sahfos_mc2_taxa, sample_type = "eye")),
+    zoo_abundances,
+    pull_zoo_pieces(zooplankton_raw, "abundances")
+  ),
+  
+  # 4. Instances of duplicate MARMAP codes
   tar_target(
-    name = sahfos_phyto_mc2,
-    command = import_sahfos_mc2(mc_taxa_key = sahfos_mc2_taxa, sample_type = "phyto")),
+    zoo_duplicates,
+    pull_zoo_pieces(zooplankton_raw, "duplicates")
+  ),
+  
+  # 5. Pivot longer and rejoin header info
   tar_target(
-    name = sahfos_trav_mc2,
-    command = import_sahfos_mc2(mc_taxa_key = sahfos_mc2_taxa, sample_type = "trav")),
-  
-  # join the two mc periods
-  tar_target(sahfos_phyto,
-             bind_mc_tables(sahfos_phyto_mc1, sahfos_phyto_mc2)),
-  tar_target(sahfos_trav,
-             bind_mc_tables(sahfos_trav_mc1, sahfos_trav_mc2)),
-  tar_target(sahfos_eye,
-             bind_mc_tables(sahfos_eye_mc1, sahfos_eye_mc2)),
-  tar_target(sahfos_meta,
-             pull_sahfos_metadata(sahfos_trav)),
+    erddap_zooplankton,
+    pivot_zooplankton(zoo_abundances, zoo_key)
+  )
   
   
-  
-  #### Unit Conversions  ####
-  # sahfos data is in number per silk transect currently
-  # which are values centered around a categorical counting system
-  # conversion goes from actual numbers captured from actual cpr water volume
-  # to what those rates are in # per 100 meters cubed
-  tar_target(sahfos_phyto_100m,
-             sahfos_to_100(sahfos_phyto)),
-  tar_target(sahfos_trav_100m,
-             sahfos_to_100(sahfos_trav)),
-  tar_target(sahfos_eye_100m,
-             sahfos_to_100(sahfos_eye)),
-  
-  
-  # Combine Traverse and Eyecount Zooplankton Groups
-  # this is what sourcing 16_SAHFOS_CPR_Cleanup.R returns
-  tar_target(sahfos_zoo_100m,
-             join_zooplankton(sahfos_trav = sahfos_trav_100m, 
-                              sahfos_eye = sahfos_eye_100m, 
-                              sahfos_meta = sahfos_meta)),
-  
-  #### Resolving Taxa Differences ####
-  tar_target(noaa_taxa_resolved,
-             consolidate_noaa_taxa(noaa_abundances = noaa_zoo)),
-  
-  # match the column names to the noaa columns
-  tar_target(sahfos_renamed,
-             match_sahfos_to_noaa(sahfos_zoo_100m)),
-  
-  
-  ####  Joining Different Sources  ####
-  tar_target(combined_zooplankton,
-             join_zoo_sources(noaa_taxa_resolved, sahfos_renamed)),
-  
-  
-  
-  # ####  Seasonal Splines  ####
-  # # Format Dates 
-  # tar_target(cpr_spline_prepped,
-  #            cpr_spline_prep(combined_zooplankton)),
-  # 
-  # # Crop to study area
-  # tar_target(gom_area_cropped,
-  #            cpr_area_crop(cpr_spline_prepped, study_area = "gom_new")),
-  # 
-  # # Pull taxa into lists
-  # tar_target(taxa_abundance_list,
-  #            split_cpr_by_taxa(gom_area_cropped)),
-  # 
-  # 
-  # # Run Models
-  # tar_target(gom_seasonal_splines, 
-  #            command = map(.x = taxa_abundance_list,
-  #                          .f = cpr_spline_fun, 
-  #                          spline_bins = 10, 
-  #                          season_bins = 4)),
-  # 
-  # # Store Predicted Anomalies
-  # tar_target(gom_anomalies,
-  #            command = map(gom_seasonal_splines, pluck, "cprdat_predicted")),
-  # 
-  # # Store Seasonal Averages (yearly and seasonal averages)
-  # tar_target(gom_seasonal_avgs,
-  #            command = map_dfr(gom_seasonal_splines, function(x){
-  #              pluck(x, "period_summs")}, .id = "taxa" )),
-  # 
-  # # Store the GAMS
-  # tar_target(gom_spline_models,
-  #            command = map(gom_seasonal_splines, pluck, "spline_model"))
-  
-  
-  
-  ####  PCA work  ####
-  
-  # reshape as matrix (pick abundance or anomalies here)
-  
-  
-  
-  # select time period
-  
-  
-  
-  # select taxa to include
-  
-  
-  
-  # perform PCA's
-  
-  
-  ####______________________####
-  #### MAB Analyses  ####
-  
-  
-  
-  
+  ####  Handling Raw Data from SAHFOS (2013-2017)
   
   
 )
