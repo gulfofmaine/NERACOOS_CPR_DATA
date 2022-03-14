@@ -1,0 +1,478 @@
+<erddapDatasets>
+<!-- GENERAL INFORMATION
+The information in this file specifies which datasets your ERDDAP will serve.
+The initial version of this file has a few examples which should work for you.
+But after your initial experiments with ERDDAP, 
+you should replace them with information for your datasets.
+
+You can change this document (e.g., add datasets, change metadata) while ERDDAP is running. 
+The changes will be detected the next time this document is read
+(as often as setup.xml loadDatasetsMinMinutes).
+
+Each dataset has a reloadEveryNMinutes value (default = 10080 (one week)).
+When this document is reread, datasets that haven't been been reloaded in 
+their reloadEveryNMinutes will be reloaded.
+You only need to specify a reloadEveryNMinutes value if you anticipate that
+the dataset will change periodically.
+
+If this document has an xml error, processing will stop and an email
+will be sent to emailEverythingTo as specified in setup.xml.
+
+If you want to remove a dataset while ERDDAP is running, add 
+    active="false"
+to the dataset tag.  For example,
+    <dataset type="EDDGridFromDap" datasetID="erdMHchla8day" active="false">
+
+For more information, see 
+http://coastwatch.pfeg.noaa.gov/erddap/download/setupDatasetsXml.html
+-->
+
+<!-- If you want to refuse requests from certain clients
+  (e.g., to fend off a Denial of Service attack or an overly zealous web robot), 
+  add their numeric IP address (e.g., 123.45.67.89) to this comma-separated list. 
+  You can also replace the last number in an IP address with * to block 0-255 (e.g., 123.45.67.*).
+  See your ERDDAP daily report for a list/tally of the most active requesters. -->
+<requestBlacklist>1.2.3.4</requestBlacklist>
+
+<!-- If you want to prevent specific people from using the email/URL subscription
+     system, uncomment the following tag and add their email addresses to the comma-separated list. 
+<subscriptionEmailBlacklist>some.name@company.com, another.name@company.com</subscriptionEmailBlacklist>
+-->
+
+<!-- These convert the local sourceUrl (used in dataset tags) 
+into the public sourceUrl (which appears in a dataset's globalAttributes).
+This is only needed if some datasets use non-public sourceUrl's
+(usually because their computer is in your DMZ or a local LAN). 
+'from' and 'to' are the start of the URLs and are case sensitive.
+'from' must be '[something]//[something]/' . 
+For example,
+<convertToPublicSourceUrl from="http://192.168.31.18/" to="https://oceanwatch.pfeg.noaa.gov/" />
+will cause a matching local sourceUrl (such as http://192.168.31.18/thredds/dodsC/satellite/BA/ssta/5day)
+into a public sourceUrl (https://oceanwatch.pfeg.noaa.gov/thredds/dodsC/satellite/BA/ssta/5day). 
+-->
+<!--
+<convertToPublicSourceUrl from="http://192.168.31.18/" to="https://oceanwatch.pfeg.noaa.gov/" />
+<convertToPublicSourceUrl from="http://192.168.31.27/" to="https://thredds1.pfeg.noaa.gov/"   />
+-->
+<dataset type="EDDTableFromErddap" datasetID="UCONN_ARTG_WQ_BTM" active="true">
+    <sourceUrl>http://merlin.dms.uconn.edu:8080/erddap/tabledap/ARTG_WQ_BTM</sourceUrl>
+</dataset><dataset type="EDDTableFromNcCFFiles" datasetID="A01_met_all" active="true">
+    <reloadEveryNMinutes>60</reloadEveryNMinutes>
+    <fileDir>/datasets/UMaine_NERACOOS_platforms/A01_met_all/</fileDir>
+    <recursive>false</recursive>
+    <fileNameRegex>*\.nc</fileNameRegex>
+    <metadataFrom>first</metadataFrom>
+    <preExtractRegex>^DSG_</preExtractRegex>
+    <postExtractRegex/>
+    <extractRegex>[A-N]{1}[0-9]{2}</extractRegex>
+    <columnNameForExtract>station</columnNameForExtract>
+    <sortFilesBySourceNames>time</sortFilesBySourceNames>
+    <fileTableInMemory>false</fileTableInMemory>
+    <addAttributes>
+        <att name="defaultGraphQuery">time,air_temperature&amp;time%3E=now-7days&amp;.draw=lines&amp;.color=0x000000</att>
+        <att name="neracoos_data_provider">UMO</att>
+        <att name="Conventions">CF-1.6, COARDS, Unidata Dataset Discovery v1.0</att>
+        <att name="cdm_timeseries_variables">station, longitude, latitude</att>
+        <att name="subsetVariables">air_temperature_qc,barometric_pressure_qc,wind_gust_qc,wind_speed_qc,wind_direction_qc,visibility_qc</att>
+        <att name="cdm_data_type">TimeSeries</att>
+        <att name="institution">Univ. of Maine</att>
+        <att name="infoUrl">http://www.neracoos.org</att>
+        <att name="keywords">air, air_temperature, air_temperature data_quality, atmosphere,
+Atmosphere &gt; Air Quality &gt; Visibility,
+Atmosphere &gt; Atmospheric Temperature &gt; Air Temperature,
+Atmosphere &gt; Atmospheric Temperature &gt; Surface Air Temperature,
+Atmosphere &gt; Atmospheric Winds &gt; Surface Winds,
+atmospheric, b01, barometric, barometric_pressure, barometric_pressure data_quality, buoy, chemistry, chlorophyll, circulation, conductivity, currents, data, density, department, depth, direction, $
+Oceans &gt; Ocean Chemistry &gt; Chlorophyll,
+Oceans &gt; Ocean Chemistry &gt; Oxygen,
+Oceans &gt; Ocean Circulation &gt; Ocean Currents,
+Oceans &gt; Ocean Optics &gt; Turbidity,
+Oceans &gt; Ocean Pressure &gt; Sea Level Pressure,
+Oceans &gt; Ocean Temperature &gt; Water Temperature,
+Oceans &gt; Ocean Waves &gt; Significant Wave Height,
+Oceans &gt; Ocean Waves &gt; Wave Period,
+Oceans &gt; Ocean Winds &gt; Surface Winds,
+Oceans &gt; Salinity/Density &gt; Conductivity,
+Oceans &gt; Salinity/Density &gt; Density,
+Oceans &gt; Salinity/Density &gt; Salinity,
+optics, oxygen, period, physical, pressure, quality, salinity, school, sciences, sea, seawater, sensor, significant, speed, station, station_name, surface, temperature, time, turbidity, university,$
+</att>
+        <att name="license">[standard]</att>
+        <att name="Metadata_Conventions">CF-1.6, COARDS, Unidata Dataset Discovery v1.0</att>
+        <att name="sourceUrl">(local files)</att>
+        <att name="title">A01 Met - Meteorology</att>
+    </addAttributes>
+    <dataVariable>
+        <sourceName>station</sourceName>
+        <destinationName>station</destinationName>
+        <dataType>String</dataType>
+        <!-- sourceAttributes>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="ioos_category">Identifier</att>
+            <att name="long_name">Station A01</att>
+            <att name="cf_role">timeseries_id</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>time</sourceName>
+        <destinationName>time</destinationName>
+        <dataType>double</dataType>
+        <!-- sourceAttributes>
+            <att name="calendar">gregorian</att>
+            <att name="standard_name">time</att>
+            <att name="units">days since 1858-11-17 00:00:00 +0:00</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="ioos_category">Time</att>
+            <att name="long_name">Time</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>global:mooring_site_desc</sourceName>
+        <destinationName>mooring_site_desc</destinationName>
+        <dataType>String</dataType>
+        <addAttributes>
+            <att name="ioos_category">Location</att>
+            <att name="long_name">Station Description</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>air_temperature</sourceName>
+        <destinationName>air_temperature</destinationName>
+        <dataType>float</dataType>
+        <!-- sourceAttributes>
+            <att name="_FillValue" type="float">-999.0</att>
+            <att name="ancillary_variables">air_temperature_qc</att>
+            <att name="coordinates">time lon lat depth</att>
+            <att name="epic_code" type="int">21</att>
+            <att name="long_name">Air Temperature</att>
+            <att name="short_name">AT</att>
+            <att name="standard_name">air_temperature</att>
+            <att name="units">celsius</att>
+            <att name="valid_range" type="floatList">-40.0 40.0</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">40.0</att>
+            <att name="colorBarMinimum" type="double">-10.0</att>
+            <att name="ioos_category">Temperature</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>air_temperature_qc</sourceName>
+        <destinationName>air_temperature_qc</destinationName>
+        <dataType>byte</dataType>
+        <!-- sourceAttributes>
+            <att name="_FillValue" type="byte">-128</att>
+            <att name="coordinates">time lon lat depth</att>
+            <att name="intent">data_quality</att>
+            <att name="long_name">Air Temperature Quality</att>
+            <att name="quality_bad" type="byte">1</att>
+            <att name="quality_good" type="byte">0</att>
+            <att name="short_name">AT QC</att>
+            <att name="standard_name">air_temperature data_quality</att>
+            <att name="units">1</att>
+            <att name="valid_range" type="shortList">-127 127</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">128.0</att>
+            <att name="colorBarMinimum" type="double">0.0</att>
+            <att name="ioos_category">Quality</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>barometric_pressure</sourceName>
+        <destinationName>barometric_pressure</destinationName>
+        <dataType>float</dataType>
+        <!-- sourceAttributes>
+            <att name="_FillValue" type="float">-999.0</att>
+            <att name="ancillary_variables">barometric_pressure_qc</att>
+            <att name="calibration_coeffs" type="doubleList">0.06 799.978</att>
+            <att name="coordinates">time lon lat depth</att>
+            <att name="epic_code" type="int">915</att>
+            <att name="is_dead" type="int">0</att>
+            <att name="long_name">Barometric Pressure</att>
+            <att name="short_name">BP</att>
+            <att name="standard_name">barometric_pressure</att>
+            <att name="units">millibars</att>
+            <att name="valid_range" type="floatList">800.0 1100.0</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">1200.0</att>
+            <att name="colorBarMinimum" type="double">700.0</att>
+            <att name="ioos_category">Pressure</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>barometric_pressure_qc</sourceName>
+        <destinationName>barometric_pressure_qc</destinationName>
+        <dataType>byte</dataType>
+        <!-- sourceAttributes>
+            <att name="_FillValue" type="byte">-128</att>
+            <att name="coordinates">time lon lat depth</att>
+            <att name="flag_values" type="byteList">0 1 2 3</att>
+            <att name="intent">data_quality</att>
+            <att name="long_name">Barometric Pressure QC</att>
+            <att name="short_name">BPQC</att>
+            <att name="standard_name">barometric_pressure data_quality</att>
+            <att name="units">1</att>
+            <att name="valid_range" type="shortList">-127 127</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">128.0</att>
+            <att name="colorBarMinimum" type="double">0.0</att>
+            <att name="ioos_category">Quality</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>wind_gust</sourceName>
+        <destinationName>wind_gust</destinationName>
+        <dataType>float</dataType>
+        <!-- sourceAttributes>
+            <att name="_FillValue" type="float">-999.0</att>
+            <att name="ancillary_variables">wind_gust_qc</att>
+            <att name="coordinates">time lon lat depth</att>
+            <att name="epic_code" type="int">402</att>
+            <att name="long_name">Wind Gust</att>
+            <att name="short_name">GST</att>
+            <att name="units">m/s</att>
+            <att name="valid_range" type="doubleList">0.0 200.0</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">30.0</att>
+            <att name="colorBarMinimum" type="double">0.0</att>
+            <att name="ioos_category">Wind</att>
+            <att name="standard_name">wind_speed_of_gust</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>wind_gust_qc</sourceName>
+        <destinationName>wind_gust_qc</destinationName>
+        <dataType>byte</dataType>
+        <!-- sourceAttributes>
+            <att name="_FillValue" type="byte">-128</att>
+            <att name="coordinates">time lon lat depth</att>
+            <att name="intent">data_quality</att>
+            <att name="long_name">Wind Gust Quality</att>
+            <att name="quality_bad" type="byte">1</att>
+            <att name="quality_good" type="byte">0</att>
+            <att name="short_name">GSTQC</att>
+            <att name="standard_name">wind_gust data_quality</att>
+            <att name="units">1</att>
+            <att name="valid_range" type="shortList">-127 127</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">128.0</att>
+            <att name="colorBarMinimum" type="double">0.0</att>
+            <att name="ioos_category">Quality</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>wind_speed</sourceName>
+        <destinationName>wind_speed</destinationName>
+        <dataType>float</dataType>
+        <!-- sourceAttributes>
+            <att name="_FillValue" type="float">-999.0</att>
+            <att name="ancillary_variables">wind_speed_qc</att>
+            <att name="coordinates">time lon lat depth</att>
+            <att name="epic_code" type="int">401</att>
+            <att name="long_name">Wind Speed</att>
+            <att name="short_name">WSPD</att>
+            <att name="standard_name">wind_speed</att>
+            <att name="units">m/s</att>
+            <att name="valid_range" type="doubleList">0.0 200.0</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">15.0</att>
+            <att name="colorBarMinimum" type="double">0.0</att>
+            <att name="ioos_category">Wind</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>wind_speed_qc</sourceName>
+        <destinationName>wind_speed_qc</destinationName>
+        <dataType>byte</dataType>
+        <!-- sourceAttributes>
+            <att name="_FillValue" type="byte">-128</att>
+            <att name="coordinates">time lon lat depth</att>
+            <att name="intent">data_quality</att>
+            <att name="long_name">Wind Speed Quality</att>
+            <att name="quality_bad" type="byte">1</att>
+            <att name="quality_good" type="byte">0</att>
+            <att name="short_name">WSPD QC</att>
+            <att name="standard_name">wind_speed data_quality</att>
+            <att name="units">1</att>
+            <att name="valid_range" type="shortList">-127 127</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">128.0</att>
+            <att name="colorBarMinimum" type="double">0.0</att>
+            <att name="ioos_category">Quality</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>wind_direction</sourceName>
+        <destinationName>wind_direction</destinationName>
+        <dataType>float</dataType>
+        <!-- sourceAttributes>
+            <att name="_FillValue" type="float">-999.0</att>
+            <att name="ancillary_variables">wind_direction_qc</att>
+            <att name="coordinates">time lon lat depth</att>
+            <att name="epic_code" type="int">410</att>
+            <att name="long_name">Wind Direction</att>
+            <att name="short_name">WD</att>
+            <att name="standard_name">wind_from_direction</att>
+            <att name="units">degrees_true</att>
+            <att name="valid_range" type="floatList">0.0 360.0</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">360.0</att>
+            <att name="colorBarMinimum" type="double">0.0</att>
+            <att name="ioos_category">Wind</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>wind_direction_qc</sourceName>
+        <destinationName>wind_direction_qc</destinationName>
+        <dataType>byte</dataType>
+        <!-- sourceAttributes>
+            <att name="_FillValue" type="byte">-128</att>
+            <att name="coordinates">time lon lat depth</att>
+            <att name="intent">data_quality</att>
+            <att name="long_name">Wind Direction Quality</att>
+            <att name="quality_bad" type="byte">1</att>
+            <att name="quality_good" type="byte">0</att>
+            <att name="short_name">WDIR QC</att>
+            <att name="standard_name">wind_direction data_quality</att>
+            <att name="units">1</att>
+            <att name="valid_range" type="shortList">-127 127</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">128.0</att>
+            <att name="colorBarMinimum" type="double">0.0</att>
+            <att name="ioos_category">Quality</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>visibility</sourceName>
+        <destinationName>visibility</destinationName>
+        <dataType>float</dataType>
+        <!-- sourceAttributes>
+            <att name="_FillValue" type="float">-999.0</att>
+            <att name="ancillary_variables">visibility_qc</att>
+            <att name="coordinates">time lon lat depth</att>
+            <att name="long_name">Visibility</att>
+            <att name="short_name">VIS</att>
+            <att name="standard_name">visibility_in_air</att>
+            <att name="units">meters</att>
+            <att name="valid_range" type="floatList">0.0 3000.0</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">100.0</att>
+            <att name="colorBarMinimum" type="double">0.0</att>
+            <att name="ioos_category">Meteorology</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>visibility_qc</sourceName>
+        <destinationName>visibility_qc</destinationName>
+        <dataType>byte</dataType>
+        <!-- sourceAttributes>
+            <att name="_FillValue" type="byte">-128</att>
+            <att name="coordinates">time lon lat depth</att>
+            <att name="intent">data_quality</att>
+            <att name="long_name">Visibility Quality</att>
+            <att name="quality_bad" type="byte">1</att>
+            <att name="quality_good" type="byte">0</att>
+            <att name="short_name">VIS QC</att>
+            <att name="standard_name">visibility data_quality</att>
+            <att name="units">1</att>
+            <att name="valid_range" type="shortList">-127 127</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">128.0</att>
+            <att name="colorBarMinimum" type="double">0.0</att>
+            <att name="ioos_category">Quality</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>lon</sourceName>
+        <destinationName>longitude</destinationName>
+        <dataType>float</dataType>
+        <!-- sourceAttributes>
+            <att name="standard_name">longitude</att>
+            <att name="units">degree_east</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">180.0</att>
+            <att name="colorBarMinimum" type="double">-180.0</att>
+            <att name="ioos_category">Location</att>
+            <att name="long_name">Longitude</att>
+            <att name="units">degrees_east</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>lat</sourceName>
+        <destinationName>latitude</destinationName>
+        <dataType>float</dataType>
+        <!-- sourceAttributes>
+            <att name="standard_name">latitude</att>
+            <att name="units">degree_north</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">90.0</att>
+            <att name="colorBarMinimum" type="double">-90.0</att>
+            <att name="ioos_category">Location</att>
+            <att name="long_name">Latitude</att>
+            <att name="units">degrees_north</att>
+        </addAttributes>
+    </dataVariable>
+    <dataVariable>
+        <sourceName>depth</sourceName>
+        <destinationName>depth</destinationName>
+        <dataType>float</dataType>
+        <!-- sourceAttributes>
+            <att name="axis">Z</att>
+            <att name="positive">down</att>
+            <att name="standard_name">depth</att>
+            <att name="units">m</att>
+        </sourceAttributes -->
+        <addAttributes>
+            <att name="colorBarMaximum" type="double">8000.0</att>
+            <att name="colorBarMinimum" type="double">0.0</att>
+            <att name="colorBarPalette">OceanDepth</att>
+            <att name="ioos_category">Location</att>
+            <att name="long_name">Depth</att>
+        </addAttributes>
+    </dataVariable>
+</dataset><!--
+ DISCLAIMER:
+   The chunk of datasets.xml made by GenerageDatasetsXml isn't perfect.
+   YOU MUST READ AND EDIT THE XML BEFORE USING IT IN A PUBLIC ERDDAP.
+   GenerateDatasetsXml relies on a lot of rules-of-thumb which aren't always
+   correct.  *YOU* ARE RESPONSIBLE FOR ENSURING THE CORRECTNESS OF THE XML
+   THAT YOU ADD TO ERDDAP'S datasets.xml FILE.
+
+ DIRECTIONS:
+ * Read about this type of dataset in
+   http://coastwatch.pfeg.noaa.gov/erddap/download/setupDatasetsXml.html .
+ * Read http://coastwatch.pfeg.noaa.gov/erddap/download/setupDatasetsXml.html#addAttributes
+   so that you understand about sourceAttributes and addAttributes.
+ * Note: Global sourceAttributes and variable sourceAttributes are listed
+   below as comments, for informational purposes only.
+   ERDDAP combines sourceAttributes and addAttributes (which have
+   precedence) to make the combinedAttributes that are shown to the user.
+   (And other attributes are automatically added to longitude, latitude,
+   altitude, depth, and time variables).
+ * If you don't like a sourceAttribute, override it by adding an
+   addAttribute with the same name but a different value
+   (or no value, if you want to remove it).
+ * All of the addAttributes are computer-generated suggestions. Edit them!
+   If you don't like an addAttribute, change it.
+ * If you want to add other addAttributes, add them.
+ * If you want to change a destinationName, change it.
+   But don't change sourceNames.
+ * You can change the order of the dataVariables or remove any of them.
+-->
+
+</erddapDatasets>

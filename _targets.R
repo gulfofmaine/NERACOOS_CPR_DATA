@@ -42,11 +42,11 @@ list(
     pull_phyto_pieces(phytoplankton_raw, "abundances")
   ),
   
-  # 4. Instances of duplicate MARMAP codes
-  tar_target(
-    phyto_duplicates,
-    pull_phyto_pieces(phytoplankton_raw, "duplicates")
-  ),
+  # # 4. Instances of duplicate MARMAP codes
+  # tar_target(
+  #   phyto_duplicates,
+  #   pull_phyto_pieces(phytoplankton_raw, "duplicates")
+  # ),
   
   # 5. Pivot longer and rejoin header info
   tar_target(
@@ -78,11 +78,11 @@ list(
     pull_zoo_pieces(zooplankton_raw, "abundances")
   ),
   
-  # 4. Instances of duplicate MARMAP codes
-  tar_target(
-    zoo_duplicates,
-    pull_zoo_pieces(zooplankton_raw, "duplicates")
-  ),
+  # # 4. Instances of duplicate MARMAP codes
+  # tar_target(
+  #   zoo_duplicates,
+  #   pull_zoo_pieces(zooplankton_raw, "duplicates")
+  # ),
   
   # 5. Pivot longer and rejoin header info
   tar_target(
