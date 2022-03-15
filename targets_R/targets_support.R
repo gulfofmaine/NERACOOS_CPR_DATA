@@ -4,7 +4,7 @@
 
 
 ####  Packages  ####
-suppressPackageStartupMessages(suppressWarnings(library(here)))
+options(tidyverse.quiet = T)
 suppressWarnings(library(readxl))
 suppressPackageStartupMessages(library(tidyverse))
 
@@ -15,7 +15,7 @@ suppressPackageStartupMessages(library(tidyverse))
 
 # # Base path to the CPR Data
 # gom_cpr_path <- box_path("climate change ecology lab", "Data/Gulf of Maine CPR")
-gom_cpr_path <- paste0(here::here("data_raw"), "/")
+# gom_cpr_path <- paste0(here::here("data_raw"), "/")
 
 
 
@@ -32,7 +32,7 @@ gom_cpr_path <- paste0(here::here("data_raw"), "/")
 
 ####  Import Raw Data from NOAA  ####
 
-noaa_cpr_raw <- function(sample_type = c("phyto", "zoo")){
+separate_measure_scales <- function(raw_file, sample_type = c("phyto", "zoo")){
   
   # Excel sheet number changes between zooplankton and zooplankton
   sheet_number <- switch(sample_type,
@@ -46,9 +46,10 @@ noaa_cpr_raw <- function(sample_type = c("phyto", "zoo")){
   
   # Should get some warnings about duplicate column headers,
   # these get repaired later
-  noaa_cpr_raw <- readxl::read_xlsx(str_c(gom_cpr_path, "NOAA_1961-2013/Gulf of Maine CPR (Feb 14, 2014 update).xlsx"),
-                                  skip = header_skip,
-                                  sheet = sheet_number)
+  noaa_cpr_raw <- readxl::read_xlsx(
+    raw_file,
+    skip = header_skip,
+    sheet = sheet_number)
     
   return(noaa_cpr_raw)
 }

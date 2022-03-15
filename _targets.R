@@ -1,25 +1,42 @@
+# About:
+# This script lists the necessary processing steps
+# to work from raw data to the data that was uploaded onto
+# ERDDAP. 
+
+# To recreate the workflow simply run:
+# targets::tar_make()
 
 
+# 1. Load packages and set specific options for the workflow
+library(targets)
+library(here)
 
-# Load packages and set specific options for the workflow
-options(tidyverse.quiet = T)
-suppressWarnings(library(targets))
-suppressWarnings(library(tarchetypes))
-suppressPackageStartupMessages(suppressWarnings(library(here)))
-suppressWarnings(library(tidyverse))
-suppressWarnings(library(readxl))
+# 2. Load any additional packages as-needed
+tar_option_set(packages = c(
+  "targets",
+  "tarchetypes",
+  "here",
+  "tidyverse",
+  "readxl"
+))
+
+# 3. Load Support Functions for Pipeline
+source(here("targets_R", "targets_support.R"))
 
 
-# Support Functions for Pipeline
-source(here("R", "support/targets_support.R"))
-
-
-# Define target pipeline: Outlines high-level steps of the analysis
+# 4. Define target pipeline: Outlines high-level steps of the analysis
 # Format is just a list of all the targets
 # Order is not important, package sorts out connections for everything
 list(
   
   #### Raw Data from NOAA (1961-2013)  ####
+  
+  ####__ Raw Data - All  ####
+  tar_target(
+    GOM_CPR_RAW,
+    "data_raw/NOAA_1961-2013/Gulf of Maine CPR (Feb 14, 2014 update).xlsx"
+  ),
+  
   
   #####__ Phytoplankton Data: ####
   # Units: #/cubic meter
@@ -27,7 +44,7 @@ list(
   # 1. Raw Data
   tar_target(
     phytoplankton_raw,
-    noaa_cpr_raw("phyto")
+    separate_measure_scales(raw_file = GOM_CPR_RAW, "phyto")
   ),
   
   # 2. Marmap Key
@@ -63,7 +80,7 @@ list(
   # 1. Raw Data
   tar_target(
     zooplankton_raw,
-    noaa_cpr_raw("zoo")
+    separate_measure_scales(raw_file = GOM_CPR_RAW, "zoo")
   ),
   
   # 2. Marmap Key
