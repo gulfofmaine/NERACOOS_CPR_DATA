@@ -8,13 +8,14 @@
 
 
 # 1. Load packages and set specific options for the workflow
-library(targets)
-library(here)
+options(tidyverse.quiet = T)
+suppressWarnings(library(targets))
+suppressPackageStartupMessages(suppressWarnings(library(here)))
+suppressWarnings(library(tidyverse))
 
 # 2. Load any additional packages as-needed
 tar_option_set(packages = c(
   "targets",
-  "tarchetypes",
   "here",
   "tidyverse",
   "readxl"

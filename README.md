@@ -50,17 +50,6 @@ recreated in full by running the following code in an active R session.
 This will recreate the processing steps outlined in `_targets.R` that
 transform the raw files into the format uploaded onto ERDDAP:
 
-    here() starts at /Users/akemberling/Documents/Repositories/NERACOOS_CPR_DATA
-    Warning messages:
-    1: package ‘targets’ was built under R version 3.6.2 
-    2: package ‘here’ was built under R version 3.6.2 
-    3: package ‘ggplot2’ was built under R version 3.6.2 
-    4: package ‘tibble’ was built under R version 3.6.2 
-    5: package ‘tidyr’ was built under R version 3.6.2 
-    6: package ‘readr’ was built under R version 3.6.2 
-    7: package ‘purrr’ was built under R version 3.6.2 
-    8: package ‘dplyr’ was built under R version 3.6.2 
-
 <img src="README_files/figure-gfm/gulf of maine pipeline-1.png" width="100%" />
 
 ### Reconciling Unit and Taxa Classification Differences
