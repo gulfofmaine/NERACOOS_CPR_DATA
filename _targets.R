@@ -32,9 +32,9 @@ list(
   
   #### Raw Data from NOAA (1961-2013)  ####
   
-  ####__ Raw Data - All  ####
+  ####__ NOAA Raw Data - All  ####
   tar_target(
-    GOM_CPR_RAW,
+    GOM_NOAA_RAW,
     "data_raw/NOAA_1961-2013/Gulf of Maine CPR (Feb 14, 2014 update).xlsx"
   ),
   
@@ -45,7 +45,7 @@ list(
   # 1. Raw Data
   tar_target(
     phytoplankton_raw,
-    separate_measure_scales(raw_file = GOM_CPR_RAW, "phyto")
+    separate_measure_scales(raw_file = GOM_NOAA_RAW, "phyto")
   ),
   
   # 2. Marmap Key
@@ -68,7 +68,7 @@ list(
   
   # 5. Pivot longer and rejoin header info
   tar_target(
-    erddap_phytoplankton,
+    erddap_phytoplankton_noaa,
     pivot_phyto(phyto_abundances, phyto_key)
   ),
   
@@ -81,7 +81,7 @@ list(
   # 1. Raw Data
   tar_target(
     zooplankton_raw,
-    separate_measure_scales(raw_file = GOM_CPR_RAW, "zoo")
+    separate_measure_scales(raw_file = GOM_NOAA_RAW, "zoo")
   ),
   
   # 2. Marmap Key
@@ -104,12 +104,37 @@ list(
   
   # 5. Pivot longer and rejoin header info
   tar_target(
-    erddap_zooplankton,
+    erddap_zooplankton_noaa,
     pivot_zooplankton(zoo_abundances, zoo_key)
-  )
+  ),
   
   
-  ####  Handling Raw Data from SAHFOS (2013-2017)
+  ####  Raw Data from SAHFOS/MBA (2013-2017)  ####
+  
+  ####__MBA Raw Data  ####
+  
+  ####__ MBA Abundance Data  ####
+  tar_target(GOM_MBA_RAW, "data_raw/SAHFOS-MBA_2013-2017/"),
+  tar_target(mba_phyto_abund,  mba_abundance_dat(GOM_MBA_RAW, "phyto")),
+  tar_target(mba_traverse_abund,  mba_abundance_dat(GOM_MBA_RAW, "trav")),
+  tar_target(mba_eyecount_abund,  mba_abundance_dat(GOM_MBA_RAW, "eye")),
+  
+  ####__ MBA Taxa Keys  ####
+  tar_target(mba_phyto_key,  extract_mba_key(GOM_MBA_RAW, "phyto")),
+  tar_target(mba_traverse_key,  extract_mba_key(GOM_MBA_RAW, "trav")),
+  tar_target(mba_eyecount_key,  extract_mba_key(GOM_MBA_RAW, "eye")),
+  
+  ####__  Pivot and Rename  ####
+  tar_target(mba_phyto_erddap   ,  pivot_mba_data(mba_phyto_abund, mba_phyto_key, "phyto")),
+  tar_target(mba_traverse_erddap,  pivot_mba_data(mba_traverse_abund, mba_traverse_key, "trav")),
+  tar_target(mba_eyecount_erddap,  pivot_mba_data(mba_eyecount_abund, mba_eyecount_key, "eye"))
+  
+ 
+  
+  
+  
+ 
+  
   
   
 )

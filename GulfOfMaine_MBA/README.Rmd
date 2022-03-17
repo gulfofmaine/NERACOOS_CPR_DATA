@@ -27,7 +27,7 @@ library(targets)
 
 ## About:
 
-This folder contains documentation on the Gulf of Maine CPR data obtained directly from the Marine Biological Association (MBA), and adjustments made prior to its integration into ERDDAP.
+This folder contains documentation on the Gulf of Maine CPR data obtained directly from the Marine Biological Association (MBA), and adjustments made prior to its integration into ERDDAP. These include a reshaping to a tidy-data format, and the renaming of a handful of columns to more generalized titles.
 
 ## MBA/SAHFOS Gulf of Maine CPR Data
 
@@ -61,5 +61,8 @@ These three measurement increments correspond with the following sub-sampling pr
 
 #### Data Processing Code
 
+Data processing and reshaping steps have been included in `_targets.R` with the supporting functions written and notated in `targets_R/targets_support.R`
 
 ## ERDDAP Metadata
+
+The `.xml` files associated with the MBA datasets can be found in the `erddap_xml folder`. They detail the units and column specifications that ERDDAP uses when serving the data and handling queries.

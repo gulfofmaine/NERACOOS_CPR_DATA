@@ -3,8 +3,7 @@
 
 # NERACOOS_CPR_DATA
 
-Project to integrate Continuous Plankton Recorder data into NERACOOS &
-ERDDAP
+Integrating Continuous Plankton Recorder data into NERACOOS & ERDDAP
 
 This repository contains the necessary code and documentation to support
 hosting the [Gulf of Maine Continuous Plankton Recorder Survey
@@ -16,20 +15,21 @@ on
 
 This repository documents the data provenance for continuous plankton
 recorder data obtained from a number of scientific research agencies
-(NOAA and MAB), and covering different sampling transects (The Gulf of
-Maine & The Mid-Atlantic Bight Transects).
+([NOAA](https://www.fisheries.noaa.gov/about/northeast-fisheries-science-center)
+and [MAB](https://www.mba.ac.uk/)), and covering different sampling
+transects (The Gulf of Maine & The Mid-Atlantic Bight Transects).
 
 Raw data from all sources is contained in the `data_raw/` directory.
 Code that prepares the raw data for ERDDAP and any necessary
-documentation is specific to the source that the data was recieved from.
+documentation is specific to the source that the data was received from.
 This information can be found in the following sub-folders:
 
 | Sub-Folder       | Description                                    |
 |------------------|------------------------------------------------|
 | GulfOfMaine_NOAA | Gulf of Maine CPR Data obtained from NOAA      |
-| GulfOfMaine_MAB  | Gulf of Maine CPR Data Obtained from MAB       |
+| GulfOfMaine_MBA  | Gulf of Maine CPR Data Obtained from MBA       |
 | MidAtlantic_NOAA | Mid-Atlantic Bight CPR Data Obtained from NOAA |
-| MidAtlantic_MAB  | Mid-Atlantic Bight CPR Data Obtained from MAB  |
+| MidAtlantic_MBA  | Mid-Atlantic Bight CPR Data Obtained from MBA  |
 
 These resources have been processed independently due to differences in
 measurement units and organization structures. Documentation on how each
@@ -52,15 +52,28 @@ transform the raw files into the format uploaded onto ERDDAP:
 
 <img src="README_files/figure-gfm/gulf of maine pipeline-1.png" width="100%" />
 
-### Reconciling Unit and Taxa Classification Differences
+### Unit and Taxa Classification Differences
 
-Conversions to a standard unit of measurement is necessary when working
-together with CPR obtained from these two sources. Another additional
-hurdle is that the taxa and group stages are also inconsistently used
-across them, and require a key for transitioning to coarser scale
-groups.
+Due to how the CPR data is stored and maintained within these two
+institutions, conversions to a standard unit of measurement is necessary
+when working with CPR jointly from both sources. In addition to unit
+conversions, there are taxonomic and development stages that are
+recorded inconsistently across them, which require the use of a key for
+transitioning to coarser scale groupings.
 
 Information on resolving the differences between these two data
 resources can be found in the following sub folder:
 `working_across_sources/`, with examples of code working from ERDDAP as
 a starting point.
+
+# Project Funding:
+
+Funding for making these resources available was provided through grant
+awards from the [National Science Foundation](https://www.nsf.gov/) and
+from the [Lenfest Ocean Program](https://www.lenfestocean.org/en). With
+communication and support from the Northeast Fisheries Science Center
+and the Marine Biological Association.
+
+------------------------------------------------------------------------
+
+## Bonus Resources:
