@@ -68,7 +68,7 @@ list(
   
   # 5. Pivot longer and rejoin header info
   tar_target(
-    erddap_phytoplankton_noaa,
+    noaa_phytoplankton_erddap,
     pivot_phyto(phyto_abundances, phyto_key)
   ),
   
@@ -104,7 +104,7 @@ list(
   
   # 5. Pivot longer and rejoin header info
   tar_target(
-    erddap_zooplankton_noaa,
+    noaa_zooplankton_erddap,
     pivot_zooplankton(zoo_abundances, zoo_key)
   ),
   
@@ -127,15 +127,24 @@ list(
   ####__  Pivot and Rename  ####
   tar_target(mba_phyto_erddap   ,  pivot_mba_data(mba_phyto_abund, mba_phyto_key, "phyto")),
   tar_target(mba_traverse_erddap,  pivot_mba_data(mba_traverse_abund, mba_traverse_key, "trav")),
-  tar_target(mba_eyecount_erddap,  pivot_mba_data(mba_eyecount_abund, mba_eyecount_key, "eye"))
+  tar_target(mba_eyecount_erddap,  pivot_mba_data(mba_eyecount_abund, mba_eyecount_key, "eye")),
   
  
   
   
+  ####  Save Data for ERDDAP  ####
   
+  # NOAA data
+  tar_target(save_noaa_phytoplankton, write_csv(noaa_phytoplankton_erddap, here::here("erddap_data/noaa_gom_cpr_phytoplankton.csv"))),
+  tar_target(save_noaa_zooplankton, write_csv(noaa_zooplankton_erddap, here::here("erddap_data/noaa_gom_cpr_zooplankton.csv"))),
+  
+  # MBA data
+  tar_target(save_mba_phytoplankton, write_csv(mba_phyto_erddap, here::here("erddap_data/mba_gom_cpr_phytoplankton.csv"))),
+  tar_target(save_mba_traverse, write_csv(mba_traverse_erddap, here::here("erddap_data/mba_gom_cpr_traverse.csv"))),
+  tar_target(save_mba_eyecount, write_csv(mba_eyecount_erddap, here::here("erddap_data/mba_gom_cpr_eyecount.csv")))
  
   
-  
+
   
 )
 # End of _targets.R
