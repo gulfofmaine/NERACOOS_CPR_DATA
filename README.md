@@ -52,6 +52,12 @@ transform the raw files into the format uploaded onto ERDDAP:
 
 <img src="README_files/figure-gfm/gulf of maine pipeline-1.png" width="100%" />
 
+The DAG above shows a simplified representation of the steps for the
+NOAA ZPR Zooplankton data, where the taxonomic information found in the
+header is separated from the abundance information and later joined back
+after it has been reshaped. Similar cleanup paths exist for the data
+obtained from NOAA as well as the data obtained from the MBA.
+
 ### Unit and Taxa Classification Differences
 
 Due to how the CPR data is stored and maintained within these two

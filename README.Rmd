@@ -58,11 +58,16 @@ tar_make()
 This will recreate the processing steps outlined in `_targets.R` that transform the raw files into the format uploaded onto ERDDAP:
 
 ```{r gulf of maine pipeline}
-#tar_visnetwork()
-withr::with_dir(rprojroot::find_root('_targets.R'), tar_glimpse())
+# #tar_visnetwork()
+# withr::with_dir(rprojroot::find_root('_targets.R'), 
+#                 tar_glimpse(allow =  c("GOM_NOAA_RAW", "zooplankton_raw", "zoo_abundances", "zoo_key", "noaa_zooplankton_erddap", "save_noaa_zooplankton")))
+
+
+withr::with_dir(rprojroot::find_root('_targets.R'), 
+                tar_visnetwork(allow =  c("GOM_NOAA_RAW", "zooplankton_raw", "zoo_abundances", "zoo_key", "noaa_zooplankton_erddap", "pivot_zooplankton", "pull_zoo_pieces")))
 ```
 
-There are two sequences of steps in the DAG above. These reflect the different cleanup paths for the data obtained from NOAA and the data obtained from the MBA. 
+The DAG above shows a simplified representation of the steps for the NOAA ZPR Zooplankton data, where the taxonomic information found in the header is separated from the abundance information and later joined back after it has been reshaped. Similar cleanup paths exist for the data obtained from NOAA as well as the data obtained from the MBA. 
 
 ### Unit and Taxa Classification Differences
 
