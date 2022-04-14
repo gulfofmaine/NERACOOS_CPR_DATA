@@ -546,41 +546,71 @@ pivot_mba_data <- function(abund_dat, key_full, sample_type){
 ####  Unit Conversions  ####
 
 
-# convert the different sample counting scales to a common unit of 100 cubic meters
-sahfos_to_100 <- function(abundance_per_transect){
+# math for transforming abundance per transect to abundance per 100m3 or 1m3
+transect_to_m3 <- function(transect_abundance, out_units = c("meters cubed", "100 meters cubed")){
+  
+
+  #---  Unit Conversion Details -
+  
+  # NOAA Data is in units of 1m3 for phytoplankton and 100m3 for zooplankton
+  # This function exists to convert from the CPR abundances of
+  # number per transect (1 silk mesh section) to the NOAA units
   
   
-  # Separate abundances from metadata
-  abundance_data <- abundance_per_transect %>% select(11:ncol(.))
+  #--- Categorical Counting System
+  # The CPR methodology counts abundance for a different amount
+  # of the silk sample based on the sizes of the organisms being counted
+  # This is done at three scales, counting abundances across the following
+  # sub-sample sizes:
   
-  #Conversion Details -
+  # A. The proportions of the silk mesh that is 
+  # sub-sampled and extrapolated using a stepped-scale
+  # based on bins corresponding to a log-scale
   
-  # A. sub-sample count to full transect
+  # phyto    1/8000th of transect counted
+  # traverse 1/40th of transect counted
+  # eyecount Full transect counted
   
-  #phyto 1/8000th of transect counted
-  #traverse 1/40th of transect counted
-  #eyecount full transect counted
+  #--- Converting from transect abundance to equivalent water volume
   
-  # B. transect to water volume
-  
+  # Distance Traveled (towed) corresponding to one sample
   # 1 transect = 10 nautical miles
+  
+  # Distance towed in meters
+  # 1852 meters in 1 nautical mile, * 10 for full transect
+  
+  # Edge Dimensions of the CPR opening aperture
   # CPR aperture dimensions = 1.27 cm square entrance
+  
+  # Area of the CPR device's opening in m2
   # aperture area in square meters = 0.00016129
-  # 1852 meters in nautical mile * 10
-  # volume in square meters per 10cm silk = 2.987091 meters^3
+  
+  # Volume of water that is sampled per 10cm silk (length * width * height)
+  # 2.987091 meters^3
+  
+  
+  #--- abundance per meters cubed:
   
   # Original calculation to get to # per meters cubed
   conversion_rate <- 1 / 2.987091
   
-  #Multiply by 100 to get to 100 cubic meters
-  conversion_rate <- conversion_rate * 100
+  # Multiply by 100 to get to 100 cubic meters if needed
+  conversion_rate <- switch(
+    out_units,
+    "meters cubed" = conversion_rate,
+    "100 meters cubed" = conversion_rate * 100
+  )
   
-  # convert all abundance data using the conversion rate
-  sahfos_100meters_cubed <- abundance_data * conversion_rate
-  return(sahfos_100meters_cubed)
+  
+  # Convert units:
+  converted_abundance <- transect_abundance * conversion_rate
+  return(converted_abundance)
   
   
-}
+  
+  }
+
+
 
 
 

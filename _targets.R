@@ -115,9 +115,9 @@ list(
   
   ####__ MBA Abundance Data  ####
   tar_target(GOM_MBA_RAW, "data_raw/SAHFOS-MBA_2013-2017/"),
-  tar_target(mba_phyto_abund,  mba_abundance_dat(GOM_MBA_RAW, "phyto")),
-  tar_target(mba_traverse_abund,  mba_abundance_dat(GOM_MBA_RAW, "trav")),
-  tar_target(mba_eyecount_abund,  mba_abundance_dat(GOM_MBA_RAW, "eye")),
+  tar_target(mba_phyto_abund,    mba_abundance_dat(GOM_MBA_RAW, "phyto")),
+  tar_target(mba_traverse_abund, mba_abundance_dat(GOM_MBA_RAW, "trav")),
+  tar_target(mba_eyecount_abund, mba_abundance_dat(GOM_MBA_RAW, "eye")),
   
   ####__ MBA Taxa Keys  ####
   tar_target(mba_phyto_key,  extract_mba_key(GOM_MBA_RAW, "phyto")),
@@ -125,11 +125,29 @@ list(
   tar_target(mba_eyecount_key,  extract_mba_key(GOM_MBA_RAW, "eye")),
   
   ####__  Pivot and Rename  ####
-  tar_target(mba_phyto_erddap   ,  pivot_mba_data(mba_phyto_abund, mba_phyto_key, "phyto")),
-  tar_target(mba_traverse_erddap,  pivot_mba_data(mba_traverse_abund, mba_traverse_key, "trav")),
-  tar_target(mba_eyecount_erddap,  pivot_mba_data(mba_eyecount_abund, mba_eyecount_key, "eye")),
+  tar_target(mba_phyto_long   ,  pivot_mba_data(mba_phyto_abund, mba_phyto_key, "phyto")),
+  tar_target(mba_traverse_long,  pivot_mba_data(mba_traverse_abund, mba_traverse_key, "trav")),
+  tar_target(mba_eyecount_long,  pivot_mba_data(mba_eyecount_abund, mba_eyecount_key, "eye")),
   
+  ####__MBA Unit Conversion
+  tar_target(mba_phyto_erddap   , mutate(mba_phyto_long, abundance = transect_to_m3(abundance_per_transect, "meters cubed"))),
+  tar_target(mba_traverse_erddap, mutate(mba_traverse_long, abundance = transect_to_m3(abundance_per_transect, "100 meters cubed"))),
+  tar_target(mba_eyecount_erddap, mutate(mba_eyecount_long, abundance = transect_to_m3(abundance_per_transect, "100 meters cubed"))),
  
+  
+  
+  
+  #### Raw Data from NOAA Mid Atlantic  ####
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   ####  Save Data for ERDDAP  ####
