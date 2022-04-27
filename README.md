@@ -3,10 +3,7 @@
 
 # NERACOOS_CPR_DATA
 
-Project to integrate Continuous Plankton Recorder data into NERACOOS &
-ERDDAP
-
-## About:
+Integrating Continuous Plankton Recorder data into NERACOOS & ERDDAP
 
 This repository contains the necessary code and documentation to support
 hosting the [Gulf of Maine Continuous Plankton Recorder Survey
@@ -14,90 +11,75 @@ Data](https://www.fisheries.noaa.gov/feature-story/long-running-plankton-survey-
 on
 [ERDDAP](http://ismn.erddap.neracoos.org/erddap/info/index.html?page=1&itemsPerPage=1000).
 
-## NOAA Gulf of Maine CPR Data
+## Organization:
 
-Data in its original form can be found in the
-[data_raw/](www.github.com/gulfofmaine/continuous_plankton_recorder/data_raw)
-sub-directory. Data in its original form was obtained from the NOAA
-Northeast Fisheries Science Center through communication with Chris
-Melrose.
+This repository documents the data provenance for continuous plankton
+recorder data obtained from a number of scientific research agencies
+([NOAA](https://www.fisheries.noaa.gov/about/northeast-fisheries-science-center)
+and [MAB](https://www.mba.ac.uk/)), and covering different sampling
+transects (The Gulf of Maine & The Mid-Atlantic Bight Transects).
 
-Data obtained from NOAA/NEFSC spans the period of: 1961-2013, and was
-delivered in the following excel file:
+Raw data from all sources is contained in the `data_raw/` directory.
+Code that prepares the raw data for ERDDAP and any necessary
+documentation is specific to the source that the data was received from.
+This information can be found in the following sub-folders:
 
-> **data_raw/NOAA_1961-2013/Gulf of Maine CPR (Feb 14, 2014
-> update).xlsx**
+| Sub-Folder       | Description                                    |
+|------------------|------------------------------------------------|
+| GulfOfMaine_NOAA | Gulf of Maine CPR Data obtained from NOAA      |
+| GulfOfMaine_MBA  | Gulf of Maine CPR Data Obtained from MBA       |
+| MidAtlantic_NOAA | Mid-Atlantic Bight CPR Data Obtained from NOAA |
+| MidAtlantic_MBA  | Mid-Atlantic Bight CPR Data Obtained from MBA  |
 
-That excel file is divided into 2 sheets. One contains data on
-phytoplankton and the other contains records on zooplankton. Each excel
-sheet has two or more additional rows in the header explaining the
-identification and development stage of certain taxa.
+These resources have been processed independently due to differences in
+measurement units and organization structures. Documentation on how each
+dataset was received and treated prior to uploading into ERDDAP is
+documented within each of the corresponding sub-folders.
 
-**NOTE: CPR data from NOAA is reported in units that do not follow CPR
-survey conventions.**
+### Reproducing the Data Transformations
 
-| Sheet Number | Description                                   | Units             |
-|--------------|-----------------------------------------------|-------------------|
-| Sheet 1      | Phytoplankton taxa densities by silk transect | Abundance / 1m3   |
-| Sheet 2      | Zooplankton taxa densities by silk transect   | Abundance / 100m3 |
-
-### Data Processing Code
-
-To make the CPR data more “ERDDAP-friendly” minor changes were applied
-to reshape the structure of the original dataset, resulting in a
-longer/tidyer dataset. Any modifications to the original files have been
-documented in the R scripts held in the
-[R/](www.github.com/gulfofmaine/R) sub-directory.
-
-Taxonomic encodings from the original excel file headers are also
-checked against MARMAP codes to ensure accuracy
-<https://www.nefsc.noaa.gov/nefsc/Narragansett/taxcodesA.html>
-
-### Reproducing Changes to CPR Data
-
-The full processing pipeline from raw data to its ERDDAP format has been
-implemented using the [{targets}](https://docs.ropensci.org/targets/)
-R-package, and can be recreated in full by running the following code in
-an active R session. (Assuming all R-packages are installed).
+The full processing pipeline from the raw data to their final ERDDAP
+formats has been implemented using the
+[{targets}](https://docs.ropensci.org/targets/) R-package, and can be
+recreated in full by running the following code in an active R session.
+(Assuming all R-packages are installed).
 
     library(targets)
     tar_make()
 
-This will recreate the processing steps outlined in `_targets.R`:
+This will recreate the processing steps outlined in `_targets.R` that
+transform the raw files into the format uploaded onto ERDDAP:
 
-<img src="man/figures/README-gulf of maine pipeline-1.png" width="100%" />
+<img src="README_files/figure-gfm/gulf of maine pipeline-1.png" width="100%" />
+
+The DAG above shows a simplified representation of the steps for the
+NOAA ZPR Zooplankton data, where the taxonomic information found in the
+header is separated from the abundance information and later joined back
+after it has been reshaped. Similar cleanup paths exist for the data
+obtained from NOAA as well as the data obtained from the MBA.
+
+### Unit and Taxa Classification Differences
+
+Due to how the CPR data is stored and maintained within these two
+institutions, conversions to a standard unit of measurement is necessary
+when working with CPR jointly from both sources. In addition to unit
+conversions, there are taxonomic and development stages that are
+recorded inconsistently across them, which require the use of a key for
+transitioning to coarser scale groupings.
+
+Information on resolving the differences between these two data
+resources can be found in the following sub folder:
+`working_across_sources/`, with examples of code working from ERDDAP as
+a starting point.
+
+# Project Funding:
+
+Funding for making these resources available was provided through grant
+awards from the [National Science Foundation](https://www.nsf.gov/) and
+from the [Lenfest Ocean Program](https://www.lenfestocean.org/en). With
+communication and support from the Northeast Fisheries Science Center
+and the Marine Biological Association.
 
 ------------------------------------------------------------------------
 
-## SAHFOS Gulf of Maine CPR Data
-
-Data obtained from SAHFOS spans the period of: **2013-2017**, and was
-delivered in the following files:
-
-> **data_raw/Gulf of Maine CPR/SAHFOS-MBA_2013-2017/MC part1.xlsx**  
-> **data_raw/Gulf of Maine CPR/SAHFOS-MBA_2013-2017/MC part 2.xlsx**
-
-Each of these files contain **three** sheets containing the different
-counting scales of the CPR survey, the phytoplankton, the traverse, and
-the “eye-count” scales. These three scales are based on the size of
-organisms counted. At each scale different subsets of the silk transect
-are used when counting the individually identified taxa. Counts from the
-subsets are then scaled to the entire silk transect and given a number
-on a categorical counting scale. These represent discrete jumps in
-abundance per transect.
-
-These three measurement increments correspond with the following
-sub-sampling protocols to save time when counting very small organisms:
-
-1.  **Phyto** - 1/8000th of transect counted  
-2.  **Traverse** - 1/40th of transect counted  
-3.  **Eyecount** - full transect counted
-
-| Sheet Number | Description                                   | Units                |
-|--------------|-----------------------------------------------|----------------------|
-| Sheet 1      | Phytoplankton taxa densities by silk transect | Abundance / Transect |
-| Sheet 2      | Zooplankton taxa densities by silk transect   | Abundance / Transect |
-| Sheet 3      | Eyecount taxa densities by silk transect      | Abundance / Transect |
-
-Conversions to a standard unit of measurement is necessary when working
-together with these two sources.
+## Bonus Resources:

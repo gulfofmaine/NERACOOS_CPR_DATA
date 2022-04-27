@@ -1,6 +1,12 @@
 ####  NOAA GOM CPR
 #### ERDDAP Prep
 
+# About:
+# This script holds the original code for tranforming the
+# raw CPR data from NOAA into its  tidyer form for placing on ERDDAP
+# the original code has been commented out, and the replacement steps
+# are now done using targets. The comparable targets objects are now present
+# in the code to illustrate what files are exported.
 
 
 ####  Packages  ####
