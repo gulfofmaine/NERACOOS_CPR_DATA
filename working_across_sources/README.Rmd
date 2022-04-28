@@ -1,0 +1,319 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  collapse = TRUE,
+  comment = "",
+  message = FALSE,
+  warning = FALSE,
+  out.width = "100%", 
+  dpi = 300
+)
+
+```
+
+
+# Joining NOAA and Marine Biological Association CPR Data
+
+As mentioned in the top-level README, slight differences in units and development stage classifications prevent a direct join of Gulf of Maine CPR data collected & stored by NOAA and its parallel data that is obtained from the Marine Biological Association.
+
+The data reshaping steps for working with these two data sources can be shown using data directly from ERDDAP.
+
+For user-convenience these
+
+```{r, eval = FALSE}
+# Load targets package
+library(targets)
+
+# Temporary paths to targets instead of ERDDAP
+withr::with_dir(rprojroot::find_root('_targets.R'), tar_load("noaa_zooplankton_erddap"))
+withr::with_dir(rprojroot::find_root('_targets.R'), tar_load("mba_eyecount_erddap"))
+withr::with_dir(rprojroot::find_root('_targets.R'), tar_load("mba_traverse_erddap"))
+```
+
+
+```{r, eval = TRUE}
+# ERDDAP Access Points
+library(rerddap)
+
+
+# 1. NOAA Zooplankton
+# Get the tabledap information from the server link and dataset_id
+cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
+                 datasetid = "noaa_gom_cpr_zooplankton")
+
+# Use the tabledap function to import all the data (optionally add filters)
+noaa_zooplankton_erddap <- tabledap(cpr_info)
+
+# 2. SAHFOS Traverse
+cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
+                 datasetid = "mba_gom_cpr_traverse")
+mba_traverse_erddap <- tabledap(cpr_info)
+
+# 2. SAHFOS Eyecount
+cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
+                 datasetid = "mba_gom_cpr_eyecount")
+mba_eyecount_erddap <- tabledap(cpr_info)
+
+
+
+```
+
+## 1. Totalling MBA Zooplankton
+
+Data from the MBA preserves the two measurement scales that the zooplankton data is recorded in. To get total zooplankton abundances.
+
+```{r}
+
+# Load data reshaping packages
+library(tidyverse)
+
+
+# The original code was in its wide-format, and with that format the metadata was in the first ten columns
+# What we can do instead with the long format is rename abundance and abundance_per_transect of the one of them, merge, then add them to get totals
+
+mba_eye <- rename(mba_eyecount_erddap,
+                  # abund_eyecount = abundance, 
+                  transect_abund_eyecount = abundance_per_transect)
+mba_trav <- rename(mba_traverse_erddap, 
+                   #abund_traverse = abundance, 
+                   transect_abund_traverse = abundance_per_transect)
+ 
+# Once the abundance columns are no longer in conflict we can merge them on taxa_id numbers etc.
+mba_zoo <- full_join(
+  x = mba_trav, 
+  y = mba_eye, 
+  by = c("cruise", "station", "date", "lat", "lon", "taxon", "taxa_id_number") # Target name
+  # by = c("cruise", "transect_number", "time", "latitude", "longitude", "taxa", "taxa_id_number") # Erddap names
+)
+ 
+
+# Total the abundances from traverse and eyecount scales where possible
+mba_zooplankton <- mba_zoo %>% 
+  mutate(
+    # Replace NA values with zeros
+    abund_eyecount       = ifelse(is.na(abund_eyecount), 0, abund_eyecount),
+    transect_abund_eyecount = ifelse(is.na(transect_abund_eyecount), 0, transect_abund_eyecount),
+    abund_traverse       = ifelse(is.na(abund_traverse), 0, abund_traverse),
+    transect_abund_traverse = ifelse(is.na(transect_abund_traverse), 0, transect_abund_traverse),
+    # Add them to get total abundances
+    abundance_per_transect = trans_abund_traverse + trans_abund_eyecount,
+    abundance              = abund_traverse + abund_eyecount
+  ) %>% 
+  select(-c(abund_eyecount, abund_traverse, trans_abund_eyecount, trans_abund_traverse))
+ 
+
+
+# Clean up environment
+rm(mba_eye, mba_eyecount_erddap, mba_trav, mba_traverse_erddap, mba_zoo)
+```
+
+
+## 2. Matching Development Stage Differences
+
+Now that there exists a combined zooplankton abundance table for both NOAA and MBA data, the next step is to ensure that the taxonomic name and development stages can be added together for a proper estimation of abundances.
+
+
+###  NOAA Taxonomic Names:
+
+
+
+
+```{r}
+# Original Source for code: github.com/adamkemberling/continuous_plankton_recorder/R/17_noaa_sahfos_eda.R
+# match sahfos column names to the noaa taxa groups
+
+# Load the keys for renaming taxa
+# Details on the keys available in reposiotry in GulfOfMaine_MBA/R & GulfOfMaine_NOAA/R
+noaa_taxa_key <- read_csv(here::here("GulfOfMaine_NOAA/taxa_resolving/noaa_gulfofmaine_taxa_key.csv"))
+
+# Reformat data types for later
+noaa_zooplankton_erddap <- mutate(noaa_zooplankton_erddap, 
+                                  station = as.character(station),
+                                  abundance = as.numeric(abundance))
+```
+
+
+
+### MBA Taxonomic Names:
+
+```{r}
+# Original Source for code: github.com/adamkemberling/continuous_plankton_recorder/R/17_noaa_sahfos_eda.R
+# match sahfos column names to the noaa taxa groups
+
+# Load the keys for renaming taxa
+# Details on the keys available in reposiotry in GulfOfMaine_MBA/R & GulfOfMaine_NOAA/R
+mba_taxa_key <- read_csv(here::here("GulfOfMaine_MBA/taxa_resolving/mba_gulfofmaine_taxa_key.csv"))
+ 
+
+# Join the Keys to the data:
+mba_zoo_renamed <- mba_zooplankton %>% 
+  mutate(taxon = tolower(taxon)) %>% 
+  left_join(mba_taxa_key, by = c("taxon" = "in_taxa")) %>% 
+  mutate(out_taxa = ifelse(is.na(out_taxa), taxon, out_taxa))
+
+
+# Drop and reorder columns
+mba_test <- mba_zoo_renamed %>% 
+  select(cruise, station, date, lat, lon, out_taxa, taxa_id_number, abundance, abundance_per_transect)
+
+
+# Unique Taxa from NOAA
+taxa_names <- sort(unique(noaa_zooplankton_erddap$taxa))
+taxa_stages <- sort(unique(noaa_zooplankton_erddap$stage))
+
+
+
+####____####
+# Cycle through all the taxa and pull them out as a new column
+
+
+# # This way doesn't work because the taxa from MBA are longer than the taxa were trying to  match agaisnt
+# mba_test %>%
+#   split(.$taxa) %>% 
+#   imap_dfr(function(x, y){
+#     
+#     # which taxa name is detected
+#     tax_matches <- which(str_detect(tolower(taxa_names), y))
+#     return(data.frame("match" = tax_matches))
+#     
+#   }, .id = "taxa")
+
+
+# This way drops things that don't  have a match
+mba_matches <- map_df(taxa_names, function(x){
+  mba_test %>% 
+    mutate(taxa = str_to_sentence(out_taxa)) %>% 
+    dplyr::filter(str_detect(string = taxa, pattern = x)) %>% 
+    mutate(taxa_new = x, .after = "taxa")
+})
+
+# Check
+glimpse(mba_matches)
+mba_matches %>% distinct(taxa_new) %>% arrange(taxa_new)
+
+
+# What taxxa didn't make the pass?
+`%nin%` <- function(x, table){ is.na(match(x, table, nomatch = NA_integer_))}
+
+
+# Taxonomic orphans
+taxa_orphans <- mba_test %>% 
+  filter(out_taxa %nin% mba_matches$out_taxa ) %>% 
+  distinct(out_taxa) %>% 
+  pull(out_taxa)
+
+print(sort(taxa_orphans))
+```
+
+### Getting Stage Information for MBA Data
+
+
+```{r}
+# Parentheses in the stage names prevent regex matches using stringr package
+
+# Going to lose these stages:
+orphan_flag <- str_detect(taxa_stages, pattern = "[(]")
+stage_orphans <- taxa_stages[orphan_flag]
+
+
+# The remaining can be processed
+stage_matches <- taxa_stages[!orphan_flag] %>% 
+  map_df(function(x){
+  mba_matches %>% 
+    dplyr::filter(str_detect(string = taxa, pattern = x)) %>% 
+    mutate(stage = x, .after = "taxa_new",
+           out_taxa = str_to_sentence(out_taxa))
+}) 
+
+
+# Rename columns to follow NOAA data structure
+mba_reformatted <- stage_matches %>% 
+  select(-c(taxa)) %>% 
+  select(cruise,
+         station,
+         date,
+         lat,
+         lon,
+         #`taxon name` = out_taxa,
+         taxa = taxa_new,
+         stage,
+         taxa_id_number,
+         abundance,
+         abundance_per_transect
+         )
+```
+
+### Getting PCI values into Zooplankton
+
+
+```{r}
+
+# PCI comes from phytoplankton data
+tar_load(mba_phyto_erddap)
+mba_pci <- distinct(mba_phyto_erddap, cruise, station, date, lat, lon, pci)
+head(mba_pci)
+
+# Merge station details with PCI into MBA zooplankton information
+mba_zooplankton_pci <- full_join(mba_pci, mba_reformatted)
+```
+
+
+
+## 3. Joining Data Sources
+
+```{r}
+# Look at MBA data
+head(mba_zooplankton_pci)
+```
+
+
+```{r}
+# Look at NOAA data
+head(noaa_zooplankton_erddap)
+```
+
+
+
+```{r}
+
+ 
+ 
+ 
+ #Bind the two data sources
+ join_zoo_sources <- function(noaa_zoo_refined, sahfos_zoo_renamed){
+   
+   combined_set <- bind_rows(
+     list("NOAA"   = noaa_zoo_refined, 
+          "SAHFOS" = sahfos_zoo_renamed), 
+     .id = "Data Source")
+   
+   return(combined_set)
+ }
+ 
+
+# Then just join them:
+datasets_joined <- join_zoo_sources(noaa_zoo_refined = noaa_zooplankton_erddap, sahfos_zoo_renamed = mba_reformatted) %>% 
+  arrange(date, taxa)
+
+```
+
+## Explore
+
+One thing that immediately will stand out is that early stage calanus is hard to identify down to the species, and is often counted under the more general "Calanus" taxa.
+
+```{r}
+datasets_joined %>% 
+  filter(taxa == "Calanus finmarchicus") %>% 
+  ggplot(aes(date, abundance, color = stage)) +
+  geom_point() +
+  theme(legend.position = "bottom") +
+  facet_wrap(~taxa + stage, scales = "free")
+```
+
+
