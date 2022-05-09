@@ -331,7 +331,7 @@ pivot_phyto <- function(phyto_abund, phyto_key){
   # clean up columns
   phyto_erd_clean <- phyto_erd %>% 
     select(cruise, 
-           station, 
+           transect_number = station, 
            date, 
            lat = `latitude (degrees)`, 
            lon = `longitude (degrees)`, 
@@ -398,14 +398,14 @@ pivot_zooplankton <- function(zoo_abund, zoo_key){
   zoo_erd_clean <- zoo_erd %>% 
     mutate(date = as.POSIXct(str_c(year, "-", month, "-", day, " ", hour, ":", minute, ":", "00"))) %>% 
     select(cruise, 
-           station, 
+           transect_number = station, 
            date, 
            lat = `latitude (degrees)`, 
            lon = `longitude (degrees)`, 
            pci = `phytoplankton color index`,
            taxa,
-           stage,
-           marmap_taxa = `marmap taxonomic code:`,
+           taxon_stage = stage,
+           marmap_code = `marmap taxonomic code:`,
            marmap_stage = `marmap stage code:`,
            abundance = abundance)
   

@@ -99,4 +99,6 @@ workflows that a user of this data may find helpful:
 -   [Generating a Full Gulf of Maine CPR
     Dataset](www.github.com/adamkemberling/NERACOOS_CPR_DATA/working_across_sources)  
 -   [Estimating Season Anomalies for Gulf of Maine CPR
-    Dataset](www.github.com/adamkemberling/NERACOOS_CPR_DATA/Estimating%20Anomalies)
+    Dataset](www.github.com/adamkemberling/NERACOOS_CPR_DATA/working_across_resources/cpr_seasonal_anomalies)
+-   [Calanus finmarchicus
+    Index](www.github.com/adamkemberling/NERACOOS_CPR_DATA/working_across_source/calanus_indices)

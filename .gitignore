@@ -3,5 +3,7 @@
 .RData
 .Ruserdata
 _targets/
+erddap_data/
+erddap_ready/
 README.html
 .DS_Store

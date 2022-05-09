@@ -49,6 +49,7 @@
             <att name="summary">Timeseries of phytoplankton abundances from the Gulf of Maine Continuous Plankton Recorder Survey.</att>
             <att name="title">NOAA Gulf of Maine Continuous Plankton Recorder Transect: Phytoplankton Data</att>
         </addAttributes>
+
         <dataVariable>
             <sourceName>cruise</sourceName>
             <destinationName>cruise</destinationName>
@@ -60,8 +61,9 @@
                 <att name="long_name">Cruise Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>station</sourceName>
+            <sourceName>transect_number</sourceName>
             <destinationName>transect_number</destinationName>
             <dataType>byte</dataType>
             <!-- sourceAttributes>
@@ -72,6 +74,7 @@
                 <att name="long_name">Transect Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>date</sourceName>
             <destinationName>time</destinationName>
@@ -87,6 +90,7 @@
                 <att name="units">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>lat</sourceName>
             <destinationName>latitude</destinationName>
@@ -102,6 +106,7 @@
                 <att name="units">degrees_north</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>lon</sourceName>
             <destinationName>longitude</destinationName>
@@ -117,6 +122,7 @@
                 <att name="units">degrees_east</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>pci</sourceName>
             <destinationName>phytoplankton_color_index</destinationName>
@@ -140,6 +146,7 @@
                 <att name="long_name">Phytoplankton Taxon</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>marmap_code</sourceName>
             <destinationName>marmap_code</destinationName>
@@ -152,6 +159,7 @@
                 <att name="long_name">Marmap Taxon Code</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>abundance</sourceName>
             <destinationName>abundance</destinationName>
@@ -235,8 +243,9 @@
                 <att name="long_name">Cruise Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>station</sourceName>
+            <sourceName>transect_number</sourceName>
             <destinationName>transect_number</destinationName>
             <dataType>byte</dataType>
             <!-- sourceAttributes>
@@ -247,6 +256,7 @@
                 <att name="long_name">Transect Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>date</sourceName>
             <destinationName>time</destinationName>
@@ -262,6 +272,7 @@
                 <att name="units">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>lat</sourceName>
             <destinationName>latitude</destinationName>
@@ -277,6 +288,7 @@
                 <att name="units">degrees_north</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>lon</sourceName>
             <destinationName>longitude</destinationName>
@@ -292,6 +304,7 @@
                 <att name="units">degrees_east</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>pci</sourceName>
             <destinationName>phytoplankton_color_index</destinationName>
@@ -304,6 +317,7 @@
                 <att name="long_name">Phytoplankton Color Index</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>taxa</sourceName>
             <destinationName>taxa</destinationName>
@@ -315,8 +329,9 @@
                 <att name="long_name">Zooplankton Taxon</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>stage</sourceName>
+            <sourceName>taxon_stage</sourceName>
             <destinationName>taxon_stage</destinationName>
             <dataType>String</dataType>
             <!-- sourceAttributes>
@@ -326,8 +341,9 @@
                 <att name="long_name">Taxon Development Stage</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>marmap_taxa</sourceName>
+            <sourceName>marmap_code</sourceName>
             <destinationName>marmap_code</destinationName>
             <dataType>short</dataType>
             <!-- sourceAttributes>
