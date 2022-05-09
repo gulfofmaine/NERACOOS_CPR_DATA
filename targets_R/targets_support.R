@@ -571,7 +571,7 @@ pivot_mba_data <- function(abund_dat, key_full, sample_type){
   if(sample_type == "phyto"){
     abunds_ready <- abunds_labelled %>% 
       select(cruise,
-             station,
+             transect_number = station,
              date = Midpoint_Date_Local,
              lat = Latitude,
              lon = Longitude,
@@ -584,7 +584,7 @@ pivot_mba_data <- function(abund_dat, key_full, sample_type){
     # Can't grab PCI if it doesn't exist
     abunds_ready <- abunds_labelled %>% 
       select(cruise,
-             station,
+             transect_number = station,
              date = Midpoint_Date_Local,
              lat = Latitude,
              lon = Longitude,

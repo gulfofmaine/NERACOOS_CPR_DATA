@@ -34,7 +34,7 @@
             <att name="contributor_name">NERACOOS ISMN</att>
             <att name="infoUrl">https://www.cprsurvey.org/</att>
             <att name="institution">Gulf of Maine Research Institute</att>
-            <att name="keywords">zooplankton, cpr, abundance, cruise, survey, plankton, phytoplankton, marmap, phytoplankton color index </att>
+            <att name="keywords">zooplankton, cpr, abundance, cruise, survey, plankton, phytoplankton, phytoplankton color index </att>
             <att name="license">[standard]</att>
             <att name="program">NERACOOS</att>
             <att name="project">Marine Biological Association (MBA) - Continuous Plankton Recorder (CPR) Survey: Gulf of Maine Transect </att>
@@ -60,6 +60,7 @@
                 <att name="long_name">Cruise Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>station</sourceName>
             <destinationName>transect_number</destinationName>
@@ -72,6 +73,7 @@
                 <att name="long_name">Transect Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>date</sourceName>
             <destinationName>time</destinationName>
@@ -87,6 +89,7 @@
                 <att name="units">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>lat</sourceName>
             <destinationName>latitude</destinationName>
@@ -102,6 +105,7 @@
                 <att name="units">degrees_north</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>lon</sourceName>
             <destinationName>longitude</destinationName>
@@ -152,6 +156,7 @@
                 <att name="long_name">Taxonomic Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>abundance</sourceName>
             <destinationName>abundance</destinationName>
@@ -165,6 +170,7 @@
                 <att name="units">Abundance per 1 cubic meter</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>abundance_per_transect</sourceName>
             <destinationName>abundance_per_transect</destinationName>
@@ -214,7 +220,7 @@
             <att name="contributor_name">NERACOOS ISMN</att>
             <att name="infoUrl">https://www.cprsurvey.org/</att>
             <att name="institution">Gulf of Maine Research Institute</att>
-            <att name="keywords">zooplankton, cpr, abundance, cruise, survey, phytoplankton, plankton, marmap, phytoplankton color index </att>
+            <att name="keywords">zooplankton, cpr, abundance, cruise, survey, phytoplankton, plankton, phytoplankton color index </att>
             <att name="license">[standard]</att>
             <att name="program">NERACOOS</att>
             <att name="project">Marine Biological Association (MBA) - Continuous Plankton Recorder (CPR) Survey: Gulf of Maine CPR Time Series </att>
@@ -240,8 +246,9 @@
                 <att name="long_name">Cruise Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>station</sourceName>
+            <sourceName>transect_number</sourceName>
             <destinationName>transect_number</destinationName>
             <dataType>byte</dataType>
             <!-- sourceAttributes>
@@ -252,6 +259,7 @@
                 <att name="long_name">Transect Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>date</sourceName>
             <destinationName>time</destinationName>
@@ -267,6 +275,7 @@
                 <att name="units">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>lat</sourceName>
             <destinationName>latitude</destinationName>
@@ -282,6 +291,7 @@
                 <att name="units">degrees_north</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>lon</sourceName>
             <destinationName>longitude</destinationName>
@@ -297,6 +307,7 @@
                 <att name="units">degrees_east</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>taxa</sourceName>
             <destinationName>taxa</destinationName>
@@ -308,6 +319,7 @@
                 <att name="long_name">Zooplankton Taxon</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>taxa_id_number</sourceName>
             <destinationName>taxa_id_number</destinationName>
@@ -320,6 +332,7 @@
                 <att name="long_name">Taxonomic Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>abundance</sourceName>
             <destinationName>abundance</destinationName>
@@ -382,7 +395,7 @@
             <att name="contributor_name">NERACOOS ISMN</att>
             <att name="infoUrl">https://www.cprsurvey.org/</att>
             <att name="institution">Gulf of Maine Research Institute</att>
-            <att name="keywords">zooplankton, cpr, abundance, cruise, survey, phytoplankton, plankton, marmap, phytoplankton color index </att>
+            <att name="keywords">zooplankton, cpr, abundance, cruise, survey, phytoplankton, plankton, phytoplankton color index </att>
             <att name="license">[standard]</att>
             <att name="program">NERACOOS</att>
             <att name="project">Marine Biological Association (MBA) - Continuous Plankton Recorder (CPR) Survey: Gulf of Maine CPR Time Series </att>
@@ -408,8 +421,9 @@
                 <att name="long_name">Cruise Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>station</sourceName>
+            <sourceName>transect_number</sourceName>
             <destinationName>transect_number</destinationName>
             <dataType>byte</dataType>
             <!-- sourceAttributes>
@@ -420,6 +434,7 @@
                 <att name="long_name">Transect Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>date</sourceName>
             <destinationName>time</destinationName>
@@ -435,6 +450,7 @@
                 <att name="units">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>lat</sourceName>
             <destinationName>latitude</destinationName>
@@ -450,6 +466,7 @@
                 <att name="units">degrees_north</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>lon</sourceName>
             <destinationName>longitude</destinationName>
@@ -465,6 +482,7 @@
                 <att name="units">degrees_east</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>taxa</sourceName>
             <destinationName>taxa</destinationName>
@@ -476,6 +494,7 @@
                 <att name="long_name">Zooplankton Taxon</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>taxa_id_number</sourceName>
             <destinationName>taxa_id_number</destinationName>
@@ -488,6 +507,7 @@
                 <att name="long_name">Taxonomic Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>abundance</sourceName>
             <destinationName>abundance</destinationName>
@@ -501,6 +521,7 @@
                 <att name="units">Abundance per 100 cubic meters</att>
             </addAttributes>
         </dataVariable>
+        
         <dataVariable>
             <sourceName>abundance_per_transect</sourceName>
             <destinationName>abundance_per_transect</destinationName>
