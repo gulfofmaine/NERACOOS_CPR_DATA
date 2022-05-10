@@ -577,7 +577,7 @@ pivot_mba_data <- function(abund_dat, key_full, sample_type){
              longitude = Longitude,
              pci = Chlorophyll_Index,
              taxon = `taxon name`,
-             taxa_id_number = id_number, #NOT the same as marmap codes
+             taxa_id_number = id_number, #NOT the same as marmap codes aphia code WoRMS
              abundance_per_transect)
   } else{
     
@@ -689,7 +689,23 @@ transect_to_m3 <- function(transect_abundance, out_units = c("meters cubed", "10
 
 ####
 
+####____Export to Box____####
 
+send_tobox <- function(
+    noaa_phyto,
+    noaa_zoo,
+    mab_phyto,
+    mab_trav,
+    mab_eye
+  ){
+  
+  
+  
+}
+
+
+
+####______________________####
 ####__ Joining Datasets  __####
 
 

@@ -26,18 +26,28 @@ The data reshaping steps for working with these two data sources can be shown us
 
 For user-convenience these
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 # Load targets package
 library(targets)
 
 # Temporary paths to targets instead of ERDDAP
-withr::with_dir(rprojroot::find_root('_targets.R'), tar_load("noaa_zooplankton_erddap"))
-withr::with_dir(rprojroot::find_root('_targets.R'), tar_load("mba_eyecount_erddap"))
-withr::with_dir(rprojroot::find_root('_targets.R'), tar_load("mba_traverse_erddap"))
+
+# NOAA Sourced
+withr::with_dir(rprojroot::find_root('_targets.R'),         
+                tar_load("noaa_zooplankton_erddap"))
+withr::with_dir(rprojroot::find_root('_targets.R'),         
+                tar_load("noaa_phytoplankton_erddap"))
+
+
+# MBA Sourced
+withr::with_dir(rprojroot::find_root('_targets.R'), 
+                tar_load("mba_eyecount_erddap"))
+withr::with_dir(rprojroot::find_root('_targets.R'), 
+                tar_load("mba_traverse_erddap"))
 ```
 
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 # ERDDAP Access Points
 library(rerddap)
 
@@ -50,12 +60,12 @@ cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap",
 # Use the tabledap function to import all the data (optionally add filters)
 noaa_zooplankton_erddap <- tabledap(cpr_info)
 
-# 2. SAHFOS Traverse
+# 2. MBA Traverse
 cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
                  datasetid = "mba_gom_cpr_traverse")
 mba_traverse_erddap <- tabledap(cpr_info)
 
-# 2. SAHFOS Eyecount
+# 2. MBA Eyecount
 cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
                  datasetid = "mba_gom_cpr_eyecount")
 mba_eyecount_erddap <- tabledap(cpr_info)
@@ -64,9 +74,9 @@ mba_eyecount_erddap <- tabledap(cpr_info)
 
 ```
 
-## 1. Totalling MBA Zooplankton
+## 1. Combine MBA Zooplankton (eyecount & traverse)
 
-Data from the MBA preserves the two measurement scales that the zooplankton data is recorded in. To get total zooplankton abundances.
+Data from the MBA preserves the two measurement scales that the zooplankton data is recorded in. To get total zooplankton abundances we need to combine the "eyecount" and "traverse" data into one zooplankton abundance dataset.
 
 ```{r}
 
@@ -88,8 +98,7 @@ mba_trav <- rename(mba_traverse_erddap,
 mba_zoo <- full_join(
   x = mba_trav, 
   y = mba_eye, 
-  # by = c("cruise", "transect_number", "date", "latitude", "longitude", "taxon", "taxa_id_number") # Target name
-  by = c("cruise", "transect_number", "time", "latitude", "longitude", "taxon", "taxa_id_number") # Erddap names
+  by = c("cruise", "transect_number", "date", "latitude", "longitude", "taxon", "taxa_id_number") # Erddap names
 )
  
 
@@ -102,10 +111,10 @@ mba_zooplankton <- mba_zoo %>%
     abund_traverse       = ifelse(is.na(abund_traverse), 0, abund_traverse),
     transect_abund_traverse = ifelse(is.na(transect_abund_traverse), 0, transect_abund_traverse),
     # Add them to get total abundances
-    abundance_per_transect = trans_abund_traverse + trans_abund_eyecount,
+    abundance_per_transect = transect_abund_traverse + transect_abund_eyecount,
     abundance              = abund_traverse + abund_eyecount
   ) %>% 
-  select(-c(abund_eyecount, abund_traverse, trans_abund_eyecount, trans_abund_traverse))
+  select(-c(abund_eyecount, abund_traverse, transect_abund_eyecount, transect_abund_traverse))
  
 
 
@@ -114,9 +123,11 @@ rm(mba_eye, mba_eyecount_erddap, mba_trav, mba_traverse_erddap, mba_zoo)
 ```
 
 
-## 2. Matching Development Stage Differences
+## 2. Match Development Stage Differences
 
 Now that there exists a combined zooplankton abundance table for both NOAA and MBA data, the next step is to ensure that the taxonomic name and development stages can be added together for a proper estimation of abundances.
+
+
 
 
 ###  NOAA Taxonomic Names:
@@ -126,7 +137,7 @@ Now that there exists a combined zooplankton abundance table for both NOAA and M
 
 ```{r}
 # Original Source for code: github.com/adamkemberling/continuous_plankton_recorder/R/17_noaa_sahfos_eda.R
-# match sahfos column names to the noaa taxa groups
+# match MBA column names to the noaa taxa groups
 
 # Load the keys for renaming taxa
 # Details on the keys available in reposiotry in GulfOfMaine_MBA/R & GulfOfMaine_NOAA/R
@@ -144,7 +155,7 @@ noaa_zooplankton_erddap <- mutate(noaa_zooplankton_erddap,
 
 ```{r}
 # Original Source for code: github.com/adamkemberling/continuous_plankton_recorder/R/17_noaa_sahfos_eda.R
-# match sahfos column names to the noaa taxa groups
+# match MBA column names to the noaa taxa groups
 
 # Load the keys for renaming taxa
 # Details on the keys available in reposiotry in GulfOfMaine_MBA/R & GulfOfMaine_NOAA/R
@@ -173,7 +184,7 @@ taxa_stages <- sort(unique(noaa_zooplankton_erddap$stage))
 # Cycle through all the taxa and pull them out as a new column
 
 
-# # This way doesn't work because the taxa from MBA are longer than the taxa were trying to  match agaisnt
+# # This way doesn't work because the taxa from MBA are longer than the taxa were trying to  match against
 # mba_test %>%
 #   split(.$taxa) %>% 
 #   imap_dfr(function(x, y){
@@ -185,7 +196,7 @@ taxa_stages <- sort(unique(noaa_zooplankton_erddap$stage))
 #   }, .id = "taxa")
 
 
-# This way drops things that don't  have a match
+# This way drops things that don't have a match
 mba_matches <- map_df(taxa_names, function(x){
   mba_test %>% 
     mutate(taxa = str_to_sentence(out_taxa)) %>% 
@@ -234,12 +245,12 @@ stage_matches <- taxa_stages[!orphan_flag] %>%
 
 # Rename columns to follow NOAA data structure
 mba_reformatted <- stage_matches %>% 
-  select(-c(taxa)) %>% 
+  select(-c(taxon)) %>% 
   select(cruise,
-         station,
+         transect_number,
          date,
-         lat,
-         lon,
+         latitude,
+         longitude,
          #`taxon name` = out_taxa,
          taxa = taxa_new,
          stage,

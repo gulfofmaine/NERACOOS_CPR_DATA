@@ -355,6 +355,7 @@
                 <att name="long_name">Marmap Taxon Code</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>marmap_stage</sourceName>
             <destinationName>marmap_stage</destinationName>
@@ -368,6 +369,7 @@
                 <att name="missing_value" type="short">32767</att>
             </addAttributes>
         </dataVariable>
+        
         <dataVariable>
             <sourceName>abundance</sourceName>
             <destinationName>abundance</destinationName>

@@ -153,7 +153,7 @@
             <addAttributes>
                 <att name="_FillValue" type="short">32767</att>
                 <att name="ioos_category">Identifier</att>
-                <att name="long_name">Taxonomic Identification Number</att>
+                <att name="long_name">Aphia Taxonomic Identification Number</att>
             </addAttributes>
         </dataVariable>
 
@@ -185,6 +185,8 @@
             </addAttributes>
         </dataVariable>
     </dataset>
+
+
 
     <dataset type="EDDTableFromAsciiFiles" datasetID="mba_gom_cpr_traverse" active="true">
         <reloadEveryNMinutes>10080</reloadEveryNMinutes>
@@ -329,7 +331,7 @@
             <addAttributes>
                 <att name="_FillValue" type="short">32767</att>
                 <att name="ioos_category">Identifier</att>
-                <att name="long_name">Taxonomic Identification Number</att>
+                <att name="long_name">Aphia Taxonomic Identification Number</att>
             </addAttributes>
         </dataVariable>
 
@@ -361,6 +363,8 @@
         </dataVariable>
     </dataset>
     
+
+
     <dataset type="EDDTableFromAsciiFiles" datasetID="mba_gom_cpr_eyecount" active="true">
         <reloadEveryNMinutes>10080</reloadEveryNMinutes>
         <updateEveryNMillis>10000</updateEveryNMillis>
@@ -504,7 +508,7 @@
             <addAttributes>
                 <att name="_FillValue" type="short">32767</att>
                 <att name="ioos_category">Identifier</att>
-                <att name="long_name">Taxonomic Identification Number</att>
+                <att name="long_name">Aphia Taxonomic Identification Number</att>
             </addAttributes>
         </dataVariable>
 
