@@ -91,7 +91,7 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>lat</sourceName>
+            <sourceName>latitude</sourceName>
             <destinationName>latitude</destinationName>
             <dataType>double</dataType>
             <!-- sourceAttributes>
@@ -107,7 +107,7 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>lon</sourceName>
+            <sourceName>longitude</sourceName>
             <destinationName>longitude</destinationName>
             <dataType>double</dataType>
             <!-- sourceAttributes>
@@ -277,7 +277,7 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>lat</sourceName>
+            <sourceName>latitude</sourceName>
             <destinationName>latitude</destinationName>
             <dataType>double</dataType>
             <!-- sourceAttributes>
@@ -293,7 +293,7 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>lon</sourceName>
+            <sourceName>longitude</sourceName>
             <destinationName>longitude</destinationName>
             <dataType>double</dataType>
             <!-- sourceAttributes>
@@ -452,7 +452,7 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>lat</sourceName>
+            <sourceName>latitude</sourceName>
             <destinationName>latitude</destinationName>
             <dataType>double</dataType>
             <!-- sourceAttributes>
@@ -468,7 +468,7 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>lon</sourceName>
+            <sourceName>longitude</sourceName>
             <destinationName>longitude</destinationName>
             <dataType>double</dataType>
             <!-- sourceAttributes>
@@ -521,7 +521,7 @@
                 <att name="units">Abundance per 100 cubic meters</att>
             </addAttributes>
         </dataVariable>
-        
+
         <dataVariable>
             <sourceName>abundance_per_transect</sourceName>
             <destinationName>abundance_per_transect</destinationName>

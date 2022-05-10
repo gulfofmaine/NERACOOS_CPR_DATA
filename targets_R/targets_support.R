@@ -333,8 +333,8 @@ pivot_phyto <- function(phyto_abund, phyto_key){
     select(cruise, 
            transect_number = station, 
            date, 
-           lat = `latitude (degrees)`, 
-           lon = `longitude (degrees)`, 
+          latitude = `latitude (degrees)`, 
+          longitude = `longitude (degrees)`, 
            pci = `phytoplankton color index`,
            taxon = `taxon name`,
            marmap_code = `marmap code:`,
@@ -400,8 +400,8 @@ pivot_zooplankton <- function(zoo_abund, zoo_key){
     select(cruise, 
            transect_number = station, 
            date, 
-           lat = `latitude (degrees)`, 
-           lon = `longitude (degrees)`, 
+           latitude = `latitude (degrees)`, 
+           longitude = `longitude (degrees)`, 
            pci = `phytoplankton color index`,
            taxa,
            taxon_stage = stage,
@@ -573,8 +573,8 @@ pivot_mba_data <- function(abund_dat, key_full, sample_type){
       select(cruise,
              transect_number = station,
              date = Midpoint_Date_Local,
-             lat = Latitude,
-             lon = Longitude,
+             latitude = Latitude,
+             longitude = Longitude,
              pci = Chlorophyll_Index,
              taxon = `taxon name`,
              taxa_id_number = id_number, #NOT the same as marmap codes
@@ -586,8 +586,8 @@ pivot_mba_data <- function(abund_dat, key_full, sample_type){
       select(cruise,
              transect_number = station,
              date = Midpoint_Date_Local,
-             lat = Latitude,
-             lon = Longitude,
+             latitude = Latitude,
+             longitude = Longitude,
              # pci = Chlorophyll_Index,
              taxon = `taxon name`,
              taxa_id_number = id_number, #NOT the same as marmap codes
@@ -995,7 +995,7 @@ transect_to_m3 <- function(transect_abundance, out_units = c("meters cubed", "10
 #'     mutate(cal_date = as.POSIXct(str_c(year, month, day, sep = "/"), format = "%Y/%m/%d"), .after = "day") %>% 
 #'     mutate(jday = lubridate::yday(cal_date), .after = "cal_date") %>% 
 #'     rename(lon = `longitude (degrees)`,
-#'            lat = `latitude (degrees)`)
+#'           latitude = `latitude (degrees)`)
 #'   
 #'   return(cpr_date_prepped)
 #' }

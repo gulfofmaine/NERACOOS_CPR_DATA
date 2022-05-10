@@ -78,18 +78,18 @@ library(tidyverse)
 # What we can do instead with the long format is rename abundance and abundance_per_transect of the one of them, merge, then add them to get totals
 
 mba_eye <- rename(mba_eyecount_erddap,
-                  # abund_eyecount = abundance, 
+                  abund_eyecount = abundance, 
                   transect_abund_eyecount = abundance_per_transect)
 mba_trav <- rename(mba_traverse_erddap, 
-                   #abund_traverse = abundance, 
+                   abund_traverse = abundance, 
                    transect_abund_traverse = abundance_per_transect)
  
 # Once the abundance columns are no longer in conflict we can merge them on taxa_id numbers etc.
 mba_zoo <- full_join(
   x = mba_trav, 
   y = mba_eye, 
-  by = c("cruise", "station", "date", "lat", "lon", "taxon", "taxa_id_number") # Target name
-  # by = c("cruise", "transect_number", "time", "latitude", "longitude", "taxa", "taxa_id_number") # Erddap names
+  # by = c("cruise", "transect_number", "date", "latitude", "longitude", "taxon", "taxa_id_number") # Target name
+  by = c("cruise", "transect_number", "time", "latitude", "longitude", "taxon", "taxa_id_number") # Erddap names
 )
  
 
