@@ -15,8 +15,8 @@
         <columnSeparator></columnSeparator>
         <columnNamesRow>1</columnNamesRow>
         <firstDataRow>2</firstDataRow>
-        <sortedColumnSourceName>date</sortedColumnSourceName>
-        <sortFilesBySourceNames>date</sortFilesBySourceNames>
+        <sortedColumnSourceName>time</sortedColumnSourceName>
+        <sortFilesBySourceNames>time</sortFilesBySourceNames>
         <fileTableInMemory>false</fileTableInMemory>
 
         <addAttributes>
@@ -75,15 +75,15 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>date</sourceName>
+            <sourceName>time</sourceName>
             <destinationName>time</destinationName>
             <dataType>String</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
             <addAttributes>
                 <att name="ioos_category">Time</att>
-                <att name="long_name">Date</att>
-                <att name="source_name">date</att>
+                <att name="long_name">Datetime</att>
+                <att name="source_name">time</att>
                 <att name="standard_name">time</att>
                 <att name="time_precision">1970-01-01T00:00:00Z</att>
                 <att name="units">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</att>
@@ -121,9 +121,10 @@
                 <att name="units">degrees_east</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>pci</sourceName>
-            <destinationName>phytoplankton_color_index</destinationName>
+            <destinationName>pci</destinationName>
             <dataType>float</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
@@ -133,6 +134,7 @@
                 <att name="long_name">Phytoplankton Color Index</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>taxon</sourceName>
             <destinationName>taxon</destinationName>
@@ -144,16 +146,17 @@
                 <att name="long_name">Phytoplankton Taxon</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>taxa_id_number</sourceName>
-            <destinationName>taxa_id_number</destinationName>
+            <sourceName>mba_id</sourceName>
+            <destinationName>mba_id</destinationName>
             <dataType>short</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
             <addAttributes>
                 <att name="_FillValue" type="short">32767</att>
                 <att name="ioos_category">Identifier</att>
-                <att name="long_name">Aphia Taxonomic Identification Number</att>
+                <att name="long_name">Taxonomic Identification Number</att>
             </addAttributes>
         </dataVariable>
 
@@ -203,8 +206,8 @@
         <columnSeparator></columnSeparator>
         <columnNamesRow>1</columnNamesRow>
         <firstDataRow>2</firstDataRow>
-        <sortedColumnSourceName>date</sortedColumnSourceName>
-        <sortFilesBySourceNames>date</sortFilesBySourceNames>
+        <sortedColumnSourceName>time</sortedColumnSourceName>
+        <sortFilesBySourceNames>time</sortFilesBySourceNames>
         <fileTableInMemory>false</fileTableInMemory>
 
         <addAttributes>
@@ -263,15 +266,15 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>date</sourceName>
+            <sourceName>time</sourceName>
             <destinationName>time</destinationName>
             <dataType>String</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
             <addAttributes>
                 <att name="ioos_category">Time</att>
-                <att name="long_name">Date</att>
-                <att name="source_name">date</att>
+                <att name="long_name">Datetime</att>
+                <att name="source_name">time</att>
                 <att name="standard_name">time</att>
                 <att name="time_precision">1970-01-01T00:00:00Z</att>
                 <att name="units">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</att>
@@ -311,6 +314,19 @@
         </dataVariable>
 
         <dataVariable>
+            <sourceName>pci</sourceName>
+            <destinationName>pci</destinationName>
+            <dataType>float</dataType>
+            <!-- sourceAttributes>
+        </sourceAttributes -->
+            <addAttributes>
+                <att name="_FillValue" type="float">NaN</att>
+                <att name="ioos_category">Unknown</att>
+                <att name="long_name">Phytoplankton Color Index</att>
+            </addAttributes>
+        </dataVariable>
+
+        <dataVariable>
             <sourceName>taxa</sourceName>
             <destinationName>taxa</destinationName>
             <dataType>String</dataType>
@@ -323,15 +339,15 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>taxa_id_number</sourceName>
-            <destinationName>taxa_id_number</destinationName>
+            <sourceName>mba_id</sourceName>
+            <destinationName>mba_id</destinationName>
             <dataType>short</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
             <addAttributes>
                 <att name="_FillValue" type="short">32767</att>
                 <att name="ioos_category">Identifier</att>
-                <att name="long_name">Aphia Taxonomic Identification Number</att>
+                <att name="long_name">Taxonomic Identification Number</att>
             </addAttributes>
         </dataVariable>
 
@@ -380,8 +396,8 @@
         <columnSeparator></columnSeparator>
         <columnNamesRow>1</columnNamesRow>
         <firstDataRow>2</firstDataRow>
-        <sortedColumnSourceName>date</sortedColumnSourceName>
-        <sortFilesBySourceNames>date</sortFilesBySourceNames>
+        <sortedColumnSourceName>time</sortedColumnSourceName>
+        <sortFilesBySourceNames>time</sortFilesBySourceNames>
         <fileTableInMemory>false</fileTableInMemory>
 
         <addAttributes>
@@ -440,15 +456,15 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>date</sourceName>
+            <sourceName>time</sourceName>
             <destinationName>time</destinationName>
             <dataType>String</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
             <addAttributes>
                 <att name="ioos_category">Time</att>
-                <att name="long_name">Date</att>
-                <att name="source_name">date</att>
+                <att name="long_name">Datetime</att>
+                <att name="source_name">time</att>
                 <att name="standard_name">time</att>
                 <att name="time_precision">1970-01-01T00:00:00Z</att>
                 <att name="units">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</att>
@@ -488,6 +504,19 @@
         </dataVariable>
 
         <dataVariable>
+            <sourceName>pci</sourceName>
+            <destinationName>pci</destinationName>
+            <dataType>float</dataType>
+            <!-- sourceAttributes>
+        </sourceAttributes -->
+            <addAttributes>
+                <att name="_FillValue" type="float">NaN</att>
+                <att name="ioos_category">Unknown</att>
+                <att name="long_name">Phytoplankton Color Index</att>
+            </addAttributes>
+        </dataVariable>
+
+        <dataVariable>
             <sourceName>taxa</sourceName>
             <destinationName>taxa</destinationName>
             <dataType>String</dataType>
@@ -500,15 +529,15 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>taxa_id_number</sourceName>
-            <destinationName>taxa_id_number</destinationName>
+            <sourceName>mba_id</sourceName>
+            <destinationName>mba_id</destinationName>
             <dataType>short</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
             <addAttributes>
                 <att name="_FillValue" type="short">32767</att>
                 <att name="ioos_category">Identifier</att>
-                <att name="long_name">Aphia Taxonomic Identification Number</att>
+                <att name="long_name">Taxonomic Identification Number</att>
             </addAttributes>
         </dataVariable>
 

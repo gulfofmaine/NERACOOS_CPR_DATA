@@ -63,7 +63,7 @@ This will recreate the processing steps outlined in `_targets.R` that transform 
 
 
 withr::with_dir(rprojroot::find_root('_targets.R'), 
-                tar_visnetwork(allow =  c("GOM_NOAA_RAW", "zooplankton_raw", "zoo_abundances", "zoo_key", "noaa_zooplankton_erddap", "pivot_zooplankton", "pull_zoo_pieces")))
+                tar_visnetwork(allow =  c("gom_noaa_raw", "zp_raw", "zp_abund", "zp_key", "noaa_zp_erddap", "pivot_zooplankton", "pull_zoo_pieces")))
 ```
 
 The DAG above shows a simplified representation of the steps for the NOAA Continuous Plankton Recorder Survey's Zooplankton data, where the taxonomic information found in the header is separated from the abundance information and later joined back after it has been reshaped. Similar cleanup paths exist for the data obtained from NOAA as well as the data obtained from the MBA. 

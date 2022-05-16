@@ -15,8 +15,8 @@
         <columnSeparator></columnSeparator>
         <columnNamesRow>1</columnNamesRow>
         <firstDataRow>2</firstDataRow>
-        <sortedColumnSourceName>date</sortedColumnSourceName>
-        <sortFilesBySourceNames>date</sortFilesBySourceNames>
+        <sortedColumnSourceName>time</sortedColumnSourceName>
+        <sortFilesBySourceNames>time</sortFilesBySourceNames>
         <fileTableInMemory>false</fileTableInMemory>
 
         <addAttributes>
@@ -76,15 +76,15 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>date</sourceName>
+            <sourceName>time</sourceName>
             <destinationName>time</destinationName>
             <dataType>String</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
             <addAttributes>
                 <att name="ioos_category">Time</att>
-                <att name="long_name">Date</att>
-                <att name="source_name">date</att>
+                <att name="long_name">Datetime</att>
+                <att name="source_name">time</att>
                 <att name="standard_name">time</att>
                 <att name="time_precision">1970-01-01T00:00:00Z</att>
                 <att name="units">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</att>
@@ -125,7 +125,7 @@
 
         <dataVariable>
             <sourceName>pci</sourceName>
-            <destinationName>phytoplankton_color_index</destinationName>
+            <destinationName>pci</destinationName>
             <dataType>float</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
@@ -199,8 +199,8 @@
         <columnSeparator></columnSeparator>
         <columnNamesRow>1</columnNamesRow>
         <firstDataRow>2</firstDataRow>
-        <sortedColumnSourceName>date</sortedColumnSourceName>
-        <sortFilesBySourceNames>date</sortFilesBySourceNames>
+        <sortedColumnSourceName>time</sortedColumnSourceName>
+        <sortFilesBySourceNames>time</sortFilesBySourceNames>
         <fileTableInMemory>false</fileTableInMemory>
 
         <addAttributes>
@@ -259,15 +259,15 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>date</sourceName>
+            <sourceName>time</sourceName>
             <destinationName>time</destinationName>
             <dataType>String</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
             <addAttributes>
                 <att name="ioos_category">Time</att>
-                <att name="long_name">Date</att>
-                <att name="source_name">date</att>
+                <att name="long_name">Datetime</att>
+                <att name="source_name">time</att>
                 <att name="standard_name">time</att>
                 <att name="time_precision">1970-01-01T00:00:00Z</att>
                 <att name="units">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</att>
@@ -308,7 +308,7 @@
 
         <dataVariable>
             <sourceName>pci</sourceName>
-            <destinationName>phytoplankton_color_index</destinationName>
+            <destinationName>pci</destinationName>
             <dataType>float</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->

@@ -5,5 +5,6 @@
 _targets/
 erddap_data/
 erddap_ready/
+data_raw/PlanktonLifeformExtraction/
 README.html
 .DS_Store
