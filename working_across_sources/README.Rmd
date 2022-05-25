@@ -20,11 +20,11 @@ knitr::opts_chunk$set(
 
 # Building One Continuous Time Series
 
-
 As mentioned in the top-level README, slight differences in units and development stage classifications prevent a direct join of Gulf of Maine CPR data collected & stored by NOAA and its parallel data that is obtained from the Marine Biological Association (MBA).
 
-## Loading NOAA and MBA Data
+This readme is intended to serve as a guide for how one might resolve these differences, and a record of some of the pitfalls a researcher one might encounter. As always, feedback and suggestions are welcome via github or by email.
 
+## Loading NOAA and MBA Data
 
 The data reshaping steps for working with these two data sources can be shown using data directly from ERDDAP.
 
