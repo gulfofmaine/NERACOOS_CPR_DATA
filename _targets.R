@@ -247,32 +247,32 @@ list(
   
   ####  Save Data for ERDDAP  ####
    
-  # Both sent to Box for Dylan:
-  # tar_target(
-  #   export_all,
-  #   targets_tobox(
-  #     noaa_phyto = noaa_phyto_erddap,
-  #     noaa_zoo = noaa_zooplankton_erddap,
-  #     mba_phyto = mba_phyto_erddap,
-  #     mba_trav = mba_zpt_erddap,
-  #     mba_eye = mba_zpe_erddap)
-  # )
+  # Both xml and CSV's sent to Box for upload to s3:
+  tar_target(
+    export_all,
+    targets_tobox(
+      noaa_phyto = noaa_phyto_erddap,
+      noaa_zoo   = noaa_zooplankton_erddap,
+      mba_phyto  = mba_phyto_erddap,
+      mba_trav   = mba_zpt_erddap,
+      mba_eye    = mba_zpe_erddap)
+  )
   
   
-  # Saving to erddap_ready folder:
-  # NOAA data
-  tar_target(save_noaa_phyto,
-             write_csv(noaa_phyto_erddap, here::here("erddap_ready/noaa_gom_cpr_phytoplankton.csv"))),
-  tar_target(save_noaa_zp,
-             write_csv(noaa_zp_erddap, here::here("erddap_ready/noaa_gom_cpr_zooplankton.csv"))),
-
-  # MBA data
-  tar_target(save_mba_phyto,
-             write_csv(mba_phyto_erddap, here::here("erddap_ready/mba_gom_cpr_phytoplankton.csv"))),
-  tar_target(save_mba_zpt,
-             write_csv(mba_zpt_erddap, here::here("erddap_ready/mba_gom_cpr_traverse.csv"))),
-  tar_target(save_mba_zpe,
-             write_csv(mba_zpe_erddap, here::here("erddap_ready/mba_gom_cpr_eyecount.csv")))
+  # # Saving to erddap_ready folder:
+  # # NOAA data
+  # tar_target(save_noaa_phyto,
+  #            write_csv(noaa_phyto_erddap, here::here("erddap_ready/noaa_gom_cpr_phytoplankton.csv"))),
+  # tar_target(save_noaa_zp,
+  #            write_csv(noaa_zp_erddap, here::here("erddap_ready/noaa_gom_cpr_zooplankton.csv"))),
+  # 
+  # # MBA data
+  # tar_target(save_mba_phyto,
+  #            write_csv(mba_phyto_erddap, here::here("erddap_ready/mba_gom_cpr_phytoplankton.csv"))),
+  # tar_target(save_mba_zpt,
+  #            write_csv(mba_zpt_erddap, here::here("erddap_ready/mba_gom_cpr_traverse.csv"))),
+  # tar_target(save_mba_zpe,
+  #            write_csv(mba_zpe_erddap, here::here("erddap_ready/mba_gom_cpr_eyecount.csv")))
 
   
 

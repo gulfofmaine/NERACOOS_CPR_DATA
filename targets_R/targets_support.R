@@ -764,6 +764,24 @@ supplement_PCI <- function(phyto_dat, zooplankton_dat){
 ####__________________####
 ####____Export to Box____####
 
+
+
+
+#' @title Export Files to Box, for ERDDAP
+#' 
+#' @description The last step before the data goes onto ERDDAP, is the csv containing the data and 
+#' an XML describing it are used to create a s3 datasource that ERDDAP can reference for the file.
+#'
+#' @param noaa_phyto NOAA Phytoplankton
+#' @param noaa_zoo NOAA Zooplankton
+#' @param mba_phyto MBA Phytoplankton
+#' @param mba_trav MBA Traverse Zooplankton
+#' @param mba_eye MBA Eyecount Zooplankton
+#'
+#' @return
+#' @export
+#'
+#' @examples
 targets_tobox <- function(noaa_phyto, noaa_zoo, mba_phyto, mba_trav, mba_eye){
 
   # Path to organization's Box drive
