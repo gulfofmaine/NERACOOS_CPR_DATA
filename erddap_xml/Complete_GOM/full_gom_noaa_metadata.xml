@@ -1,10 +1,10 @@
     <!--Test NOAA Gulf of Maine CPR Data-->
 
-    <dataset type="EDDTableFromAsciiFiles" datasetID="noaa_gom_cpr_phytoplankton" active="true">
+    <dataset type="EDDTableFromAsciiFiles" datasetID="gom_cpr_phytoplankton_full" active="true">
         <reloadEveryNMinutes>10080</reloadEveryNMinutes>
         <updateEveryNMillis>10000</updateEveryNMillis>
         <fileDir>/cache</fileDir>
-        <fileNameRegex>mba_gom_cpr_phytoplankton.csv</fileNameRegex>
+        <fileNameRegex>gom_cpr_phytoplankton_full.csv</fileNameRegex>
         <cacheFromUrl>https://mbon-erddap-store.s3.us-east-1.amazonaws.com/CPR/</cacheFromUrl>
         <cacheSizeGB>10</cacheSizeGB>
         <recursive>true</recursive>
@@ -46,8 +46,8 @@
             <att name="sourceUrl">(local files)</att>
             <att name="standard_name_vocabulary">CF Standard Name Table v70</att>
             <att name="subsetVariables">cruise, transect_number, taxon</att>
-            <att name="summary">Timeseries of phytoplankton abundances from the Gulf of Maine Continuous Plankton Recorder Survey.</att>
-            <att name="title">NOAA Gulf of Maine Continuous Plankton Recorder Transect: Phytoplankton Data</att>
+            <att name="summary">Timeseries of phytoplankton abundances from the Gulf of Maine Continuous Plankton Recorder Survey, Full Timeseries.</att>
+            <att name="title">Gulf of Maine Continuous Plankton Recorder Transect: Phytoplankton Data</att>
         </addAttributes>
 
         <dataVariable>
@@ -149,15 +149,15 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>marmap_code</sourceName>
-            <destinationName>marmap_code</destinationName>
+            <sourceName>aphia_number</sourceName>
+            <destinationName>aphia_number</destinationName>
             <dataType>short</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
             <addAttributes>
                 <att name="_FillValue" type="short">32767</att>
                 <att name="ioos_category">Identifier</att>
-                <att name="long_name">Marmap Taxon Code</att>
+                <att name="long_name">Numeric Taxon Code from WORMs and Aphia ID Database</att>
             </addAttributes>
         </dataVariable>
 
@@ -184,13 +184,13 @@
 
 
 
-    <dataset type="EDDTableFromAsciiFiles" datasetID="noaa_gom_cpr_zooplankton" active="true">
+    <dataset type="EDDTableFromAsciiFiles" datasetID="gom_cpr_zooplankton_full" active="true">
         <reloadEveryNMinutes>10080</reloadEveryNMinutes>
         <updateEveryNMillis>10000</updateEveryNMillis>
         <fileDir>/cache</fileDir>
         <cacheFromUrl>https://mbon-erddap-store.s3.us-east-1.amazonaws.com/CPR/</cacheFromUrl>
         <cacheSizeGB>10</cacheSizeGB>
-        <fileNameRegex>noaa_gom_cpr_zooplankton.csv</fileNameRegex>
+        <fileNameRegex>gom_cpr_zooplankton_full.csv</fileNameRegex>
         <recursive>true</recursive>
         <pathRegex>.*</pathRegex>
         <metadataFrom>last</metadataFrom>
@@ -230,8 +230,8 @@
             <att name="sourceUrl">(local files)</att>
             <att name="standard_name_vocabulary">CF Standard Name Table v70</att>
             <att name="subsetVariables">cruise, transect_number, taxa</att>
-            <att name="summary">Timeseries of zooplankton densities from the Gulf of Maine Continuous Plankton Recorder Survey.</att>
-            <att name="title">NOAA Gulf of Maine Continuous Plankton Recorder Transect: CPR Zooplankton Data</att>
+            <att name="summary">Timeseries of zooplankton densities from the Gulf of Maine Continuous Plankton Recorder Survey, Full Timeseries.</att>
+            <att name="title">Gulf of Maine Continuous Plankton Recorder Transect: CPR Zooplankton Data</att>
         </addAttributes>
         <dataVariable>
             <sourceName>cruise</sourceName>
@@ -344,15 +344,15 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>marmap_code</sourceName>
-            <destinationName>marmap_code</destinationName>
+            <sourceName>aphia_number</sourceName>
+            <destinationName>aphia_number</destinationName>
             <dataType>short</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
             <addAttributes>
                 <att name="_FillValue" type="short">32767</att>
-                <att name="ioos_category">Taxonomy</att>
-                <att name="long_name">Marmap Taxon Code</att>
+                <att name="ioos_category">Identifier</att>
+                <att name="long_name">Numeric Taxon Code from WORMs and Aphia ID Database</att>
             </addAttributes>
         </dataVariable>
 

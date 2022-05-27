@@ -216,43 +216,15 @@ list(
                             zooplankton_dat = mba_zpe_100m)),
   
   
-  
-  ####__ MBA Taxa Keys  ####
-  
-  ####__  Pivot and Rename  ####
-
-  ####__MBA Unit Conversion
-  
-  #### All Zooplankton:  ####
-  
-  # Combine traverse and eyecount:
-  
-  
-  
-  
-  
   ####____________________####
-  #### Raw Data from NOAA Mid Atlantic  ####
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   ####  Save Data for ERDDAP  ####
-   
+  
   # Both xml and CSV's sent to Box for upload to s3:
   tar_target(
     export_all,
     targets_tobox(
       noaa_phyto = noaa_phyto_erddap,
-      noaa_zoo   = noaa_zooplankton_erddap,
+      noaa_zoo   = noaa_zp_erddap,
       mba_phyto  = mba_phyto_erddap,
       mba_trav   = mba_zpt_erddap,
       mba_eye    = mba_zpe_erddap)
@@ -273,9 +245,26 @@ list(
   #            write_csv(mba_zpt_erddap, here::here("erddap_ready/mba_gom_cpr_traverse.csv"))),
   # tar_target(save_mba_zpe,
   #            write_csv(mba_zpe_erddap, here::here("erddap_ready/mba_gom_cpr_eyecount.csv")))
-
   
-
+  
+  
+  
+  
+  
+  ####____________________####
+  #### Raw Data from NOAA Mid Atlantic  ####
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
 )
 # End of _targets.R

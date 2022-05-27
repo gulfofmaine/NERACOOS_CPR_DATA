@@ -422,39 +422,28 @@ pivot_zooplankton <- function(zoo_abund, zoo_key){
     mutate(taxa = str_to_sentence(taxa),
            stage = tolower(stage))
   
+
   
-  # Prep zoo key names
-  key_clean <- zoo_key #%>% 
-    # separate(`taxon name`,  
-    #          into = c("taxa", "stage"), 
-    #          sep = "[_]", 
-    #          fill = "right", 
-    #          remove = TRUE) %>% 
-    # mutate(taxa = str_to_sentence(taxa))
-  
-  
-  
-  # Join marmap codes in, prep the data... key is all jank?
+  # Join marmap codes in, prep the data
   zoo_erd <- zoo_split %>% 
-    left_join(key_clean, by = c("taxa", "stage")) 
+    left_join(zoo_key, by = c("taxa", "stage")) 
   
   
   # # Check that the stage matched up
   # zoo_erd %>% distinct(`taxon name`, taxa, stage)
   
-  
-  
-  
   # reformat columns
   zoo_erd_clean <- zoo_erd %>% 
-    mutate(date = as.POSIXct(str_c(year, "-", month, "-", day, " ", hour, ":", minute, ":", "00"))) %>% 
+    mutate(
+      date = as.POSIXct(str_c(year, "-", month, "-", day, " ", hour, ":", minute, ":", "00")),
+      stage = str_trim(stage)) %>% 
     select(cruise, 
            transect_number = station, 
            time = date, 
            latitude = `latitude (degrees)`, 
            longitude = `longitude (degrees)`, 
            pci = `phytoplankton color index`,
-           taxa,
+           taxon = taxa,
            taxon_stage = stage,
            marmap_code = `marmap taxonomic code:`,
            marmap_stage = `marmap stage code:`,
@@ -784,18 +773,24 @@ supplement_PCI <- function(phyto_dat, zooplankton_dat){
 #' @examples
 targets_tobox <- function(noaa_phyto, noaa_zoo, mba_phyto, mba_trav, mba_eye){
 
-  # Path to organization's Box drive
-  box_path <- gmRi::cs_path("res", "CPR_ERDDAP")
-  gom_path <- str_c(box_path, "/gulfofmaine_cpr/")
-  dat_path <- str_c(gom_path, "/data/")
-  xml_path <- str_c(gom_path, "/xml/")
+  # # This function does not seem to overwrite anything... or work, wtf Box
+  # plz excuse profanity I have covid
+  # # Path to organization's Box drive -
+  # box_path <- gmRi::cs_path("res", "CPR_ERDDAP")
+  # box_path <- gmRi::cs_path("res", "CPR_ERDDAP")
+  # gom_path <- str_c(box_path, "/gulfofmaine_cpr/")
+  # dat_path <- str_c(gom_path, "/data/")
+  # xml_path <- str_c(gom_path, "/xml/")
 
+  # Use here, then manually move:
+  here_path <- here::here("erddap_ready")
+  
   # Data
-  write_csv(noaa_phyto, file = str_c(dat_path, "noaa_gom_cpr_phytoplankton.csv"))
-  write_csv(noaa_zoo,   file = str_c(dat_path, "noaa_gom_cpr_zoooplankton.csv"))
-  write_csv(mba_phyto,  file = str_c(dat_path, "mba_gom_cpr_phytoplankton.csv"))
-  write_csv(mba_trav,   file = str_c(dat_path, "mba_gom_cpr_traverse.csv"))
-  write_csv(mba_eye,    file = str_c(dat_path, "mba_gom_cpr_eyecount.csv"))
+  write_csv(noaa_phyto, file = str_c(here_path, "/noaa_gom_cpr_phytoplankton.csv"))
+  write_csv(noaa_zoo,   file = str_c(here_path, "/noaa_gom_cpr_zooplankton.csv"))
+  write_csv(mba_phyto,  file = str_c(here_path, "/mba_gom_cpr_phytoplankton.csv"))
+  write_csv(mba_trav,   file = str_c(here_path, "/mba_gom_cpr_traverse.csv"))
+  write_csv(mba_eye,    file = str_c(here_path, "/mba_gom_cpr_eyecount.csv"))
 
 
   # XML
@@ -912,16 +907,17 @@ separate_taxastage <- function(z_dat){
     list(singles, doubles, leftovers))
   
   # Add to the mba_zooplankton
+  # Drop the original one that was long and had both:
   mba_splittaxa <- z_copy %>% 
     select(-taxon) %>% 
     left_join(taxa_split, by = "row_i") 
   
   
-  # Drop the original one that was long and had both:
+  # Tidy up
   mba_splittaxa <- mba_splittaxa %>% 
     mutate(taxa = str_to_sentence(taxa)) %>% 
     select(cruise, transect_number, time, latitude, longitude, pci, 
-           taxa, taxon_stage, mba_id, abundance_per_transect, abundance)
+           taxon = taxa, taxon_stage, mba_id, abundance_per_transect, abundance)
   
   # Return the split taxa
   return(mba_splittaxa)

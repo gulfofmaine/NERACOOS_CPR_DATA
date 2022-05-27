@@ -8,6 +8,11 @@ development stage classifications prevent a direct join of Gulf of Maine
 CPR data collected & stored by NOAA and its parallel data that is
 obtained from the Marine Biological Association (MBA).
 
+This readme is intended to serve as a guide for how one might resolve
+these differences, and a record of some of the pitfalls a researcher one
+might encounter. As always, feedback and suggestions are welcome via
+github or by email.
+
 ## Loading NOAA and MBA Data
 
 The data reshaping steps for working with these two data sources can be
@@ -466,9 +471,11 @@ follows:
 | aphia_id        | Aphia Identification number                                     |
 | abundance       | Estimated abundance in \# per 100 meters cubed of water         |
 
-From here it is fairly easy to work on these larger stage groups, but
-whenever in doubt it is always possible to operate on the taxonomic
-level:
+### Example: Average Densities of C. Fin
+
+From this point it is fairly easy to work on these larger stage groups
+for analyses, but whenever in doubt it is always possible to operate on
+the taxonomic level:
 
 ``` r
 gom_full_grouped %>% 

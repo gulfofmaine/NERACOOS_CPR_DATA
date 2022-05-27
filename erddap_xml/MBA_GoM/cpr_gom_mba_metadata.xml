@@ -327,8 +327,8 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>taxa</sourceName>
-            <destinationName>taxa</destinationName>
+            <sourceName>taxon</sourceName>
+            <destinationName>taxon</destinationName>
             <dataType>String</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
@@ -517,8 +517,8 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>taxa</sourceName>
-            <destinationName>taxa</destinationName>
+            <sourceName>taxon</sourceName>
+            <destinationName>taxon</destinationName>
             <dataType>String</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
