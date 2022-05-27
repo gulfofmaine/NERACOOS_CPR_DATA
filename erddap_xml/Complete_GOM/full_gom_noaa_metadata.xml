@@ -149,8 +149,8 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>aphia_number</sourceName>
-            <destinationName>aphia_number</destinationName>
+            <sourceName>aphia_id</sourceName>
+            <destinationName>aphia_id</destinationName>
             <dataType>short</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
@@ -344,8 +344,8 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>aphia_number</sourceName>
-            <destinationName>aphia_number</destinationName>
+            <sourceName>aphia_id</sourceName>
+            <destinationName>aphia_id</destinationName>
             <dataType>short</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
@@ -353,20 +353,6 @@
                 <att name="_FillValue" type="short">32767</att>
                 <att name="ioos_category">Identifier</att>
                 <att name="long_name">Numeric Taxon Code from WORMs and Aphia ID Database</att>
-            </addAttributes>
-        </dataVariable>
-
-        <dataVariable>
-            <sourceName>marmap_stage</sourceName>
-            <destinationName>marmap_stage</destinationName>
-            <dataType>short</dataType>
-            <!-- sourceAttributes>
-        </sourceAttributes -->
-            <addAttributes>
-                <att name="_FillValue" type="short">999</att>
-                <att name="ioos_category">Biology</att>
-                <att name="long_name">Marmap Development Stage Code</att>
-                <att name="missing_value" type="short">32767</att>
             </addAttributes>
         </dataVariable>
         

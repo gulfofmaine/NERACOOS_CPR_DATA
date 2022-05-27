@@ -342,6 +342,8 @@ gulfofmaine_full <- bind_rows(noaa_prepped, mba_stage_tidy) %>%
 
 The data at this point has had a few minor cosmetic changes, and a handful of find & replace swaps for text consistencies, but is otherwise true to its original form. The following table details what columns are present, and what information they contain. This information will be mirrored by the ERDDAP metadata.
 
+**NOTE:** For code used to repeat the processs for phytoplankton, refer to `working_across_sources/R/phytoplankton_timeseries_processing.R`.
+
 ## Full Timeseries Data Dictionary:
 
 Once these steps are complete the data is now in a single table spanning the full time period. Definitions of the different columns are as follows:
