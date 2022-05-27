@@ -529,8 +529,8 @@
         </dataVariable>
 
         <dataVariable>
-            <sourceName>aphia_id</sourceName>
-            <destinationName>aphia_id</destinationName>
+            <sourceName>mba_id</sourceName>
+            <destinationName>mba_id</destinationName>
             <dataType>short</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
