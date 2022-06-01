@@ -342,7 +342,7 @@ gulfofmaine_full <- bind_rows(noaa_prepped, mba_stage_tidy) %>%
 
 The data at this point has had a few minor cosmetic changes, and a handful of find & replace swaps for text consistencies, but is otherwise true to its original form. The following table details what columns are present, and what information they contain. This information will be mirrored by the ERDDAP metadata.
 
-**NOTE:** For code used to repeat the processs for phytoplankton, refer to `working_across_sources/R/phytoplankton_timeseries_processing.R`.
+**NOTE:** For code used to repeat the processs for phytoplankton, refer to `Full_Timeseries_Workup/R/phytoplankton_timeseries_processing.R`.
 
 ## Full Timeseries Data Dictionary:
 
@@ -456,7 +456,7 @@ check_stage_use("Centropages typicus")
 
 There are a handful of instances where the original taxon stage that is assigned, is a group that spans this early-late distinction that we might desire. For these instances the original range is preserved but with additional text removed.
 
-```{r}
+```{r, eval = FALSE}
 # Make a key that we can iterate over them
 stage_reduce_key <- list(
   # "taxon_stage",   "stage_group",
@@ -519,7 +519,7 @@ stage_reduce_key <- list(
 
 
 
-# Since it is a list we can iwalk through them and use if else
+# Since it is a list we can iwalk through them and use if else to supply the new stage grouping
 gom_full_grouped <- imap_dfr(stage_reduce_key, function(new_stage, messy_stage){
   
   # Filter just the stage so we don't duplicate or need to merge later:

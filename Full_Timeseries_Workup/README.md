@@ -13,7 +13,7 @@ these differences, and a record of some of the pitfalls a researcher one
 might encounter. As always, feedback and suggestions are welcome via
 github or by email.
 
-## Loading NOAA and MBA Data
+### Loading NOAA and MBA Data
 
 The data reshaping steps for working with these two data sources can be
 shown using data directly from ERDDAP.
@@ -21,6 +21,9 @@ shown using data directly from ERDDAP.
 For user-convenience these steps have been detailed below:
 
 **Necessary R Packages**
+
+The following R packages and their uses are necessary for recreating the
+steps outlined in this README:
 
 ``` r
 library(targets)   # For loading data from targets workflow
@@ -35,20 +38,11 @@ library(worrms)    # Interface with WORMS and Aphia ID's
 **Working from the {targets} pipeline**
 
 ``` r
-# Paths to targets instead of ERDDAP
+# Paths to targets instead of ERDDAP:
 
-# NOAA Sourced Years
+#---- NOAA Sourced Years ----#
 withr::with_dir(rprojroot::find_root('_targets.R'),         
                 tar_load("noaa_zp_erddap"))
-# withr::with_dir(rprojroot::find_root('_targets.R'),         
-#                 tar_load("noaa_phyto_erddap"))
-
-
-# MBA Sourced Years
-withr::with_dir(rprojroot::find_root('_targets.R'), 
-                tar_load("mba_zpe_erddap"))
-withr::with_dir(rprojroot::find_root('_targets.R'), 
-                tar_load("mba_zpt_erddap"))
 
 
 # Reformat data types for later
@@ -58,8 +52,13 @@ noaa_zp <- noaa_zp_erddap %>%
     abundance = as.numeric(abundance))
 
 
+#---- MBA Sourced Years ----#
+withr::with_dir(rprojroot::find_root('_targets.R'), 
+                tar_load("mba_zpe_erddap"))
+withr::with_dir(rprojroot::find_root('_targets.R'), 
+                tar_load("mba_zpt_erddap"))
 
-# Shorten MBA names
+# Shorten the MBA names
 mba_zpt <- mba_zpt_erddap
 mba_zpe <- mba_zpe_erddap
 
@@ -111,7 +110,7 @@ zooplankton taxa. To get total zooplankton abundances we need to first
 combine the “eyecount” and “traverse” data into one zooplankton
 abundance dataset.
 
-In general there is very little overlap where a taxa would be
+In general there is very little overlap where a taxon would be
 “double-counted”, making this step a simple append. As a check against
 instances where there may be abundance data at both scales, I rename the
 columns before joining them to preserve the source scale. Then I can
@@ -213,7 +212,7 @@ up taxonomic ID numbers from their names.
 
 # Can we get the Aphia ID anyways, mostly
 mba_aphia <- mba_stages %>% 
-  split(.$taxa) %>% 
+  split(.$taxon) %>% 
   imap_dfr(function(x, y){
     # Attempt to gain Aphia ID using lookup:
     aphia_id = try(
@@ -224,7 +223,7 @@ mba_aphia <- mba_stages %>%
     aphia_id <- ifelse(class(aphia_id) == "try-error", NA, aphia_id)
     x_out <- mutate(x, aphia_id = aphia_id, .after = "mba_id")
     return(x_out)}) %>% 
-  arrange(time, cruise, transect_number, taxa)
+  arrange(time, cruise, transect_number, taxon)
 
 rm(mba_stages)
 ```
@@ -249,7 +248,7 @@ data:
 ``` r
 # Do the same Aphia ID Check for the NOAA taxa
 noaa_aphia <- noaa_zp %>% 
-  split(.$taxa) %>% 
+  split(.$taxon) %>% 
   imap_dfr(function(x, y){
     # Attempt to gain Aphia ID using lookup:
     aphia_id = try(
@@ -260,18 +259,18 @@ noaa_aphia <- noaa_zp %>%
     aphia_id <- ifelse(class(aphia_id) == "try-error", NA, aphia_id)
     x_out <- mutate(x, aphia_id = aphia_id, .after = "marmap_stage")
     return(x_out)}) %>% 
-  arrange(time, cruise, transect_number, taxa)
+  arrange(time, cruise, transect_number, taxon)
 
 
 rm(noaa_zp)
 ```
 
-# Create One Continuous Time Series
+# Creating One Continuous Time Series
 
 At this stage we have two groups of data, one from NOAA & two years of
 data from the Marine Biological Association. These datasets have been
 modified to contain consistent units and augmented with Aphia
-identification numbers for each taxa.
+identification numbers for each taxon.
 
 From here, we just need to drop columns that we no longer need. Then
 there a few minor tweaks where text strings are changed to be
@@ -325,32 +324,120 @@ mba_stage_tidy <- mba_prepped %>%
     taxon_stage = ifelse(taxon_stage == "larvae (total)", "larvae", taxon_stage),
     taxon_stage = ifelse(taxon_stage == "larvae (unidentified)", "larvae", taxon_stage),
     taxon_stage = ifelse(taxon_stage == "(unidentified)", NA, taxon_stage),
-    # Cfin is not given a stage, but since it is only ID'd to 
-    # species at adult stages we can presume V-VI
-    taxon_stage = ifelse(taxa == "Calanus finmarchicus", "copepodite v-vi", taxon_stage)
+    # Cfin is not given a stage, but since it is only ID'd as 
+    # an adult stages we can presume V-VI
+    taxon_stage = ifelse(taxon == "Calanus finmarchicus", "copepodite v-vi", taxon_stage)
   )
 
 #rm(mba_prepped)
 ```
 
+### Make NA’s Explicit
+
+In the notes from the NOAA data it is stated that abundance values of
+`-9999` are used when a taxon is identified but no abundance is given.
+To safeguard against these being averaged into estimates, these have
+been replaced with true `NA` values.
+
 ``` r
 # Drop data with caveats or incorrect/missing information
 noaa_prepped <- noaa_prepped %>% 
-  mutate(abundance = ifelse(abundance == -9999, NA, abundance)) 
+  mutate(abundance = ifelse(abundance == -9999, NA, abundance))
+```
 
+### Merge Data Sources
 
-# Format column types
+Finally we get to a point where columns are aligned, carrying the same
+information in the same forms.
+
+``` r
+# Format column types for merge
 mba_stage_tidy <- mutate(mba_stage_tidy, pci = as.character(pci))
 
 # Append full timeseries
-gulfofmaine_full <- bind_rows(noaa_prepped, mba_stage_tidy)
+gulfofmaine_full <- bind_rows(noaa_prepped, mba_stage_tidy) %>% 
+  mutate(taxon_stage = ifelse(is.na(taxon_stage), "unstaged", taxon_stage))
 ```
 
-### Simplify Development Stages
+# Saving a Single Time Series
 
-The last step is an ease-of-use change to simplify the development
-stages of zooplankton into early stage (copepodite stages I-IV) and late
-stage (copepodite stages V-VI).
+The data at this point has had a few minor cosmetic changes, and a
+handful of find & replace swaps for text consistencies, but is otherwise
+true to its original form. The following table details what columns are
+present, and what information they contain. This information will be
+mirrored by the ERDDAP metadata.
+
+**NOTE:** For code used to repeat the processs for phytoplankton, refer
+to `Full_Timeseries_Workup/R/phytoplankton_timeseries_processing.R`.
+
+## Full Timeseries Data Dictionary:
+
+Once these steps are complete the data is now in a single table spanning
+the full time period. Definitions of the different columns are as
+follows:
+
+| Column          | Definition                                                   |
+|:----------------|:-------------------------------------------------------------|
+| cruise          | Identification code for the ship passage through the region. |
+| transect_number | Transect number sampled during the cruise                    |
+| time            | Date-time of the midpoint of the transect                    |
+| latitude        | Latitude coordinate of the center of the transect            |
+| longitude       | Longitude coordinate of the center of the transect           |
+| pci             | Phytoplankton color index                                    |
+| taxon           | Taxonomic identification                                     |
+| taxon_stage     | Development stage identification if given                    |
+| aphia_id        | Aphia Identification number                                  |
+| abundance       | Estimated abundance in \# per 100 meters cubed of water      |
+
+### Showcase: Average Densities of C. Fin
+
+From this point it is fairly straightforward to select a taxon of
+interest and check its abundances. The biggest pitfall/disclaimer to
+highlight however is that there is some inconsistency through time with
+the `taxon_stage`. Whenever in doubt it is always possible to operate on
+the `taxon` level.
+
+``` r
+gulfofmaine_full %>% 
+  filter(taxon %in% c("Calanus", "Calanus finmarchicus")) %>% 
+  group_by(year = lubridate::year(time), taxon) %>% 
+  summarise(mean_abundance = mean(abundance, na.rm = T),
+            .groups = "drop") %>%
+  ggplot(aes(year, mean_abundance)) +
+  geom_line(size = 0.5, linetype = 3) +
+  geom_point(size = 1) +
+  facet_wrap(~taxon, ncol = 1, scale = "free") +
+  labs(x = "Year", y = "Average Abundance / 100m3")
+```
+
+<img src="README_files/figure-gfm/unnamed-chunk-14-1.png" width="100%" />
+
+## Saving the Single Timeseries
+
+Because these steps for preparing the data contain some decision making
+on how strings are formatted and how to encode `NA` values these steps
+were not included in the primary pipeline. However, because of its ease
+of use advantages this full time series has been added to ERDDAP as
+well.
+
+``` r
+write_csv(gulfofmaine_full, here::here("erddap_ready", "gom_cpr_zooplankton_full.csv"))
+```
+
+------------------------------------------------------------------------
+
+# Extras
+
+As mentioned previously, sometimes there is a need to get abundance for
+particular stages (or range of stages) through time. In order to do so,
+one must resolve them to a less-precise grouping that will capture
+groups of stages that may have phased in-and-out of use through time.
+
+## Simplifying Development Stages
+
+The following approach is one possible solution for an ease-of-use
+change to simplify the development stages of zooplankton into early
+stage (copepodite stages I-IV) and late stage (copepodite stages V-VI).
 
 What this step accomplished is it eliminates any circumstance where
 certain specific stages or groups of stages that were used in the past
@@ -364,19 +451,19 @@ coalesce them into the groups that were actually used.
 
 One example where this is somewhat straightforward is C. finmarchicus:
 
-<img src="README_files/figure-gfm/unnamed-chunk-13-1.png" width="100%" />
+<img src="README_files/figure-gfm/unnamed-chunk-17-1.png" width="100%" />
 
 An example that is less obvious how to proceed with might be C. typicus.
 In this example, beginning around 1985 and for whatever reason, instead
 of recording C. typicus under `copepodite IV-VI`, abundances were now
 being allocated to stages `IV-V` or just `VI`.
 
-<img src="README_files/figure-gfm/unnamed-chunk-14-1.png" width="100%" />
+<img src="README_files/figure-gfm/unnamed-chunk-18-1.png" width="100%" />
 
 There are a handful of instances where the original taxon stage that is
 assigned, is a group that spans this early-late distinction that we
-might desire. For these instances a more inclusive “i-vi” group is
-assigned.
+might desire. For these instances the original range is preserved but
+with additional text removed.
 
 ``` r
 # Make a key that we can iterate over them
@@ -389,14 +476,14 @@ stage_reduce_key <- list(
   "calyptopis"              = "calyptopis",                                               
   "calyptopis (protozoea)"  = "calyptopis",                                     
   "calyptopis i"            = "calyptopis",                                     
-  "copepedite iii-v   "     = "copepodite i-vi",                                   
+  "copepedite iii-v"        = "copepodite i-vi",                                   
   "copepodite"              = "copepodite",                                  
   "copepodite i"            = "copepodite i-iv",
   "copepodite i-iii"        = "copepodite i-iv",                                
   "copepodite i-iv"         = "copepodite i-iv",                                         
   "copepodite i-v"          = "copepodite i-vi",                                          
   "copepodite i-v (pseudocalanus / copepodite i-vi (paracalanus)" =  
-    "copepodite i-v",
+    "copepodite i-vi",
   "copepodite i-vi"         = "copepodite i-vi",                                                    
   "copepodite ii"           = "copepodite i-iv",                                       
   "copepodite ii-vi"        = "copepodite i-iv",                      
@@ -404,8 +491,8 @@ stage_reduce_key <- list(
   "copepodite iii-iv"       = "copepodite i-iv",                                
   "copepodite iii-vi"       = "copepodite i-vi",                                   
   "copepodite iv"           = "copepodite i-iv",                             
-  "copepodite iv-v"         = "copepodite i-vi",                                 
-  "copepodite iv-vi"        = "copepodite i-vi",                                
+  "copepodite iv-v"         = "copepodite iv-v",                                 
+  "copepodite iv-vi"        = "copepodite iv-vi",                                
   "copepodite v"            = "copepodite v-vi",                                    
   "copepodite v-vi"         = "copepodite v-vi",                            
   "copepodite vi"           = "copepodite v-vi",                                      
@@ -441,53 +528,15 @@ stage_reduce_key <- list(
 
 
 
-# Since it is a list we can iwalk through them and use if else
+# Since it is a list we can iwalk through them and use if else to supply the new stage grouping
 gom_full_grouped <- imap_dfr(stage_reduce_key, function(new_stage, messy_stage){
   
   # Filter just the stage so we don't duplicate or need to merge later:
   gulfofmaine_full %>% 
     filter(taxon_stage == messy_stage) %>% 
     mutate(stage_group = new_stage, .after = "taxon_stage")}) %>% 
-  arrange(time, cruise, transect_number, taxa)
+  arrange(time, cruise, transect_number, taxon)
+
+
+# And we can see if/when those are used also
 ```
-
-## Full Timeseries Data Dictionary:
-
-Once these steps are complete the data is now in a single table spanning
-the full time period. Definitions of the different columns are as
-follows:
-
-| Column          | Definition                                                      |
-|:----------------|:----------------------------------------------------------------|
-| cruise          | Identification code for the ship passage through the region.    |
-| transect_number | Transect number sampled during the cruise                       |
-| time            | Date-time of the midpoint of the transect                       |
-| latitude        | Latitude coordinate of the center of the transect               |
-| longitude       | Longitude coordinate of the center of the transect              |
-| pci             | Phytoplankton color index                                       |
-| taxa            | Taxonomic identification                                        |
-| taxon_stage     | Development stage identification if given                       |
-| stage_group     | Early or late development stage group, created from taxon_stage |
-| aphia_id        | Aphia Identification number                                     |
-| abundance       | Estimated abundance in \# per 100 meters cubed of water         |
-
-### Example: Average Densities of C. Fin
-
-From this point it is fairly easy to work on these larger stage groups
-for analyses, but whenever in doubt it is always possible to operate on
-the taxonomic level:
-
-``` r
-gom_full_grouped %>% 
-  filter(taxa %in% c("Calanus", "Calanus finmarchicus")) %>% 
-  group_by(year = lubridate::year(time), taxa) %>% 
-  summarise(mean_abundance = mean(abundance, na.rm = T),
-            .groups = "drop") %>%
-  ggplot(aes(year, mean_abundance)) +
-  geom_line(size = 0.5, linetype = 3) +
-  geom_point(size = 1) +
-  facet_wrap(~taxa, ncol = 1, scale = "free") +
-  labs(x = "Year", y = "Average Abundance / 100m3")
-```
-
-<img src="README_files/figure-gfm/unnamed-chunk-17-1.png" width="100%" />

@@ -47,7 +47,7 @@
             <att name="standard_name_vocabulary">CF Standard Name Table v70</att>
             <att name="subsetVariables">cruise, transect_number, taxon</att>
             <att name="summary">Timeseries of phytoplankton abundances from the Gulf of Maine Continuous Plankton Recorder Survey.</att>
-            <att name="title">MBA Gulf of Maine Continuous Plankton Recorder Transect: Phytoplankton Data</att>
+            <att name="title">MBA Gulf of Maine Continuous Plankton Recorder: Phytoplankton</att>
         </addAttributes>
         <dataVariable>
             <sourceName>cruise</sourceName>
@@ -238,7 +238,7 @@
             <att name="standard_name_vocabulary">CF Standard Name Table v70</att>
             <att name="subsetVariables">cruise, transect_number, taxa</att>
             <att name="summary">Timeseries of zooplankton densities from the Gulf of Maine Continuous Plankton Recorder Survey.</att>
-            <att name="title">MBA Gulf of Maine Continuous Plankton Recorder Transect: CPR Traverse Data</att>
+            <att name="title">MBA Gulf of Maine Continuous Plankton Recorder: Traverse Zooplankton</att>
         </addAttributes>
         <dataVariable>
             <sourceName>cruise</sourceName>
@@ -428,7 +428,7 @@
             <att name="standard_name_vocabulary">CF Standard Name Table v70</att>
             <att name="subsetVariables">cruise, transect_number, taxa </att>
             <att name="summary">Timeseries of zooplankton densities from the Gulf of Maine Continuous Plankton Recorder Survey.</att>
-            <att name="title">MBA Gulf of Maine Continuous Plankton Recorder Transect: CPR Eyecount Data</att>
+            <att name="title">MBA Gulf of Maine Continuous Plankton Recorder: Eyecount Zooplankton</att>
         </addAttributes>
         <dataVariable>
             <sourceName>cruise</sourceName>

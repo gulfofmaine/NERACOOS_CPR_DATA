@@ -83,7 +83,8 @@ software packages like R’s
 library(rerddap)
 
 # Get the tabledap information from the server link and dataset_id
-cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", datasetid = "noaa_gom_traverse")
+cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
+                 datasetid = "noaa_gom_cpr_zooplankton")
 
 # Use the tabledap function to import all the data (optionally add filters)
 gom_zooplankton <- tabledap(cpr_info)
@@ -101,7 +102,7 @@ e = ERDDAP(
 )
 
 # Add Dataset ID
-e.dataset_id = "noaa_gom_phyto"
+e.dataset_id = "noaa_gom_cpr_phytoplankton"
 
 # Coerce to pandas df
 gom_phytoplankton = e.to_pandas()
