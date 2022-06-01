@@ -74,7 +74,7 @@
             </addAttributes>
         </dataVariable>
 
-        <dataVariable>
+        <dataVariable>  
             <sourceName>time</sourceName>
             <destinationName>time</destinationName>
             <dataType>String</dataType>
@@ -552,6 +552,19 @@
                 <att name="ioos_category">Unknown</att>
                 <att name="long_name">Abundance</att>
                 <att name="units">Abundance per 100 cubic meters</att>
+            </addAttributes>
+        </dataVariable>
+        <dataVariable>
+            <sourceName>abundance_per_transect</sourceName>
+            <destinationName>abundance_per_transect</destinationName>
+            <dataType>double</dataType>
+            <!-- sourceAttributes>
+        </sourceAttributes -->
+            <addAttributes>
+                <att name="_FillValue" type="double">-9999.0</att>
+                <att name="ioos_category">Unknown</att>
+                <att name="long_name">Abundance per Transect</att>
+                <att name="units">Actual or estimated number present in a single silk mesh sample</att>
             </addAttributes>
         </dataVariable>
 
