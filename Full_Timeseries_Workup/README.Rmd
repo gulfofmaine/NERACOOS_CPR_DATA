@@ -393,6 +393,12 @@ gulfofmaine_full %>%
 Because these steps for preparing the data contain some decision making on how strings are formatted and how to encode `NA` values these steps were not included in the primary pipeline. However, because of its ease of use advantages this full time series has been added to ERDDAP as well.
 
 ```{r}
+# Change units of longitude to place them in correct hemisphere:
+# This is done prior to putting on ERDDAP
+gulfofmaine_full <- gulfofmaine_full %>%  
+  mutate(longitude = ifelse(longitude > 0, longitude *-1, longitude))
+
+# Save it
 write_csv(gulfofmaine_full, here::here("erddap_ready", "gom_cpr_zooplankton_full.csv"))
 ```
 

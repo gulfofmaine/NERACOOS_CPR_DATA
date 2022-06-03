@@ -126,6 +126,4 @@ Funding for making these resources available was provided through grant awards f
 Whenever working with different datasets, or differently managed versions of the same data, it is common to have to perform data reshaping steps in order to join across resources. CPR data made available via ERDDAP is no different. Below are a few common processing workflows that a user of this data may find helpful:
 
  *  [Generating the Full Gulf of Maine CPR Dataset](www.github.com/gulfofmaine/NERACOOS_CPR_DATA/Full_Timeseries_Workup)   
- *  [Estimating Season Anomalies for Gulf of Maine CPR Dataset](www.github.com/gulfofmaine/NERACOOS_CPR_DATA/Full_Timeseries_Workup/guides/cpr_seasonal_anomalies)
-  *  [Calanus finmarchicus Index](www.github.com/adamkemberling/NERACOOS_CPR_DATA/Full_Timeseries_Workup/guides/calanus_indices)
-
+ *  [Estimating Season Anomalies for Gulf of Maine Calanus](gulfofmaine.github.io/NERACOOS_CPR_DATA/Full_Timeseries_Workup/guides/Calanus_indices.html)

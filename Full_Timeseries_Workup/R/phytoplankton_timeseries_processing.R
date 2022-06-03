@@ -111,6 +111,9 @@ phyto_aphia %>% filter(is.na(aphia_id)) %>% distinct(taxon) %>% pull()
 # This is about as much as I could do without making subjective decisions.
 # If you have any questions or want to contribute, feel empowered to do so
 
+# Check longitude and set it to negative
+phyto_aphia <- mutate(phyto_aphia, longitude = ifelse(longitude > 0, longitude*-1, longitude))
+
 
 # Export
 write_csv(phyto_aphia, here::here("erddap_ready/gom_cpr_phytoplankton_full.csv"))

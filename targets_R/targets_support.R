@@ -781,6 +781,16 @@ targets_tobox <- function(noaa_phyto, noaa_zoo, mba_phyto, mba_trav, mba_eye){
   # gom_path <- str_c(box_path, "/gulfofmaine_cpr/")
   # dat_path <- str_c(gom_path, "/data/")
   # xml_path <- str_c(gom_path, "/xml/")
+  
+  
+  # Make any last second changes that should happen to all of them:
+  
+  # Make sure longitude is negative...
+  walk(
+    .x = list(noaa_phyto, noaa_zoo, mba_phyto, mba_trav, mba_eye),
+    .f = function(x){x <- mutate(x, longitude = ifelse(longitude > 0, longitude *-1, longitude))}
+  )
+  
 
   # Use here, then manually move:
   here_path <- here::here("erddap_ready")
