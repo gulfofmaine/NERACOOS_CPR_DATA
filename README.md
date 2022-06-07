@@ -78,7 +78,7 @@ resources can be found in the following sub folder:
 `working_across_sources/`, with examples of code working from ERDDAP as
 a starting point.
 
-## Full Timeseries Availability
+# Full Gulf of Maine Timeseries
 
 For those interested in working with a complete timeseries, we have made
 one available following minor data wrangling changes to the original
@@ -87,7 +87,8 @@ datasets.
 Access to the complete timeseries can be done via ERDDAP here: [NERACOOS
 ERDDAP](http://ismn.erddap.neracoos.org/erddap/info/index.html?page=1&itemsPerPage=1000)
 
-Or using software packages like {rerddap} or {erdappy}:
+Or using software packages like {rerddap} for R or {erdappy} for access
+using python:
 
 ``` r
 # Package to interface with ERDDAP
@@ -135,7 +136,5 @@ workflows that a user of this data may find helpful:
 
 -   [Generating the Full Gulf of Maine CPR
     Dataset](www.github.com/gulfofmaine/NERACOOS_CPR_DATA/Full_Timeseries_Workup)  
--   [Estimating Season Anomalies for Gulf of Maine CPR
-    Dataset](www.github.com/gulfofmaine/NERACOOS_CPR_DATA/Full_Timeseries_Workup/guides/cpr_seasonal_anomalies)
--   [Calanus finmarchicus
-    Index](www.github.com/adamkemberling/NERACOOS_CPR_DATA/Full_Timeseries_Workup/guides/calanus_indices)
+-   [Estimating Season Anomalies for Gulf of Maine
+    Calanus](https://adamkemberling.github.io/NERACOOS_CPR_DATA/Full_Timeseries_Workup/guides/Calanus_indices.html)
