@@ -76,7 +76,7 @@ Due to how the CPR data is stored and maintained within these two institutions, 
 
 In addition to unit conversions, there are taxonomic and development stages that are recorded inconsistently across the two data sources and used inconsistently through time. Working across the data sources requires additional data-wrangling which is accomplished with the use of a key for transitioning to more coarse development stage groupings.
 
-Information on resolving the differences between these two data resources can be found in the following sub folder: `working_across_sources/`, with examples of code working from ERDDAP as a starting point.
+Information on resolving the differences between these two data resources can be found in the following sub folder: `Full_Timeseries_Workup/`, with examples of code working from ERDDAP as a starting point.
 
 
 # Full Gulf of Maine Timeseries
@@ -125,5 +125,5 @@ Funding for making these resources available was provided through grant awards f
 
 Whenever working with different datasets, or differently managed versions of the same data, it is common to have to perform data reshaping steps in order to join across resources. CPR data made available via ERDDAP is no different. Below are a few common processing workflows that a user of this data may find helpful:
 
- *  [Generating the Full Gulf of Maine CPR Dataset](www.github.com/gulfofmaine/NERACOOS_CPR_DATA/Full_Timeseries_Workup)   
+ *  [Generating the Full Gulf of Maine CPR Dataset](https://github.com/gulfofmaine/NERACOOS_CPR_DATA/tree/main/Full_Timeseries_Workup)   
  *  [Estimating Season Anomalies for Gulf of Maine Calanus](https://adamkemberling.github.io/NERACOOS_CPR_DATA/Full_Timeseries_Workup/guides/Calanus_indices.html)

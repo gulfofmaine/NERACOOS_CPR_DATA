@@ -75,7 +75,7 @@ a key for transitioning to more coarse development stage groupings.
 
 Information on resolving the differences between these two data
 resources can be found in the following sub folder:
-`working_across_sources/`, with examples of code working from ERDDAP as
+`Full_Timeseries_Workup/`, with examples of code working from ERDDAP as
 a starting point.
 
 # Full Gulf of Maine Timeseries
@@ -135,6 +135,6 @@ available via ERDDAP is no different. Below are a few common processing
 workflows that a user of this data may find helpful:
 
 -   [Generating the Full Gulf of Maine CPR
-    Dataset](www.github.com/gulfofmaine/NERACOOS_CPR_DATA/Full_Timeseries_Workup)  
+    Dataset](https://github.com/gulfofmaine/NERACOOS_CPR_DATA/tree/main/Full_Timeseries_Workup)  
 -   [Estimating Season Anomalies for Gulf of Maine
     Calanus](https://adamkemberling.github.io/NERACOOS_CPR_DATA/Full_Timeseries_Workup/guides/Calanus_indices.html)
