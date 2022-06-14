@@ -137,4 +137,4 @@ workflows that a user of this data may find helpful:
 -   [Generating the Full Gulf of Maine CPR
     Dataset](https://github.com/gulfofmaine/NERACOOS_CPR_DATA/tree/main/Full_Timeseries_Workup)  
 -   [Estimating Season Anomalies for Gulf of Maine
-    Calanus](https://adamkemberling.github.io/NERACOOS_CPR_DATA/Full_Timeseries_Workup/guides/Calanus_indices.html)
+    Calanus](https://adamkemberling.github.io/NERACOOS_CPR_DATA/Full_Timeseries_Workup/guides/Calanus_Indices.html)
