@@ -80,7 +80,15 @@ separate_measure_scales <- function(raw_file, sample_type = c("phyto", "zoo")){
 
 
 
-#' @title Tidy Phytoplankton Header Information
+#' @title Clean Phytoplankton Header Information
+#'
+#' @description Creates a coherent dataframe where multiple rows of header information do not exist 
+#'  prior to the data on abundances of phytoplankton taxa.
+#'  
+#'  Takes the first two rows of the excel sheet that details information on
+#'  what the phytoplankton identity and marmap code is for that taxa, and separates it from the
+#'  rest of the data on cruise information and abundances. These ID's are checked for odd-characters
+#'  before joining back to the abundance information.
 #'
 #' @param phyto_raw 
 #' @param return_option 
@@ -108,7 +116,7 @@ pull_phyto_pieces <- function(phyto_raw, return_option = c("abundances", "key"))
   
   # For each column after metadata
   for (i in 1:(ncol(phyto_raw) - metadata_cols)) {
-    phyto_group_stage_names[i] <- names(phyto_raw[i + metadata_cols])                      #Just the names of the taxa
+    phyto_group_stage_names[i] <- names(phyto_raw[i + metadata_cols])                       #Just the names of the taxa
     phyto_group_stage_names[i] <- str_remove_all(phyto_group_stage_names[i], "'")           #Drop 's
     phyto_group_stage_names[i] <- str_remove_all(phyto_group_stage_names[i], " \\d")        #Drop first digit
     phyto_group_stage_names[i] <- str_remove_all(phyto_group_stage_names[i], "\\d")         #Drop second digit
@@ -189,9 +197,26 @@ pull_phyto_pieces <- function(phyto_raw, return_option = c("abundances", "key"))
 
 
 
-#### Zooplankton Marmap Key:
+#### Zooplankton Marmap Key repair:
 
-#noaa_zoo <- import_noaa_cpr_raw(sample_type = "zoo")
+
+#' @title Clean Zooplankton Header Information
+#' 
+#' @description Creates a coherent dataframe where multiple rows of header information do not exist 
+#'  prior to the data on abundances of zooplankton taxa.
+#'  
+#'  Takes the first three rows of the excel sheet that details information on
+#'  what the zooplankton identity and marmap code is for that taxa, and separates it from the
+#'  rest of the data on cruise information and abundances. These ID's are checked for odd-characters
+#'  before joining back to the abundance information.
+#'
+#' @param noaa_zoo 
+#' @param return_option 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 pull_zoo_pieces <- function(noaa_zoo, return_option = c("abundances", "key")){
   
   
@@ -313,6 +338,20 @@ pull_zoo_pieces <- function(noaa_zoo, return_option = c("abundances", "key")){
 ####  3. Reshape Abundance Data  ####
 
 # Pivot the table into longer format
+
+
+#' @title Pivot Phytoplankton Abundances to Long-Format
+#' 
+#' @description Takes columns on abundance of phytoplankton and converts them into two columns,
+#' abundance and taxon.
+#'
+#' @param phyto_abund 
+#' @param phyto_key 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 pivot_phyto <- function(phyto_abund, phyto_key){
   
   # Pivot the abundances into a long format
@@ -331,10 +370,10 @@ pivot_phyto <- function(phyto_abund, phyto_key){
   # clean up columns
   phyto_erd_clean <- phyto_erd %>% 
     select(cruise, 
-           station, 
-           date, 
-           lat = `latitude (degrees)`, 
-           lon = `longitude (degrees)`, 
+           transect_number = station, 
+           time = date, 
+           latitude = `latitude (degrees)`, 
+           longitude = `longitude (degrees)`, 
            pci = `phytoplankton color index`,
            taxon = `taxon name`,
            marmap_code = `marmap code:`,
@@ -353,6 +392,18 @@ pivot_phyto <- function(phyto_abund, phyto_key){
 
 
 
+#' @title Pivot Zooplankton Abundances to Long-Format
+#' 
+#' @description Takes columns on abundance of zooplankton and converts them into two columns,
+#' abundance and taxon.
+#'
+#' @param zoo_abund 
+#' @param zoo_key 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 pivot_zooplankton <- function(zoo_abund, zoo_key){
   
   # Pivot longer
@@ -371,41 +422,30 @@ pivot_zooplankton <- function(zoo_abund, zoo_key){
     mutate(taxa = str_to_sentence(taxa),
            stage = tolower(stage))
   
+
   
-  # Prep zoo key names
-  key_clean <- zoo_key #%>% 
-    # separate(`taxon name`,  
-    #          into = c("taxa", "stage"), 
-    #          sep = "[_]", 
-    #          fill = "right", 
-    #          remove = TRUE) %>% 
-    # mutate(taxa = str_to_sentence(taxa))
-  
-  
-  
-  # Join marmap codes in, prep the data... key is all jank?
+  # Join marmap codes in, prep the data
   zoo_erd <- zoo_split %>% 
-    left_join(key_clean, by = c("taxa", "stage")) 
+    left_join(zoo_key, by = c("taxa", "stage")) 
   
   
   # # Check that the stage matched up
   # zoo_erd %>% distinct(`taxon name`, taxa, stage)
   
-  
-  
-  
   # reformat columns
   zoo_erd_clean <- zoo_erd %>% 
-    mutate(date = as.POSIXct(str_c(year, "-", month, "-", day, " ", hour, ":", minute, ":", "00"))) %>% 
+    mutate(
+      date = as.POSIXct(str_c(year, "-", month, "-", day, " ", hour, ":", minute, ":", "00")),
+      stage = str_trim(stage)) %>% 
     select(cruise, 
-           station, 
-           date, 
-           lat = `latitude (degrees)`, 
-           lon = `longitude (degrees)`, 
+           transect_number = station, 
+           time = date, 
+           latitude = `latitude (degrees)`, 
+           longitude = `longitude (degrees)`, 
            pci = `phytoplankton color index`,
-           taxa,
-           stage,
-           marmap_taxa = `marmap taxonomic code:`,
+           taxon = taxa,
+           taxon_stage = stage,
+           marmap_code = `marmap taxonomic code:`,
            marmap_stage = `marmap stage code:`,
            abundance = abundance)
   
@@ -436,9 +476,12 @@ pivot_zooplankton <- function(zoo_abund, zoo_key){
 # from Marine Biological Association
 
 #' @title Load MBA CPR Abundance Data
+#' 
+#' @description Load one of the three measurement scales of the Gulf of Maine
+#' CPR program: phytoplankton, traverse, or eyecount
 #'
-#' @param raw_path 
-#' @param sample_type 
+#' @param raw_path Path to the excel file that CPR data is stored on
+#' @param sample_type one of: "phyto", "trav", or "eye"
 #'
 #' @return
 #' @export
@@ -478,8 +521,11 @@ mba_abundance_dat <- function(raw_path, sample_type){
 
 #' @title Build MBA CPR Taxa Key
 #'
-#' @param raw_path 
-#' @param sample_type 
+#' @description Load the identification key for one of the three measurement scales of the Gulf of Maine
+#' CPR program: phytoplankton, traverse, or eyecount
+#'
+#' @param raw_path Path to the excel file that CPR data is stored on
+#' @param sample_type one of: "phyto", "trav", or "eye"
 #'
 #' @return
 #' @export
@@ -571,26 +617,26 @@ pivot_mba_data <- function(abund_dat, key_full, sample_type){
   if(sample_type == "phyto"){
     abunds_ready <- abunds_labelled %>% 
       select(cruise,
-             station,
-             date = Midpoint_Date_Local,
-             lat = Latitude,
-             lon = Longitude,
+             transect_number = station,
+             time = Midpoint_Date_Local,
+             latitude = Latitude,
+             longitude = Longitude,
              pci = Chlorophyll_Index,
              taxon = `taxon name`,
-             taxa_id_number = id_number, #NOT the same as marmap codes
+             mba_id = id_number, #NOT the same as marmap codes aphia code WoRMS
              abundance_per_transect)
   } else{
     
     # Can't grab PCI if it doesn't exist
     abunds_ready <- abunds_labelled %>% 
       select(cruise,
-             station,
-             date = Midpoint_Date_Local,
-             lat = Latitude,
-             lon = Longitude,
+             transect_number = station,
+             time = Midpoint_Date_Local,
+             latitude = Latitude,
+             longitude = Longitude,
              # pci = Chlorophyll_Index,
              taxon = `taxon name`,
-             taxa_id_number = id_number, #NOT the same as marmap codes
+             mba_id = id_number, #NOT the same as marmap codes
              abundance_per_transect)
     
   }
@@ -685,119 +731,218 @@ transect_to_m3 <- function(transect_abundance, out_units = c("meters cubed", "10
   }
 
 
+#### 5. Add PCI to Zooplankton  ####
+
+supplement_PCI <- function(phyto_dat, zooplankton_dat){
+  
+  
+  # PCI comes from phytoplankton data
+  transect_pci <- distinct(phyto_dat, cruise, transect_number, time, 
+                      latitude, longitude, pci)
+  
+  # Merge station details with PCI into MBA zooplankton information
+  mba_zooplankton_pci <- full_join(transect_pci, zooplankton_dat)
+  
+  # Return the new data
+  return(mba_zooplankton_pci)
+  
+}
+
+
+
+####__________________####
+####____Export to Box____####
+
+
+
+
+#' @title Export Files to Box, for ERDDAP
+#' 
+#' @description The last step before the data goes onto ERDDAP, is the csv containing the data and 
+#' an XML describing it are used to create a s3 datasource that ERDDAP can reference for the file.
+#'
+#' @param noaa_phyto NOAA Phytoplankton
+#' @param noaa_zoo NOAA Zooplankton
+#' @param mba_phyto MBA Phytoplankton
+#' @param mba_trav MBA Traverse Zooplankton
+#' @param mba_eye MBA Eyecount Zooplankton
+#'
+#' @return
+#' @export
+#'
+#' @examples
+targets_tobox <- function(noaa_phyto, noaa_zoo, mba_phyto, mba_trav, mba_eye){
+
+  # # This function does not seem to overwrite anything... or work, wtf Box
+  # plz excuse profanity I have covid
+  # # Path to organization's Box drive -
+  # box_path <- gmRi::cs_path("res", "CPR_ERDDAP")
+  # box_path <- gmRi::cs_path("res", "CPR_ERDDAP")
+  # gom_path <- str_c(box_path, "/gulfofmaine_cpr/")
+  # dat_path <- str_c(gom_path, "/data/")
+  # xml_path <- str_c(gom_path, "/xml/")
+  
+  
+  # Make any last second changes that should happen to all of them:
+  
+  # Make sure longitude is negative...
+  walk(
+    .x = list(noaa_phyto, noaa_zoo, mba_phyto, mba_trav, mba_eye),
+    .f = function(x){x <- mutate(x, longitude = ifelse(longitude > 0, longitude *-1, longitude))}
+  )
+  
+
+  # Use here, then manually move:
+  here_path <- here::here("erddap_ready")
+  
+  # Data
+  write_csv(noaa_phyto, file = str_c(here_path, "/noaa_gom_cpr_phytoplankton.csv"))
+  write_csv(noaa_zoo,   file = str_c(here_path, "/noaa_gom_cpr_zooplankton.csv"))
+  write_csv(mba_phyto,  file = str_c(here_path, "/mba_gom_cpr_phytoplankton.csv"))
+  write_csv(mba_trav,   file = str_c(here_path, "/mba_gom_cpr_traverse.csv"))
+  write_csv(mba_eye,    file = str_c(here_path, "/mba_gom_cpr_eyecount.csv"))
+
+
+  # XML
+
+}
+
+
+####________________####
+####____  Joining Prep  ####
+
+#### 1. Separate Taxa and Stage  ####
+separate_taxastage <- function(z_dat){
+  # Words that indicate the stage and not a taxonomic ID
+  stage_identifiers <- c(
+    "adult",
+    "calyptopis",
+    "copepodite", 
+    "cyphonautes",
+    "cypris",
+    "cyst",
+    "egg", 
+    "immature", 
+    "i-iv",
+    "larva",
+    "larvae",
+    "medusa",
+    "megalopa",
+    "molt",
+    "nauplii",
+    "nauplius",
+    "parva",  
+    "post",
+    "postlarva",
+    "(total)",
+    "total",
+    "trochophore",
+    "unstaged", 
+    "unidentified",
+    "(unidentified)",
+    "v-vi",
+    "(v-vi)",
+    "veliger", 
+    "with",
+    "without",
+    "zoea",
+    "NA")
+  
+  
+  # Make a copy, but index the rows:
+  # format the taxa to lowercase
+  # replace spp. and spp since they are redundant and NOAA data does not have it 
+  z_copy <- z_dat %>% 
+    mutate(row_i = row_number(),
+           taxa_mba = tolower(taxon),
+           taxa_mba = str_replace_all(string = taxa_mba, pattern = " spp.", ""),
+           taxa_mba = str_replace_all(string = taxa_mba, pattern = " spp", ""),
+           taxa_mba = str_replace_all(string = taxa_mba, pattern = " eyecount", "")) 
+  
+  # Pull out the first word, second word, and third
+  # these will be used to check whether the the stage is being described or
+  # whether it is still the taxon
+  z_taxa <- z_copy %>% 
+    transmute(
+      row_i = row_number(),
+      taxa_mba = taxa_mba,
+      word_1 = word(taxa_mba, start = 1, end = 1, sep = " "),
+      word_2 = word(taxa_mba, start = 2, end = 2, sep = " "),
+      word_3 = word(taxa_mba, start = 3, end = 3, sep = " "))
+  
+  # If the second word is a stage identifier like copepodite
+  # then the 2nd-last word is the taxon stage
+  # And the taxon itself is just word_1
+  singles <- z_taxa %>% 
+    filter( (word_2 %in% stage_identifiers | is.na(word_2)) ) %>% 
+    mutate(taxa = word_1,
+           taxon_stage = word(taxa_mba, 2, -1, sep = " ")) %>% 
+    select(row_i, taxa, taxon_stage)
+  
+  # If the second word is not part of the stage identifier than it is part of the taxon
+  # But now since some are more than 2 words long we have this nonsense
+  doubles <- z_taxa %>% 
+    filter(
+      row_i %nin% singles$row_i,
+      ( word_3 %in% stage_identifiers | is.na(word_3) )
+    ) %>% 
+    mutate(taxa = str_c(word_1, " ", word_2),
+           taxon_stage = word(taxa_mba, 3, -1, sep = " ")) %>% 
+    select(row_i, taxa, taxon_stage)
+  
+  # successes
+  successes <- c(singles$row_i, doubles$row_i)
+  
+  
+  # # What is left?
+  # z_taxa %>% 
+  #   filter(row_i %nin% successes) %>% 
+  #   distinct(taxa_mba)
+  
+  # Just these:
+  # Fusopsis incertae sedis
+  # Thecosomata (north atlantic)
+  
+  # For whatever is left, the taxon is the only information
+  leftovers <- z_taxa %>% 
+    filter(row_i %nin% successes) %>% 
+    mutate(taxa = taxa_mba,
+           taxon_stage = NA) %>% 
+    select(row_i, taxa, taxon_stage)
+  
+  
+  
+  # Join them up
+  taxa_split <- bind_rows(
+    list(singles, doubles, leftovers))
+  
+  # Add to the mba_zooplankton
+  # Drop the original one that was long and had both:
+  mba_splittaxa <- z_copy %>% 
+    select(-taxon) %>% 
+    left_join(taxa_split, by = "row_i") 
+  
+  
+  # Tidy up
+  mba_splittaxa <- mba_splittaxa %>% 
+    mutate(taxa = str_to_sentence(taxa)) %>% 
+    select(cruise, transect_number, time, latitude, longitude, pci, 
+           taxon = taxa, taxon_stage, mba_id, abundance_per_transect, abundance)
+  
+  # Return the split taxa
+  return(mba_splittaxa)
+}
 
 
 ####
 
 
+
+
+
+####______________________####
 ####__ Joining Datasets  __####
 
-
-
-####  Combine MBA Sample Scales (Traverse and Eyecount) ####
-#' 
-#' # bind rows on the two mc table sources
-#' bind_mc_tables <- function(mc1_data, mc2_data){
-#'   bind_rows(mc1_data, mc2_data)
-#' }
-#' 
-#' 
-#' # Pull out the first ten columns as sample metadata structure
-#' pull_sahfos_metadata <- function(sahfos_data){
-#'   sahfos_meta <- select(sahfos_data, 1:10)
-#' }
-#' 
-#' 
-#' 
-#' 
-#' # Join the two zooplankton groups together
-#' join_zooplankton <- function(sahfos_trav, sahfos_eye, sahfos_meta){
-#'   
-#'   # rename to reuse original workflow code
-#'   strav_m3 <- sahfos_trav
-#'   seye_m3  <- sahfos_eye
-#'   
-#'   #Idea, create a dataframe with names found in both, make the values the added contribution from one or both the subsample types
-#'   unique_names     <- sort(unique(c(names(strav_m3), names(seye_m3))))
-#'   new_df           <- data.frame(matrix(0, nrow = nrow(strav_m3), ncol = length(unique_names)))
-#'   colnames(new_df) <- unique_names
-#'   
-#'   
-#'   #Function to add columns as they appear in either set. 
-#'   #Overwrites NA's with zeros
-#'   taxa_fill <- function(empty_frame = new_df,  df_1 = strav_m3, df_2 = seye_m3) {
-#'     
-#'     #Taxon Names We want for the output
-#'     taxa_names <- colnames(empty_frame)
-#'     
-#'     # 1. Abundances from the traverse subsampling procedure
-#'     
-#'     # Make a list that matches output names
-#'     traverse_counts <- vector(mode = "list", length = length(taxa_names))
-#'     names(traverse_counts) <- taxa_names
-#'     
-#'     # Fill that list with traverse abundances when they match
-#'     traverse_counts <- imap(traverse_counts, function(x,y) {
-#'       
-#'       #Baseline of 0
-#'       taxa_counts <- rep(0, nrow(df_1))
-#'       
-#'       if(y %in% names(df_1)) {
-#'         taxa_counts <- df_1 %>% select(one_of(y)) %>% pull()
-#'         taxa_counts[is.na(taxa_counts)] <- 0
-#'       }
-#'       
-#'       return(taxa_counts)
-#'     })
-#'     
-#'     #Bind list to a dataframe
-#'     traverse_out <- bind_cols(traverse_counts)
-#'     
-#'     # 2. Abundances from eyecount subsampling procedure
-#'     
-#'     #Make a list that matches output names
-#'     eyecount_counts <- vector(mode = "list", length = length(taxa_names))
-#'     names(eyecount_counts) <- taxa_names
-#'     
-#'     # Fill that list with eyecount abundances
-#'     eyecount_counts <- imap(eyecount_counts, function(x,y) {
-#'       #Baseline of zero
-#'       taxa_counts <- rep(0, nrow(df_2))
-#'       
-#'       if(y %in% names(df_2)) {
-#'         taxa_counts <- df_2 %>% select(one_of(y)) %>% pull()
-#'         taxa_counts[is.na(taxa_counts)] <- 0
-#'       }
-#'       
-#'       return(taxa_counts)
-#'     })
-#'     
-#'     #Bind list to a dataframe
-#'     eyecount_out <- bind_cols(eyecount_counts)
-#'     
-#'     
-#'     #Add the two of them to get combined abundance
-#'     zooplankton_abundances <- traverse_out + eyecount_out
-#'     return(zooplankton_abundances)
-#'     
-#'     
-#'     
-#'     
-#'   }
-#'   
-#'   
-#'   ####  Combine Traverse and Eyecounts Abundances
-#'   # 1:1 sum of traverse and eyecount abunndances in # per 100 cubic meters
-#'   sahfos_zoo <- taxa_fill(empty_frame = new_df, df_1 = strav_m3, df_2 = seye_m3)
-#'   sahfos_zoo <- bind_cols(sahfos_meta, sahfos_zoo)
-#'   
-#'   return(sahfos_zoo)
-#'   
-#' }
-#' 
-#' 
-#' 
-#' 
 
 
 ####  Prepare NOAA and SAHFOS for Join  ####
@@ -995,7 +1140,7 @@ transect_to_m3 <- function(transect_abundance, out_units = c("meters cubed", "10
 #'     mutate(cal_date = as.POSIXct(str_c(year, month, day, sep = "/"), format = "%Y/%m/%d"), .after = "day") %>% 
 #'     mutate(jday = lubridate::yday(cal_date), .after = "cal_date") %>% 
 #'     rename(lon = `longitude (degrees)`,
-#'            lat = `latitude (degrees)`)
+#'           latitude = `latitude (degrees)`)
 #'   
 #'   return(cpr_date_prepped)
 #' }

@@ -1,0 +1,449 @@
+---
+title: "Calanus Seasonal Abundance Index"
+author: 
+  - first_name: "Adam"
+    last_name: "Kemberling"
+    url: https://github.com/adamkemberling
+    affiliation: Gulf of Maine Research Institute
+    affiliation_url: https://www.gmri.org
+description: | 
+  Deriving Seasonal Abundance Cycles and Anomalies from Gulf of Maine CPR
+date: "Updated on: `r Sys.Date()`"
+editor_options: 
+  chunk_output_type: console
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.height = 3)
+```
+
+`r gmRi::use_gmri_style_rmd()`
+
+# Purpose
+
+This guide is intended to show a possible method for determining what the long-term seasonal abundance is for a given zooplankton taxa, and how to derive abundance anomalies from that anticipated cycle. This is not an assertion that these cycles are true to life, but a demonstration of how a seasonally varying abundance can be derived from the Gulf of  Maine CPR Data.
+
+A secondary purpose of this guide is to highlight some of the common pitfalls that might catch researchers/analysts exploring the CPR data.
+
+### Why Seasonally Varying Anomalies?
+
+Many ocean basins have productivity regimes that follow a seasonal pattern driven by different mixing/stratification patterns throughout the year. The Gulf of Maine is one of these places. Winter mixing in the Gulf of Maine supplies surface waters with nutrients, nutrients fuel spring phytoplankton blooms, which support predatory zooplankton populations. Over the course of the summer the water column stratifies, preventing further mixing with nutrient rich deep-water and any movement by plankton to deeper waters. This annual cycle fosters life-history strategies that take advantage of this window of high productivity, and consequently different taxa have abundance patterns that relate to the timing of seasonal stratification and the spring phytoplankton blooms.
+
+Knowing that populations may vary predictably throughout the year, it is more informative to present abundances relative to that seasonal pattern, rather than an average for the entire year. For this reason researchers may choose to compute seasonally varying abundance anomalies for use in their work.
+
+
+
+### Loading Data from ERDDAP
+
+The starting data for this guide will be accessed from ERDDAP. The Gulf of Maine CPR dataset was added to ERDDAP servers in 2022 and can be accessed directly from an active R session using {rerrdap}. The code below demonstrates how to access the full Gulf of Maine timeseries from online and bring it into a local R session.
+
+```{r}
+#### Packages:
+library(rerddap)           # Access to ERDDAP
+library(tidyverse)         # Data wrangling and plotting
+library(gmRi)              # For this document's styling 
+library(mgcv)              # Support for GAM's
+library(lubridate)         # Date parsing
+theme_set(theme_minimal()) # Plot theme
+
+#### Data:
+
+# 1. Zooplankton
+# Get the tabledap information from the server link and dataset_id
+cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
+                 datasetid = "gom_cpr_zooplankton_full")
+
+# Use the tabledap function to import all the data (optionally add filters)
+gom_zp <- tabledap(cpr_info)
+
+# Reformat to a data.frame, some packages don't recognize the erddap data class
+gom_zp <- as.data.frame(gom_zp)
+
+```
+
+### Subset Calanus Information
+
+For this demonstration the taxon of interest will be `Calanus`, using all life stages recorded in the data. This example was chosen for two reasons. The first is the significance of C. finmarchicus to the ecology of this region. The second reason is to highlight a potential pitfall when working with the CPR Data.
+
+In the CPR dataset Calanus finmarchicus is present in the data under the `taxon` of "Calanus" (for their early copepodite stages) & "Calanus finmarchicus" for adult stages. However; there are instances where `Calanus` is assigned as `taxon`, but the `taxon_stage` assigned is an adult stage of `V` or `V-VI`, a break in the rule.
+
+When working with any taxa be sure to check that the stages match your research needs and assumptions. As for this demonstration, we will look at the early stage `Calanus` ID only. The Counts of when the different stages are used have been displayed below to capture their relative prevalence
+
+```{r}
+# Pull taxon ID's for Early and Late-Stage C. finmarchicus
+cfin_data <- gom_zp %>% 
+  filter(taxon %in% c("Calanus", "Calanus finmarchicus"))
+
+# Display some records
+cfin_data %>% 
+  mutate(data_provider = ifelse(year(time) < 2014, "NOAA", "MBA"),
+         data_provider = fct_rev(data_provider)) %>% 
+  count(data_provider, taxon, taxon_stage) %>% 
+  rename(abundance_records = n) %>% 
+  gt::gt()
+```
+
+### Filter Early Stages
+
+One way a researcher might approach this is to filter observations that include only the `taxon_stage`'s of interest. In this scenario researchers might opt to be more "inclusive" and include this case we will pull the early stages explicitly. It is often the case that there are a handful of "primary" `taxon_stage` groups that the majority of abundance is assigned to. We recommend looking at them and their use through time.
+
+```{r}
+
+# Determine the stages you want to keep
+early_stage <- c(
+  "copepodite i",
+  "copepodite ii",
+  "copepodite iii",
+  "copepodite iv",
+  "copepodite i-iv")
+
+# Filter them out from the rest of the stages
+cfin_early <- cfin_data %>% 
+  filter(taxon_stage %in% early_stage)
+
+# Or just use taxon as the group (industry standard)
+cfin_early <- cfin_data %>% 
+  filter(taxon == "Calanus")
+```
+
+
+
+
+### Crop to a Specific Area
+
+In some of the analyses we've done we have reduced the data from the full CPR survey footprint to a more central area to reduce the impact of more inshore influences.
+
+```{r}
+
+#Gulf of Maine BBOX - Extended North to capture cpr route change
+study_area_bbox <- tribble( 
+   ~"area",    ~"lon",      ~"lat",
+  "gom_new",   -70.000000,	42.200000, 
+  "gom_new",   -66.600000,	42.200000, 
+  "gom_new",   -66.600000,	43.800000, 
+  "gom_new",   -70.000000,	43.800000, 
+  "gom_new",   -70.000000,	42.200000)
+
+
+# Filter lat/lon to fit the extent (lazy way)
+cfin_gom <- cfin_early %>% 
+  mutate(longitude = as.numeric(longitude),
+         longitude = ifelse(longitude > 0, longitude * -1, longitude)) %>% 
+  filter(
+    between(longitude, min(study_area_bbox$lon), max(study_area_bbox$lon)),
+    between(latitude, min(study_area_bbox$lat), max(study_area_bbox$lat)))
+  
+```
+
+###  Prepare Data for the Model
+
+Before fitting the model I first add a handful of columns that reformat dates for the model: things like the day of the year. This would also be where I would subset any data by location in the event that there was a desire to limit the analysis to a specific area.
+
+
+```{r}
+# Make a new taxon_title to represent the aggregate we filtered
+taxon_title <- "C. finmarchicus, Early Stage I-IV"
+
+# Get the year, day within the year, and the log(abundance)
+cfin_gom <- cfin_gom %>% 
+  mutate(
+    taxon_title = taxon_title,
+    time = as.POSIXct(time),
+    year = year(time),
+    jday = yday(time),
+    abundance = as.numeric(abundance),
+    log_abundance = log(abundance),
+    log_abundance = ifelse(is.infinite(log_abundance), 0, log_abundance))
+```
+
+
+### Explore Abundance Data
+
+```{r}
+cfin_gom %>% 
+  group_by(taxon, jday, year) %>% 
+  summarise(abundance = mean(abundance, na.rm = T), .groups = "drop") %>% 
+  ggplot(aes(jday, year)) +
+  geom_point(aes(color = log(abundance + 1)), size = 3) +
+  scale_color_distiller(palette = "YlOrBr", direction = 1) +
+  theme_classic() +
+  labs(x = "Day of the Year", 
+       y = "Year", 
+       title = "Calanus Daily Abundances",
+       color = "Log(Abundance)") +
+  theme(legend.position = "bottom")
+```
+
+
+
+# Model Long-Term Seasonal Variability
+
+The modeling of a seasonally varying abundance is done using a general additive model (GAM). In the model the abundance of zooplankton (per 100m3) is predicted based on the day within the year that it was sampled. The smoother is cyclic such that each year begins and ends at the same concentration, creating a repeating seasonal pattern.
+
+
+### Variation 1: Abundance as-is
+
+The following code will fit a GAM to the abundance data without any data transformations. This might not be the best choice for the data, but is included here for demonstration purposes. Any model should be checked for quality of fit to the data and for out-of-sample performance.
+
+```{r}
+
+####  Potential Model: 4 distinct seasons  ####
+
+# #Set the number of seasonal bins (They split the year evenly)
+# season_bins <- 4
+# bin_splits <- c(seq(0, 365, by = ceiling(365 / (season_bins))), 365)
+
+
+# # If we want to force a 4-season curve we can limit the knots using length(bin_splits)
+# gam_knots <-  length(bin_splits)
+
+# # Model for setting 4-seasons
+# seasonal_abund_mod <- gam(abundance ~  s(jday, bs = "cc", k = gam_knots),
+#                         knots = list(jday = bin_splits),
+#                         data = cfin_gom)
+
+
+
+####  Fitting a Seasonal Cycle to Abundance  ####
+
+# Model for 10 knots in a year:
+gam_knots <- 10
+
+#Set the knot values explicitly using the equal breaks in year-day
+seasonal_abund_mod <- gam(abundance ~  s(jday, bs = "cc", k = gam_knots),
+                        data = cfin_gom)
+
+# Add seasonal predictions to data:
+cfin_gom$pred_abund  <- predict(seasonal_abund_mod, cfin_gom, type = "response")
+
+#The seasonal cycle is removed from the data to compute anomalies
+cfin_gom$seasonal_anomaly  <- cfin_gom$abundance - cfin_gom$pred_abund
+
+# Standardize by variance
+abund_sd <- sd(cfin_gom$abundance, na.rm = T)
+cfin_gom$anom_z <- cfin_gom$seasonal_anomaly / abund_sd
+```
+
+#### Visualize Seasonal Cycle
+
+The following plot shows how anomaly data for the CPR survey is derived for a single year of data using the seasonal variation modeled above. The predicted seasonal variation is depicted in black with anomalies colored in blue and orange.
+
+```{r}
+# The anomaly direction is then used for labeling the following plot
+cfin_gom$anom_direction <- ifelse(cfin_gom$seasonal_anomaly > 0, "Positive Anomaly", "Negative Anomaly")
+
+# To really show the consistent seasonal smooth prediction we need to predict on all days not just when sampling happened
+
+# Will use a subset of time to show it in the plots to see intra-annual variability:
+start_dat <- as.Date("2015-01-01 EST")
+end_dat <- as.Date("2016-12-31 EST")
+all_dates <- seq.Date(from = start_dat,to = end_dat, by = "day")
+all_dates <- as.POSIXct(all_dates)
+all_dates_df <- data.frame(time = all_dates) %>% 
+  mutate(jday = yday(time))
+
+
+# Add predicted abundance
+all_dates_df$pred_abund <- predict(seasonal_abund_mod, all_dates_df, type = "response")
+
+
+# Plotting the abundance, fit, and anomalies 
+cfin_gom %>% 
+  filter(time >=  start_dat,
+         time <=  end_dat) %>%
+  ggplot(aes(time, abundance)) +
+  geom_point(aes(color = anom_direction), alpha = 0.8) +
+  geom_segment(aes(x = time, 
+                   y = pred_abund,
+                   xend = time, 
+                   yend = abundance,
+                   color = anom_direction),
+               size = 0.4,
+               alpha = 0.4) +
+  geom_line(data = all_dates_df,
+            aes(time, pred_abund, color = "Predicted Abundance"), size = 1) +
+  scale_color_manual(
+    values = c(
+      "Negative Anomaly" = as.character(gmri_cols("orange")),
+      "Positive Anomaly" = as.character(gmri_cols("gmri blue")),
+      "Predicted Abundance" = "black")) +
+  labs(x = "Date", 
+       y = "Abundance / 100m3", 
+       color = "Anomaly Information",
+       title = "Derivation of Abundance Anomalies",
+       subtitle = "Difference between observations and predicted seasonal abundance") +
+  theme(legend.position = "bottom")
+
+```
+
+
+
+### Variation 2: Log(Abundance) 
+
+An alternative way to model the data is to predict log(abundance), rather than the absolute density as shown above. Code for modeling this way can be shown below:
+
+```{r}
+#Build spline model using mgsv::gam using cyclic penalized cubic regression spline smooth
+logabund_mod <- gam(log_abundance ~ s(jday, bs = "cc", k = gam_knots),
+                    data = cfin_gom)
+  
+#Add Predictions back to the data
+cfin_gom$pred_logabund <- predict(logabund_mod, cfin_gom, type = "response")
+
+#Calculate anomalies
+cfin_gom$log_anomaly <- cfin_gom$log_abund - cfin_gom$pred_logabund
+
+# Standardize by variance
+labund_sd <- sd(cfin_gom$log_abundance, na.rm = T)
+cfin_gom$log_anom_z <- cfin_gom$log_anomaly / labund_sd
+
+```
+
+
+#### Visualize Log Abundance Model
+
+```{r}
+# The anomaly direction is then used for labeling the following plot
+cfin_gom$log_anom_direction <- ifelse(cfin_gom$log_anomaly > 0, "Positive Anomaly", "Negative Anomaly")
+
+# Predict on all days not just sampling dates
+all_dates_df$log_preds <- predict(logabund_mod, all_dates_df, type = "response")
+
+
+
+# Plotting the abundance, fit, and anomalies 
+cfin_gom %>% 
+  filter(time >=  start_dat,
+         time <=  end_dat) %>%
+  ggplot(aes(time, log_abundance)) +
+  geom_point(aes(color = log_anom_direction), alpha = 0.8) +
+  geom_segment(aes(x = time, 
+                   y = pred_logabund,
+                   xend = time, 
+                   yend = log_abundance,
+                   color = log_anom_direction),
+               size = 0.4,
+               alpha = 0.4) +
+  geom_line(data = all_dates_df,
+            aes(time, log_preds, color = "Predicted Log(Abundance)"), size = 1) +
+  scale_color_manual(
+    values = c(
+      "Negative Anomaly" = as.character(gmri_cols("orange")),
+      "Positive Anomaly" = as.character(gmri_cols("gmri blue")),
+      "Predicted Log(Abundance)" = "black")) +
+  labs(x = "Date", 
+       y = "Log(Abundance / 100m3)", 
+       color = "Anomaly Information",
+       title = "Derivation of Log(Abundance) Anomalies") +
+  theme(legend.position = "bottom")
+
+```
+
+# Aggregating Annual Indices
+
+Once we have the predicted seasonal cycles and the observed anomalies from whichever model is deemed superior, getting annual indices is just a matter of averaging the anomalies for that year or seasonal periods. This is pretty simple and the output can be seen below:
+
+
+```{r}
+# Summarize each year to return index
+cfin_index <- cfin_gom %>% 
+  group_by(year = year(time), taxon_title) %>% 
+  summarise(
+    avg_abund = mean(abundance, na.rm = T),
+    avg_anom  = mean(seasonal_anomaly, na.rm = T),
+    avg_anom_z = mean(anom_z, na.rm = T),
+    avg_log_anom = mean(log_anomaly, na.rm = T),
+    avg_log_anom_z = mean(log_anom_z, na.rm = T),
+    .groups = "drop")
+
+# Fill gap years with NA's
+# This shows the gap years as missing data and prevents lines from plotting over them
+cfin_index <- data.frame(year = c(min(cfin_index$year):max(cfin_index$year)), taxon_title = taxon_title) %>% 
+  left_join(cfin_index)
+```
+
+###  Abundance "as-is" Indices
+
+The following figure is the result of the "abundance as-is" model. 
+
+**Absolute Index**
+
+The first plot shows abundance anomalies in absolute terms.
+
+```{r}
+# Modeling absolute abundance
+ggplot(cfin_index, aes(year, avg_anom)) + 
+  geom_line(color = "royalblue", size = 1) +
+  geom_hline(yintercept = 0, linetype = 2, alpha = 0.5) +
+  facet_wrap(~taxon_title) +
+  scale_x_continuous(breaks = seq(1960, 2020, 5)) +
+  labs(y = "Average Abundance Anomaly", y = "Year")
+```
+
+**Relative Index (z-scores)**
+
+This figure then shows what the anomalies are when standardized by the variation in abundance.
+
+```{r}
+ggplot(cfin_index, aes(year, avg_anom_z)) + 
+  geom_line(color = "royalblue", size = 1) +
+  geom_hline(yintercept = 0, linetype = 2, alpha = 0.5) +
+  facet_wrap(~taxon_title) +
+  scale_x_continuous(breaks = seq(1960, 2020, 5)) +
+  labs(y = "Relative Abundance Anomaly (z)")
+```
+
+
+### Log(Abundance) Indices
+
+The next set of figures display the results of the model using the log-transformed abundances.
+
+**Absolute Index**
+
+The first plot shows abundance anomalies in absolute terms.
+
+```{r}
+# This looks broken: Modeled anomalies of log(abundance)
+ggplot(cfin_index, aes(year, avg_log_anom)) + 
+  geom_line(color = "royalblue", size = 1) +
+  geom_hline(yintercept = 0, linetype = 2, alpha = 0.5) +
+  facet_wrap(~taxon_title) +
+  scale_x_continuous(breaks = seq(1960, 2020, 5)) +
+  labs(y = "Average Log(Abundance) Anomaly")
+```
+
+
+**Relative Index (z-scores)**
+
+This figure then shows what the anomalies are when standardized by the variation in abundance.
+
+```{r}
+cfin_index %>% 
+  ggplot(aes(year, avg_log_anom_z)) + 
+    geom_line(color = "royalblue", size = 1) +
+    geom_hline(yintercept = 0, linetype = 2, alpha = 0.5) +
+    facet_wrap(~taxon_title) +
+    scale_x_continuous(breaks = seq(1960, 2020, 5)) +
+    labs(y = "Relative Abundance Anomaly (z)")
+```
+
+
+
+# Concluding Remarks
+
+When formulating any numerical model like the two above it is important to both think critically about any assumptions that the model formulation makes, and to thoroughly assess their performance.
+
+The above models assume that there is some underlying annual cycle in abundance that is consistent through all years. This assumption may or may not be true, and alternative models may be better suited for the data. 
+
+Selecting `taxon_stage`'s to include in the index will also have an impact on how the indices turn out, researchers should investigate what stages are used and during which time periods when determining data to include on the index.
+
+
+As always, please reach out with comments for improvement.
+
+
+`r gmRi::insert_gmri_footer()`

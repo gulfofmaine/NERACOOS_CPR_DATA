@@ -63,7 +63,7 @@ This will recreate the processing steps outlined in `_targets.R` that transform 
 
 
 withr::with_dir(rprojroot::find_root('_targets.R'), 
-                tar_visnetwork(allow =  c("GOM_NOAA_RAW", "zooplankton_raw", "zoo_abundances", "zoo_key", "noaa_zooplankton_erddap", "pivot_zooplankton", "pull_zoo_pieces")))
+                tar_visnetwork(allow =  c("gom_noaa_raw", "zp_raw", "zp_abund", "zp_key", "noaa_zp_erddap", "pivot_zooplankton", "pull_zoo_pieces")))
 ```
 
 The DAG above shows a simplified representation of the steps for the NOAA Continuous Plankton Recorder Survey's Zooplankton data, where the taxonomic information found in the header is separated from the abundance information and later joined back after it has been reshaped. Similar cleanup paths exist for the data obtained from NOAA as well as the data obtained from the MBA. 
@@ -76,8 +76,41 @@ Due to how the CPR data is stored and maintained within these two institutions, 
 
 In addition to unit conversions, there are taxonomic and development stages that are recorded inconsistently across the two data sources and used inconsistently through time. Working across the data sources requires additional data-wrangling which is accomplished with the use of a key for transitioning to more coarse development stage groupings.
 
-Information on resolving the differences between these two data resources can be found in the following sub folder: `working_across_sources/`, with examples of code working from ERDDAP as a starting point.
+Information on resolving the differences between these two data resources can be found in the following sub folder: `Full_Timeseries_Workup/`, with examples of code working from ERDDAP as a starting point.
 
+
+# Full Gulf of Maine Timeseries
+
+For those interested in working with a complete timeseries, we have made one available following minor data wrangling changes to the original datasets.
+
+Access to the complete timeseries can be done via ERDDAP here: [NERACOOS ERDDAP](http://ismn.erddap.neracoos.org/erddap/info/index.html?page=1&itemsPerPage=1000)
+
+Or using software packages like {rerddap} for R or {erdappy} for access using python:
+
+```{r, eval = F, echo = T}
+# Package to interface with ERDDAP
+library(rerddap)
+
+# 1. Zooplankton
+# Get the tabledap information from the server link and dataset_id
+cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
+                 datasetid = "gom_cpr_zooplankton_full")
+
+# Use the tabledap function to import all the data (optionally add filters)
+gom_zp <- tabledap(cpr_info)
+
+
+# 2. Phytoplankton
+# Get the tabledap information from the server link and dataset_id
+cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
+                 datasetid = "gom_cpr_phytoplankton_full")
+
+# Use the tabledap function to import all the data (optionally add filters)
+gom_phyto <- tabledap(cpr_info)
+```
+
+
+Details on how the complete timeseries was generated, with code and notes on data wrangling decisions can be found here: www.github.com/gulfofmaine/neracoos_cpr_data/Full_Timeseries_Workup 
 
 
 
@@ -88,11 +121,9 @@ Funding for making these resources available was provided through grant awards f
 
 ---
 
-## Additionals Resources:
+## Additionals Resources (Under Development):
 
 Whenever working with different datasets, or differently managed versions of the same data, it is common to have to perform data reshaping steps in order to join across resources. CPR data made available via ERDDAP is no different. Below are a few common processing workflows that a user of this data may find helpful:
 
- *  [Generating a Full Gulf of Maine CPR Dataset](www.github.com/adamkemberling/NERACOOS_CPR_DATA/working_across_sources)   
- *  [Estimating Season Anomalies for Gulf of Maine CPR Dataset](www.github.com/adamkemberling/NERACOOS_CPR_DATA/working_across_resources/cpr_seasonal_anomalies)
-  *  [Calanus finmarchicus Index](www.github.com/adamkemberling/NERACOOS_CPR_DATA/working_across_source/calanus_indices)
-
+ *  [Generating the Full Gulf of Maine CPR Dataset](https://github.com/gulfofmaine/NERACOOS_CPR_DATA/tree/main/Full_Timeseries_Workup)   
+ *  [Estimating Season Anomalies for Gulf of Maine Calanus](https://adamkemberling.github.io/NERACOOS_CPR_DATA/Full_Timeseries_Workup/guides/Calanus_indices.html)

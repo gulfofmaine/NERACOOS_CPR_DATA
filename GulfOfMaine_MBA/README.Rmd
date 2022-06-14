@@ -66,3 +66,46 @@ Data processing and reshaping steps have been included in `_targets.R` with the 
 ## ERDDAP Metadata
 
 The `.xml` files associated with the MBA datasets can be found in the `erddap_xml folder`. They detail the units and column specifications that ERDDAP uses when serving the data and handling queries.
+
+
+---
+
+## Working with CPR Data
+
+Data can be accessed directly from [ERDDAP](http://ismn.erddap.neracoos.org/erddap/index.html), or through software packages like R's {[rerddap](https://github.com/ropensci/rerddap/tree/0723cafce46cf31dd46efed71d76706788c08889)}.
+
+```{r, eval = FALSE, echo = TRUE}
+# Accessing the Gulf of Maine CPR Zooplankton Data
+library(rerddap)
+
+# Get the tabledap information from the server link and dataset_id
+cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
+                 datasetid = "mba_gom_cpr_traverse")
+
+# Use the tabledap function to import all the data (optionally add filters)
+mba_traverse_zooplankton <- tabledap(cpr_info)
+
+```
+
+
+Or python's {[erddapy](https://ioos.github.io/erddapy/)}.
+
+```{python, eval = FALSE, echo = TRUE}
+# Accessing the Gulf of Maine CPR Zooplankton Data
+from erddapy import ERDDAP
+e = ERDDAP(
+  server = "http://ismn.erddap.neracoos.org/erddap",
+  protocol = "tabledap",
+  response = "csv"
+)
+
+# Add Dataset ID
+e.dataset_id = "mba_gom_cpr_eyecount"
+
+# Coerce to pandas df
+mba_eyecount_zooplankton = e.to_pandas()
+
+```
+
+
+

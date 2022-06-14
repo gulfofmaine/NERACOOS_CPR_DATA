@@ -1,0 +1,170 @@
+---
+title: "Taxonomic Groups for Pershing & Kemberling, 2022"
+author: 
+  - first_name: "Adam"
+    last_name: "Kemberling"
+    url: https://github.com/adamkemberling
+    affiliation: Gulf of Maine Research Institute
+    affiliation_url: https://www.gmri.org
+description: | 
+  Working towards simplified life-stage groups from CPR Data for Analyses
+date: "Updated on: `r Sys.Date()`"
+editor_options: 
+  chunk_output_type: console
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+# knitr options
+knitr::opts_chunk$set(echo = FALSE, 
+                      message = F, 
+                      warning = F, 
+                      comment = "", 
+                      fig.align = "center")
+
+```
+
+`r gmRi::use_gmri_style_rmd(css = "gmri_rmarkdown.css")`
+
+
+
+# Pershing 22 Groups
+
+
+As part of the analyses for Pershing & Kemberling 2022, the decision was made to reduce the life stage specificity from specific copepodite stages like copepodite III or IV, into "early" and "adult" stage groups comprised of the sum of each stage that fell within those groups.
+
+**Loading Data and Packages**
+
+```{r}
+####  Packages  ####
+library(lubridate)
+library(here)
+library(rerddap)
+library(scales)
+library(sf)
+library(gmRi)
+library(gt)
+library(gtExtras)
+library(tidyverse)
+
+# Support Functions
+source(here("targets_R/targets_support.R"), verbose = FALSE)
+```
+
+
+#### Renaming NOAA Taxa
+
+
+"Early" stage was set as stages I-IV and "Adult" included stages V & VI. For that analysis the following key was used to work from the discrete stages to the more relaxed groups.
+
+```{r}
+# Original Source for code: github.com/adamkemberling/continuous_plankton_recorder/R/17_noaa_sahfos_eda.R
+# match MBA column names to the noaa taxa groups
+
+# Load the keys for renaming taxa
+# Details on the keys available in reposiotry in GulfOfMaine_MBA/R & GulfOfMaine_NOAA/R
+noaa_taxa_key <- read_csv(
+  file =  here::here("GulfOfMaine_NOAA/taxa_resolving/noaa_gulfofmaine_taxa_key.csv"),
+  col_types = cols())
+
+
+# Join the taxa and stages again to make a join-able column to the key
+noaa_simplified <- noaa_aphia %>% 
+  mutate(in_taxa = str_c(taxa, "_", taxon_stage),
+         in_taxa = tolower(in_taxa))
+
+# Join the key
+noaa_simplified <- noaa_simplified %>% 
+  left_join(noaa_taxa_key, by = "in_taxa") %>% 
+  mutate(out_taxa = ifelse( is.na(out_taxa), in_taxa, out_taxa)) 
+
+
+
+# Tidy up
+
+```
+
+
+
+
+#### Renaming MBA Taxa
+
+
+```{r}
+# Original Source for code: github.com/adamkemberling/continuous_plankton_recorder/R/17_noaa_sahfos_eda.R
+# match MBA column names to the noaa taxa groups
+
+# Load the keys for renaming taxa
+# Details on the keys available in reposiotry in GulfOfMaine_MBA/R & GulfOfMaine_NOAA/R
+mba_taxa_key <- read_csv(
+  file = here::here("GulfOfMaine_MBA/taxa_resolving/mba_gulfofmaine_taxa_key.csv"),
+  col_types = cols())
+ 
+
+# Join the Keys to the data:
+mba_zoo_renamed <- mba_zooplankton %>% 
+  mutate(taxon = tolower(taxon)) %>% 
+  left_join(mba_taxa_key, by = c("taxon" = "in_taxa")) %>% 
+  mutate(out_taxa = ifelse(is.na(out_taxa), taxon, out_taxa))
+
+
+# Drop and reorder columns
+mba_test <- mba_zoo_renamed %>% 
+  select(cruise, transect_number, time, latitude, longitude, out_taxa, mba_id, abundance, abundance_per_transect)
+```
+
+
+
+
+## 3. Joining Data Sources
+
+```{r}
+# Look at MBA data
+head(mba_zooplankton_pci) %>% gt()
+```
+
+
+```{r}
+# Look at NOAA data
+head(noaa_zooplankton_erddap) %>% gt()
+```
+
+
+
+```{r}
+
+ #Bind the two data sources
+ join_zoo_sources <- function(noaa_zoo_refined, sahfos_zoo_renamed){
+   
+   combined_set <- bind_rows(
+     list("NOAA"   = noaa_zoo_refined, 
+          "SAHFOS" = sahfos_zoo_renamed), 
+     .id = "Data Source")
+   
+   return(combined_set)
+ }
+ 
+
+# Then just join them:
+datasets_joined <- join_zoo_sources(noaa_zoo_refined = noaa_zooplankton_erddap, sahfos_zoo_renamed = mba_reformatted) %>% 
+  arrange(time, taxa)
+
+```
+
+## Explore
+
+One thing that immediately will stand out is that early stage calanus is hard to identify down to the species, and is actually included under the more general "Calanus" taxa.
+
+```{r}
+datasets_joined %>% 
+  filter(taxa == "Calanus finmarchicus") %>% 
+  ggplot(aes(time, abundance, color = stage)) +
+  geom_point() +
+  theme(legend.position = "bottom") +
+  facet_wrap(~taxa + stage, scales = "free")
+```
+

@@ -2,6 +2,13 @@
 .Rhistory
 .RData
 .Ruserdata
-_targets/
 README.html
 .DS_Store
+
+
+# Data to keep of github:
+_targets/
+erddap_data/
+erddap_ready/
+data_raw/PlanktonLifeformExtraction/
+GulfOfMaine_NOAA/taxa_resolving/noaa_supplements/

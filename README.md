@@ -75,8 +75,46 @@ a key for transitioning to more coarse development stage groupings.
 
 Information on resolving the differences between these two data
 resources can be found in the following sub folder:
-`working_across_sources/`, with examples of code working from ERDDAP as
+`Full_Timeseries_Workup/`, with examples of code working from ERDDAP as
 a starting point.
+
+# Full Gulf of Maine Timeseries
+
+For those interested in working with a complete timeseries, we have made
+one available following minor data wrangling changes to the original
+datasets.
+
+Access to the complete timeseries can be done via ERDDAP here: [NERACOOS
+ERDDAP](http://ismn.erddap.neracoos.org/erddap/info/index.html?page=1&itemsPerPage=1000)
+
+Or using software packages like {rerddap} for R or {erdappy} for access
+using python:
+
+``` r
+# Package to interface with ERDDAP
+library(rerddap)
+
+# 1. Zooplankton
+# Get the tabledap information from the server link and dataset_id
+cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
+                 datasetid = "gom_cpr_zooplankton_full")
+
+# Use the tabledap function to import all the data (optionally add filters)
+gom_zp <- tabledap(cpr_info)
+
+
+# 2. Phytoplankton
+# Get the tabledap information from the server link and dataset_id
+cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
+                 datasetid = "gom_cpr_phytoplankton_full")
+
+# Use the tabledap function to import all the data (optionally add filters)
+gom_phyto <- tabledap(cpr_info)
+```
+
+Details on how the complete timeseries was generated, with code and
+notes on data wrangling decisions can be found here:
+www.github.com/gulfofmaine/neracoos_cpr_data/Full_Timeseries_Workup
 
 # Project Funding:
 
@@ -88,7 +126,7 @@ and the Marine Biological Association.
 
 ------------------------------------------------------------------------
 
-## Additionals Resources:
+## Additionals Resources (Under Development):
 
 Whenever working with different datasets, or differently managed
 versions of the same data, it is common to have to perform data
@@ -96,7 +134,7 @@ reshaping steps in order to join across resources. CPR data made
 available via ERDDAP is no different. Below are a few common processing
 workflows that a user of this data may find helpful:
 
--   [Generating a Full Gulf of Maine CPR
-    Dataset](www.github.com/adamkemberling/NERACOOS_CPR_DATA/working_across_sources)  
--   [Estimating Season Anomalies for Gulf of Maine CPR
-    Dataset](www.github.com/adamkemberling/NERACOOS_CPR_DATA/Estimating%20Anomalies)
+-   [Generating the Full Gulf of Maine CPR
+    Dataset](https://github.com/gulfofmaine/NERACOOS_CPR_DATA/tree/main/Full_Timeseries_Workup)  
+-   [Estimating Season Anomalies for Gulf of Maine
+    Calanus](https://adamkemberling.github.io/NERACOOS_CPR_DATA/Full_Timeseries_Workup/guides/Calanus_indices.html)

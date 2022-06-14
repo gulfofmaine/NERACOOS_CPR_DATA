@@ -15,8 +15,8 @@
         <columnSeparator></columnSeparator>
         <columnNamesRow>1</columnNamesRow>
         <firstDataRow>2</firstDataRow>
-        <sortedColumnSourceName>date</sortedColumnSourceName>
-        <sortFilesBySourceNames>date</sortFilesBySourceNames>
+        <sortedColumnSourceName>time</sortedColumnSourceName>
+        <sortFilesBySourceNames>time</sortFilesBySourceNames>
         <fileTableInMemory>false</fileTableInMemory>
 
         <addAttributes>
@@ -34,7 +34,7 @@
             <att name="contributor_name">NERACOOS ISMN</att>
             <att name="infoUrl">https://www.cprsurvey.org/</att>
             <att name="institution">Gulf of Maine Research Institute</att>
-            <att name="keywords">zooplankton, cpr, abundance, cruise, survey, plankton, phytoplankton, marmap, phytoplankton color index </att>
+            <att name="keywords">zooplankton, cpr, abundance, cruise, survey, plankton, phytoplankton, phytoplankton color index </att>
             <att name="license">[standard]</att>
             <att name="program">NERACOOS</att>
             <att name="project">Marine Biological Association (MBA) - Continuous Plankton Recorder (CPR) Survey: Gulf of Maine Transect </att>
@@ -47,7 +47,7 @@
             <att name="standard_name_vocabulary">CF Standard Name Table v70</att>
             <att name="subsetVariables">cruise, transect_number, taxon</att>
             <att name="summary">Timeseries of phytoplankton abundances from the Gulf of Maine Continuous Plankton Recorder Survey.</att>
-            <att name="title">MBA Gulf of Maine Continuous Plankton Recorder Transect: Phytoplankton Data</att>
+            <att name="title">MBA Gulf of Maine Continuous Plankton Recorder: Phytoplankton</att>
         </addAttributes>
         <dataVariable>
             <sourceName>cruise</sourceName>
@@ -60,6 +60,7 @@
                 <att name="long_name">Cruise Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>station</sourceName>
             <destinationName>transect_number</destinationName>
@@ -72,23 +73,25 @@
                 <att name="long_name">Transect Identification Number</att>
             </addAttributes>
         </dataVariable>
-        <dataVariable>
-            <sourceName>date</sourceName>
+
+        <dataVariable>  
+            <sourceName>time</sourceName>
             <destinationName>time</destinationName>
             <dataType>String</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
             <addAttributes>
                 <att name="ioos_category">Time</att>
-                <att name="long_name">Date</att>
-                <att name="source_name">date</att>
+                <att name="long_name">Datetime</att>
+                <att name="source_name">time</att>
                 <att name="standard_name">time</att>
                 <att name="time_precision">1970-01-01T00:00:00Z</att>
                 <att name="units">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>lat</sourceName>
+            <sourceName>latitude</sourceName>
             <destinationName>latitude</destinationName>
             <dataType>double</dataType>
             <!-- sourceAttributes>
@@ -102,8 +105,9 @@
                 <att name="units">degrees_north</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>lon</sourceName>
+            <sourceName>longitude</sourceName>
             <destinationName>longitude</destinationName>
             <dataType>double</dataType>
             <!-- sourceAttributes>
@@ -117,9 +121,10 @@
                 <att name="units">degrees_east</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>pci</sourceName>
-            <destinationName>phytoplankton_color_index</destinationName>
+            <destinationName>pci</destinationName>
             <dataType>float</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
@@ -129,6 +134,7 @@
                 <att name="long_name">Phytoplankton Color Index</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>taxon</sourceName>
             <destinationName>taxon</destinationName>
@@ -140,9 +146,10 @@
                 <att name="long_name">Phytoplankton Taxon</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>taxa_id_number</sourceName>
-            <destinationName>taxa_id_number</destinationName>
+            <sourceName>mba_id</sourceName>
+            <destinationName>mba_id</destinationName>
             <dataType>short</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
@@ -152,6 +159,7 @@
                 <att name="long_name">Taxonomic Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>abundance</sourceName>
             <destinationName>abundance</destinationName>
@@ -165,6 +173,7 @@
                 <att name="units">Abundance per 1 cubic meter</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>abundance_per_transect</sourceName>
             <destinationName>abundance_per_transect</destinationName>
@@ -179,6 +188,8 @@
             </addAttributes>
         </dataVariable>
     </dataset>
+
+
 
     <dataset type="EDDTableFromAsciiFiles" datasetID="mba_gom_cpr_traverse" active="true">
         <reloadEveryNMinutes>10080</reloadEveryNMinutes>
@@ -195,8 +206,8 @@
         <columnSeparator></columnSeparator>
         <columnNamesRow>1</columnNamesRow>
         <firstDataRow>2</firstDataRow>
-        <sortedColumnSourceName>date</sortedColumnSourceName>
-        <sortFilesBySourceNames>date</sortFilesBySourceNames>
+        <sortedColumnSourceName>time</sortedColumnSourceName>
+        <sortFilesBySourceNames>time</sortFilesBySourceNames>
         <fileTableInMemory>false</fileTableInMemory>
 
         <addAttributes>
@@ -214,7 +225,7 @@
             <att name="contributor_name">NERACOOS ISMN</att>
             <att name="infoUrl">https://www.cprsurvey.org/</att>
             <att name="institution">Gulf of Maine Research Institute</att>
-            <att name="keywords">zooplankton, cpr, abundance, cruise, survey, phytoplankton, plankton, marmap, phytoplankton color index </att>
+            <att name="keywords">zooplankton, cpr, abundance, cruise, survey, phytoplankton, plankton, phytoplankton color index </att>
             <att name="license">[standard]</att>
             <att name="program">NERACOOS</att>
             <att name="project">Marine Biological Association (MBA) - Continuous Plankton Recorder (CPR) Survey: Gulf of Maine CPR Time Series </att>
@@ -227,7 +238,7 @@
             <att name="standard_name_vocabulary">CF Standard Name Table v70</att>
             <att name="subsetVariables">cruise, transect_number, taxa</att>
             <att name="summary">Timeseries of zooplankton densities from the Gulf of Maine Continuous Plankton Recorder Survey.</att>
-            <att name="title">MBA Gulf of Maine Continuous Plankton Recorder Transect: CPR Traverse Data</att>
+            <att name="title">MBA Gulf of Maine Continuous Plankton Recorder: Traverse Zooplankton</att>
         </addAttributes>
         <dataVariable>
             <sourceName>cruise</sourceName>
@@ -240,8 +251,9 @@
                 <att name="long_name">Cruise Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>station</sourceName>
+            <sourceName>transect_number</sourceName>
             <destinationName>transect_number</destinationName>
             <dataType>byte</dataType>
             <!-- sourceAttributes>
@@ -252,23 +264,25 @@
                 <att name="long_name">Transect Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>date</sourceName>
+            <sourceName>time</sourceName>
             <destinationName>time</destinationName>
             <dataType>String</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
             <addAttributes>
                 <att name="ioos_category">Time</att>
-                <att name="long_name">Date</att>
-                <att name="source_name">date</att>
+                <att name="long_name">Datetime</att>
+                <att name="source_name">time</att>
                 <att name="standard_name">time</att>
                 <att name="time_precision">1970-01-01T00:00:00Z</att>
                 <att name="units">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>lat</sourceName>
+            <sourceName>latitude</sourceName>
             <destinationName>latitude</destinationName>
             <dataType>double</dataType>
             <!-- sourceAttributes>
@@ -282,8 +296,9 @@
                 <att name="units">degrees_north</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>lon</sourceName>
+            <sourceName>longitude</sourceName>
             <destinationName>longitude</destinationName>
             <dataType>double</dataType>
             <!-- sourceAttributes>
@@ -297,9 +312,23 @@
                 <att name="units">degrees_east</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>taxa</sourceName>
-            <destinationName>taxa</destinationName>
+            <sourceName>pci</sourceName>
+            <destinationName>pci</destinationName>
+            <dataType>float</dataType>
+            <!-- sourceAttributes>
+        </sourceAttributes -->
+            <addAttributes>
+                <att name="_FillValue" type="float">NaN</att>
+                <att name="ioos_category">Unknown</att>
+                <att name="long_name">Phytoplankton Color Index</att>
+            </addAttributes>
+        </dataVariable>
+
+        <dataVariable>
+            <sourceName>taxon</sourceName>
+            <destinationName>taxon</destinationName>
             <dataType>String</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
@@ -308,9 +337,10 @@
                 <att name="long_name">Zooplankton Taxon</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>taxa_id_number</sourceName>
-            <destinationName>taxa_id_number</destinationName>
+            <sourceName>mba_id</sourceName>
+            <destinationName>mba_id</destinationName>
             <dataType>short</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
@@ -320,6 +350,7 @@
                 <att name="long_name">Taxonomic Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>abundance</sourceName>
             <destinationName>abundance</destinationName>
@@ -348,6 +379,8 @@
         </dataVariable>
     </dataset>
     
+
+
     <dataset type="EDDTableFromAsciiFiles" datasetID="mba_gom_cpr_eyecount" active="true">
         <reloadEveryNMinutes>10080</reloadEveryNMinutes>
         <updateEveryNMillis>10000</updateEveryNMillis>
@@ -363,8 +396,8 @@
         <columnSeparator></columnSeparator>
         <columnNamesRow>1</columnNamesRow>
         <firstDataRow>2</firstDataRow>
-        <sortedColumnSourceName>date</sortedColumnSourceName>
-        <sortFilesBySourceNames>date</sortFilesBySourceNames>
+        <sortedColumnSourceName>time</sortedColumnSourceName>
+        <sortFilesBySourceNames>time</sortFilesBySourceNames>
         <fileTableInMemory>false</fileTableInMemory>
 
         <addAttributes>
@@ -382,7 +415,7 @@
             <att name="contributor_name">NERACOOS ISMN</att>
             <att name="infoUrl">https://www.cprsurvey.org/</att>
             <att name="institution">Gulf of Maine Research Institute</att>
-            <att name="keywords">zooplankton, cpr, abundance, cruise, survey, phytoplankton, plankton, marmap, phytoplankton color index </att>
+            <att name="keywords">zooplankton, cpr, abundance, cruise, survey, phytoplankton, plankton, phytoplankton color index </att>
             <att name="license">[standard]</att>
             <att name="program">NERACOOS</att>
             <att name="project">Marine Biological Association (MBA) - Continuous Plankton Recorder (CPR) Survey: Gulf of Maine CPR Time Series </att>
@@ -395,7 +428,7 @@
             <att name="standard_name_vocabulary">CF Standard Name Table v70</att>
             <att name="subsetVariables">cruise, transect_number, taxa </att>
             <att name="summary">Timeseries of zooplankton densities from the Gulf of Maine Continuous Plankton Recorder Survey.</att>
-            <att name="title">MBA Gulf of Maine Continuous Plankton Recorder Transect: CPR Eyecount Data</att>
+            <att name="title">MBA Gulf of Maine Continuous Plankton Recorder: Eyecount Zooplankton</att>
         </addAttributes>
         <dataVariable>
             <sourceName>cruise</sourceName>
@@ -408,8 +441,9 @@
                 <att name="long_name">Cruise Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>station</sourceName>
+            <sourceName>transect_number</sourceName>
             <destinationName>transect_number</destinationName>
             <dataType>byte</dataType>
             <!-- sourceAttributes>
@@ -420,23 +454,25 @@
                 <att name="long_name">Transect Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>date</sourceName>
+            <sourceName>time</sourceName>
             <destinationName>time</destinationName>
             <dataType>String</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
             <addAttributes>
                 <att name="ioos_category">Time</att>
-                <att name="long_name">Date</att>
-                <att name="source_name">date</att>
+                <att name="long_name">Datetime</att>
+                <att name="source_name">time</att>
                 <att name="standard_name">time</att>
                 <att name="time_precision">1970-01-01T00:00:00Z</att>
                 <att name="units">yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>lat</sourceName>
+            <sourceName>latitude</sourceName>
             <destinationName>latitude</destinationName>
             <dataType>double</dataType>
             <!-- sourceAttributes>
@@ -450,8 +486,9 @@
                 <att name="units">degrees_north</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>lon</sourceName>
+            <sourceName>longitude</sourceName>
             <destinationName>longitude</destinationName>
             <dataType>double</dataType>
             <!-- sourceAttributes>
@@ -465,9 +502,23 @@
                 <att name="units">degrees_east</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>taxa</sourceName>
-            <destinationName>taxa</destinationName>
+            <sourceName>pci</sourceName>
+            <destinationName>pci</destinationName>
+            <dataType>float</dataType>
+            <!-- sourceAttributes>
+        </sourceAttributes -->
+            <addAttributes>
+                <att name="_FillValue" type="float">NaN</att>
+                <att name="ioos_category">Unknown</att>
+                <att name="long_name">Phytoplankton Color Index</att>
+            </addAttributes>
+        </dataVariable>
+
+        <dataVariable>
+            <sourceName>taxon</sourceName>
+            <destinationName>taxon</destinationName>
             <dataType>String</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
@@ -476,9 +527,10 @@
                 <att name="long_name">Zooplankton Taxon</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
-            <sourceName>taxa_id_number</sourceName>
-            <destinationName>taxa_id_number</destinationName>
+            <sourceName>mba_id</sourceName>
+            <destinationName>mba_id</destinationName>
             <dataType>short</dataType>
             <!-- sourceAttributes>
         </sourceAttributes -->
@@ -488,6 +540,7 @@
                 <att name="long_name">Taxonomic Identification Number</att>
             </addAttributes>
         </dataVariable>
+
         <dataVariable>
             <sourceName>abundance</sourceName>
             <destinationName>abundance</destinationName>
@@ -514,4 +567,5 @@
                 <att name="units">Actual or estimated number present in a single silk mesh sample</att>
             </addAttributes>
         </dataVariable>
+
     </dataset>
