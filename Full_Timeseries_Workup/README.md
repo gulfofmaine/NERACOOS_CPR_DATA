@@ -72,8 +72,8 @@ rm(noaa_zp_erddap, mba_zpt_erddap, mba_zpe_erddap)
 ``` r
 # 1. NOAA Zooplankton
 # Get the tabledap information from the server link and dataset_id
-cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
-                 datasetid = "noaa_gom_cpr_zooplankton")
+cpr_info <- info(url = "https://data.neracoos.org/erddap", 
+                 datasetid = "gom_cpr_zooplankton_full")
 
 # Use the tabledap function to import all the data (optionally add filters)
 noaa_zp <- tabledap(cpr_info)
@@ -86,12 +86,12 @@ noaa_zp <- noaa_zp %>%
 
 
 # 2. MBA Traverse
-cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
+cpr_info <- info(url = "https://data.neracoos.org/erddap", 
                  datasetid = "mba_gom_cpr_traverse")
 mba_zpt <- tabledap(cpr_info)
 
 # 2. MBA Eyecount
-cpr_info <- info(url = "http://ismn.erddap.neracoos.org/erddap", 
+cpr_info <- info(url = "https://data.neracoos.org/erddap", 
                  datasetid = "mba_gom_cpr_eyecount")
 mba_zpe <- tabledap(cpr_info)
 ```
